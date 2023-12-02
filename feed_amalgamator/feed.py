@@ -10,7 +10,7 @@ from feed_amalgamator.helpers.custom_exceptions import MastodonConnError
 from feed_amalgamator.helpers.logging_helper import LoggingHelper
 from feed_amalgamator.helpers.mastodon_data_interface import MastodonDataInterface
 from feed_amalgamator.helpers.mastodon_oauth_interface import MastodonOAuthInterface
-from feed_amalgamator.helpers.db_interface import dbi, UserServer, ApplicationTokens
+from feed_amalgamator.helpers.db_interface import dbi, UserServer
 
 """
 Notes from discussion with Professor:
