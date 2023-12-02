@@ -4,16 +4,13 @@ Any module interacting with the Mastodon API for Oauth purposes should do so str
 
 import configparser
 import logging
-import json
 from pathlib import Path
-import requests
 import json
 import mastodon.errors
 import requests
 from urllib.parse import urlparse
 from http import HTTPStatus
 
-from feed_amalgamator.helpers.logging_helper import LoggingHelper
 from mastodon import Mastodon, MastodonAPIError  # pip install Mastodon.py
 from feed_amalgamator.helpers.custom_exceptions import (
     MastodonConnError,
