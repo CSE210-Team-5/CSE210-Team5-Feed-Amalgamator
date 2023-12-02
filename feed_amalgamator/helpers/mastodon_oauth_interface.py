@@ -6,18 +6,20 @@ import configparser
 import logging
 import json
 from pathlib import Path
-
+import requests
+import json
 import mastodon.errors
 import requests
 from urllib.parse import urlparse
 from http import HTTPStatus
 
+from feed_amalgamator.helpers.logging_helper import LoggingHelper
 from mastodon import Mastodon, MastodonAPIError  # pip install Mastodon.py
 from feed_amalgamator.helpers.custom_exceptions import (
     MastodonConnError,
     InvalidApiInputError,
 )
-
+from feed_amalgamator.helpers.db_interface import dbi, ApplicationTokens
 # Add more logging levels (info etc. - forgot about this)
 # Segment https error types to become more descriptive
 # Need to test the third party api thoroughly (definitely need to sanity check the url)
@@ -102,7 +104,7 @@ class MastodonOAuthInterface:
             wanted_domain = parsed_input.path
         return wanted_domain
 
-    def start_app_api_client(self, user_domain: str):
+    def start_app_api_client(self, user_domain: str,  client_id: str, client_secret: str, access_token: str):
         """
         Function to start the app client (client used by our app to authenticate users).
         This generated app client will be used to process user authorization requests
@@ -114,9 +116,9 @@ class MastodonOAuthInterface:
         """
         try:
             client = Mastodon(
-                client_id=self.CLIENT_ID,
-                client_secret=self.CLIENT_SECRET,
-                access_token=self.ACCESS_TOKEN,
+                client_id=client_id,
+                client_secret=client_secret,
+                access_token=access_token,
                 api_base_url=user_domain,
             )
             # Be careful: Wrong information used to start this client will not cause
@@ -195,3 +197,52 @@ class MastodonOAuthInterface:
         )
         self.logger.error(error_message)
         raise MastodonConnError(error_message)
+
+    def check_if_domain_exists(self, domain_name):
+        """
+        Check if domain is already added in database with access token
+        """
+        domain = ApplicationTokens.query.filter_by(server=domain_name).first()
+        if domain is None:
+            return None
+        else:
+            return domain
+
+    def add_domain(self, domain_name):
+        """
+        Add new domain to database. Fetch client id, client secret and access token and store it in database
+        """
+        api_url = "https://" + domain_name + "/api/v1/apps"
+        token_url = "https://" + domain_name + "/oauth/token"
+        payload = {
+            'client_name': 'Test Application',
+            'redirect_uris': 'urn:ietf:wg:oauth:2.0:oob',
+            'scopes': 'read write push',
+            'website': 'https://myapp.example'
+        }
+        try:
+            response = requests.post(api_url, data=payload)
+            response.raise_for_status()  # Raises an HTTPError if the HTTP request returned an unsuccessful status code
+            response_dict = json.loads(response.text)
+            client_id = response_dict['client_id']
+            client_secret = response_dict['client_secret']
+            payload_token = {
+                'client_id': client_id,
+                'client_secret': client_secret,
+                'redirect_uri': 'urn:ietf:wg:oauth:2.0:oob',
+                'grant_type': 'client_credentials'
+            }
+            response = requests.post(token_url, data=payload_token)
+            response.raise_for_status()  # Raises an HTTPError if the HTTP request returned an unsuccessful status code
+            response_dict_token = json.loads(response.text)
+            access_token = response_dict_token['access_token']
+            app_token = ApplicationTokens(server=domain_name, client_id=client_id, client_secret=client_secret,
+                                          access_token=access_token)
+            dbi.session.add(app_token)
+            dbi.session.commit()
+            print("Domain Added!")
+            return client_id, client_secret, access_token
+        except requests.exceptions.RequestException as e:
+            # Handle exceptions that might occur during the request
+            print(f"Error: {e}")
+            return None

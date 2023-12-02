@@ -10,7 +10,7 @@ from feed_amalgamator.helpers.custom_exceptions import MastodonConnError
 from feed_amalgamator.helpers.logging_helper import LoggingHelper
 from feed_amalgamator.helpers.mastodon_data_interface import MastodonDataInterface
 from feed_amalgamator.helpers.mastodon_oauth_interface import MastodonOAuthInterface
-from feed_amalgamator.helpers.db_interface import dbi, UserServer
+from feed_amalgamator.helpers.db_interface import dbi, UserServer, ApplicationTokens
 
 """
 Notes from discussion with Professor:
@@ -111,7 +111,16 @@ def render_redirect_url_page():
         )
         raise Exception  # TODO: We will need to standardize how to handle exceptions in the flask context.
 
-    auth_api.start_app_api_client(parsed_domain)
+    domain = auth_api.check_if_domain_exists(parsed_domain)
+    if domain is not None:
+        client_id = domain.client_id
+        client_secret = domain.client_secret
+        access_token = domain.access_token
+    else:
+        client_id, client_secret, access_token = auth_api.add_domain(parsed_domain)
+        logger.info("New domain added to the database")
+
+    auth_api.start_app_api_client(parsed_domain, client_id, client_secret, access_token)
     url = auth_api.generate_redirect_url()
     logger.info("Generated redirect url: {u}".format(u=url))
     return render_template("feed/add_server.html", url=url, is_domain_set=True)
