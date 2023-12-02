@@ -240,7 +240,6 @@ class MastodonOAuthInterface:
                                           access_token=access_token)
             dbi.session.add(app_token)
             dbi.session.commit()
-            print("Domain Added!")
             return client_id, client_secret, access_token
         except requests.exceptions.RequestException as e:
             # Handle exceptions that might occur during the request
