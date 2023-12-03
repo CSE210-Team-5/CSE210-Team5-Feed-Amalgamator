@@ -37,7 +37,7 @@ class MastodonOAuthInterface:
         parser = configparser.ConfigParser()
         parser.read(config_file_loc)
 
-        client_dict = parser["APP_TOKENS"]
+        # client_dict = parser["APP_TOKENS"]
 
         # self.CLIENT_ID = client_dict["CLIENT_ID"]
         # self.CLIENT_SECRET = client_dict["CLIENT_SECRET"]
