@@ -41,7 +41,7 @@ class MastodonOAuthInterface:
 
         # self.CLIENT_ID = client_dict["CLIENT_ID"]
         # self.CLIENT_SECRET = client_dict["CLIENT_SECRET"]
-        self.ACCESS_TOKEN = client_dict["ACCESS_TOKEN"]
+        # self.ACCESS_TOKEN = client_dict["ACCESS_TOKEN"]
 
         """We pass in a logger instead of creating a new one
         As we want logs to be logged to the program calling the interface
@@ -162,7 +162,6 @@ class MastodonOAuthInterface:
             client = Mastodon(
                 client_id=self.CLIENT_ID,
                 client_secret=self.CLIENT_SECRET,
-                access_token=self.ACCESS_TOKEN,
                 api_base_url=user_domain,
             )
             # Be careful: Wrong information used to start this client will not cause
