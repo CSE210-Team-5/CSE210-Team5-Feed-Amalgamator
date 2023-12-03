@@ -14,11 +14,13 @@ Please follow the instructions below to run the application:
 
 5. Run `pdm install`. This will resolve all dependency conflicts and install the required packages inside the projects folder and create a `pdm.lock` file.
 
-6. Now when you open the project using pycharm it would automatically detect the virtual environment present inside the project folder and will choose that as the default interpreter.
+6. Create a 'configuration' folder and add app_settings.ini file to it.
 
-7. Restart the terminal inside Pycharm.
+7. Now when you open the project using pycharm it would automatically detect the virtual environment present inside the project folder and will choose that as the default interpreter.
 
-8. Put the client.ini file in instance directory.
+8. Restart the terminal inside Pycharm.
 
-9. Run `flask --app feed_amalgamator run --debug` . This opens the site in your browser. In debug mode, you can make live changes in the code which will be reflected on the site without having to restart the server.
+9. Put the client.ini file in instance directory.
+
+10. Run `flask --app feed_amalgamator run --debug` . This opens the site in your browser. In debug mode, you can make live changes in the code which will be reflected on the site without having to restart the server.
 
