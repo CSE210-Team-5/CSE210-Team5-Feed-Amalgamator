@@ -17,6 +17,8 @@ from feed_amalgamator.helpers.custom_exceptions import (
     MastodonConnError,
     InvalidApiInputError,
 )
+from feed_amalgamator.helpers.db_interface import dbi, MastodonInstances
+from sqlalchemy import exc
 
 # Add more logging levels (info etc. - forgot about this)
 # Segment https error types to become more descriptive
@@ -37,8 +39,8 @@ class MastodonOAuthInterface:
 
         client_dict = parser["APP_TOKENS"]
 
-        self.CLIENT_ID = client_dict["CLIENT_ID"]
-        self.CLIENT_SECRET = client_dict["CLIENT_SECRET"]
+        # self.CLIENT_ID = client_dict["CLIENT_ID"]
+        # self.CLIENT_SECRET = client_dict["CLIENT_SECRET"]
         self.ACCESS_TOKEN = client_dict["ACCESS_TOKEN"]
 
         """We pass in a logger instead of creating a new one
@@ -101,6 +103,47 @@ class MastodonOAuthInterface:
             # user did not provide http in string
             wanted_domain = parsed_input.path
         return wanted_domain
+    
+    def get_app_tokens(self, user_domain: str):
+
+        """
+        Function to get app client_id and client_secret for the app for user_domain
+
+        @param user_domain: Mastodon.io, mstdn.io and the like; essentially, which server the user's
+        account is located on
+        @return client_id and client_secret
+        """
+
+        try:
+            print("User Domain", user_domain)
+            mastodon_instance = MastodonInstances.query.filter_by(instance_handle=user_domain).first()
+            if mastodon_instance is None:
+
+                redirect_uris="urn:ietf:wg:oauth:2.0:oob"
+                client_id, client_secret = Mastodon.create_app(
+                    client_name="FeedAmalgamator",
+                    redirect_uris=redirect_uris,
+                    api_base_url=user_domain
+                )
+
+                print("Client ID : ", client_id)
+                print("Client Secret : ", client_secret)
+                
+                mastodon_instance = MastodonInstances(
+                    instance_handle=user_domain,
+                    redirect_uris=redirect_uris,
+                    client_id=client_id,
+                    client_secret=client_secret
+                )
+                dbi.session.add(mastodon_instance)
+                dbi.session.commit()
+
+                return client_id, client_secret
+            else:
+                return mastodon_instance.client_id, mastodon_instance.client_secret
+        
+        except exc.IntegrityError:
+            pass
 
     def start_app_api_client(self, user_domain: str):
         """
@@ -113,6 +156,9 @@ class MastodonOAuthInterface:
         @return: None, but there is a side effect of setting self.app_client
         """
         try:
+            client_id, client_secret = self.get_app_tokens(user_domain)
+            self.CLIENT_ID = client_id
+            self.CLIENT_SECRET = client_secret
             client = Mastodon(
                 client_id=self.CLIENT_ID,
                 client_secret=self.CLIENT_SECRET,
