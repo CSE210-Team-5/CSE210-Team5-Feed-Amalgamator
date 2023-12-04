@@ -27,13 +27,11 @@ bp = Blueprint("auth", __name__, url_prefix="/auth")
 # Setup for logging and interface layers
 
 # Setting up the loggers and interface layers
-CONFIG_FILE_LOC = Path(
-    "configuration/app_settings.ini"
-)  # Path is hardcoded, needs to be changed
+CONFIG_FILE_LOC = Path("configuration/app_settings.ini")  # Path is hardcoded, needs to be changed
 parser = configparser.ConfigParser()
 parser.read(CONFIG_FILE_LOC)
-log_file_loc = Path(parser["LOG_SETTINGS"]["feed_log_loc"])
-logger = LoggingHelper.generate_logger(logging.INFO, log_file_loc, "feed_page")
+log_file_loc = Path(parser["LOG_SETTINGS"]["auth_log_loc"])
+logger = LoggingHelper.generate_logger(logging.INFO, log_file_loc, "auth_page")
 error = ""
 
 

@@ -38,6 +38,9 @@ class TestOauthInterface(unittest.TestCase):
             (True, wanted_result),
         )
 
+        another_valid_domain = "mstdn.jp"
+        self.assertEqual(self.client.verify_user_provided_domain(another_valid_domain), (True, another_valid_domain))
+
         mangled_domain = "mastodo.social"
         self.assertEqual(
             self.client.verify_user_provided_domain(mangled_domain)[0], False
