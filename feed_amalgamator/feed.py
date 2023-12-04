@@ -118,6 +118,8 @@ def render_redirect_url_page():
         access_token = domain.access_token
     else:
         client_id, client_secret, access_token = auth_api.add_domain(parsed_domain)
+        if client_id is None:
+            return render_template("feed/add_server.html", is_domain_set=False, error=True)
         logger.info("New domain added to the database")
 
     auth_api.start_app_api_client(parsed_domain, client_id, client_secret, access_token)

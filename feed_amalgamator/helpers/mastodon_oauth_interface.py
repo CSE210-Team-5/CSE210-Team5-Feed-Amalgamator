@@ -62,14 +62,19 @@ class MastodonOAuthInterface:
 
         # Hardcoded endpoint for generally getting an instance's info
         endpoint_to_test = "https://{d}/api/v2/instance".format(d=wanted_domain)
-
         # As this is before any api client is created, we will use a simple https request
         try:
-            response = requests.get(endpoint_to_test)
+            headers = {
+                "User-Agent": "YourApp/1.0",
+                "Accept": "application/json",
+            }
+            response = requests.get(endpoint_to_test, headers=headers)
+            print(response.content)
             if response.status_code == HTTPStatus.OK:
+                domain = json.loads(response.content)["domain"]
                 return (
                     True,
-                    json.loads(response.content)["domain"],
+                    domain,
                 )  # Obtain the cleansed content
         except requests.exceptions.ConnectionError as e:
             # If the user domain is invalid, it is indistinguishable from a connection error (cannot resolve
@@ -218,7 +223,11 @@ class MastodonOAuthInterface:
             'website': 'https://myapp.example'
         }
         try:
-            response = requests.post(api_url, data=payload)
+            headers = {
+                "User-Agent": "YourApp/1.0",
+                "Accept": "application/json",
+            }
+            response = requests.post(api_url, data=payload, headers=headers)
             response.raise_for_status()  # Raises an HTTPError if the HTTP request returned an unsuccessful status code
             response_dict = json.loads(response.text)
             client_id = response_dict['client_id']
@@ -229,7 +238,7 @@ class MastodonOAuthInterface:
                 'redirect_uri': 'urn:ietf:wg:oauth:2.0:oob',
                 'grant_type': 'client_credentials'
             }
-            response = requests.post(token_url, data=payload_token)
+            response = requests.post(token_url, data=payload_token, headers=headers)
             response.raise_for_status()  # Raises an HTTPError if the HTTP request returned an unsuccessful status code
             response_dict_token = json.loads(response.text)
             access_token = response_dict_token['access_token']
@@ -241,4 +250,4 @@ class MastodonOAuthInterface:
         except requests.exceptions.RequestException as e:
             # Handle exceptions that might occur during the request
             print(f"Error: {e}")
-            return None
+            return None, None, None
