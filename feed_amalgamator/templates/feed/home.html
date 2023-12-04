@@ -4,14 +4,23 @@
         <a href="{{ url_for("feed.add_server") }}">Add Server</a>
     </p>
     {% if timelines is not none %}
-        {% for timeline in timelines %}
-            {% for post in timeline %}
+            {% for post in timelines %}
                 <article>
+                    {% if post['reblog'] != None %}
+                        <span class="status-prepend">
+                            <i class="fa fa-retweet"></i>
+                            <strong>{{ post['account']['display_name'] }} boosted</strong>
+                        </span>
+                        {% set post = post['reblog'] %}
+                    {% endif %}
                     <div class="status">
                         <div class="status-info">
                             <div class="status-avatar">
                                 <div class="account-avatar">
-                                    <img src="{{ post['account']['avatar'] }}" alt="avatar" height="50" width="50">
+                                    <img src="{{ post['account']['avatar'] }}"
+                                         alt="avatar"
+                                         height="50"
+                                         width="50">
                                 </div>
                             </div>
                             <span class="display-name">
@@ -21,10 +30,25 @@
                                 <span class="display-name-account">{{ post['account']['acct'] }}</span>
                             </span>
                         </div>
+                        <div class="detailed-status-meta">
+                            <span class="detailed-status-datetime">{{ post['created_at'].strftime("%b %d, %Y, %I:%M") }}</span>
+                            ·
+                            <span class="status-visibility-icon">
+                                {% if post['visibility'] == 'public' %}<i class="fa fa-globe" title="Public"></i>{% endif %}
+                                {% if post['visibility'] == 'unlisted' %}<i class="fa fa-unlock" title="Unlisted"></i>{% endif %}
+                                {% if post['visibility'] == 'private' %}<i class="fa fa-lock" title="Followers only"></i>{% endif %}
+                                {% if post['visibility'] == 'direct' %}<i class="fa fa-at" title="Followers only"></i>{% endif %}
+                            </span>
+                            ·
+                            <i class="fa fa-retweet"></i>
+                            <span class="detailed-status-reblogs">{{ post['reblogs_count'] }}</span>
+                            ·
+                            <i class="fa fa-star"></i>
+                            <span class="detailed-status-favourites">{{ post['favourites_count'] }}</span>
+                        </div>
                         <div class="status-content">{{ post['content']|safe }}</div>
                     </div>
                 </article>
             {% endfor %}
-        {% endfor %}
     {% endif %}
 {% endblock %}

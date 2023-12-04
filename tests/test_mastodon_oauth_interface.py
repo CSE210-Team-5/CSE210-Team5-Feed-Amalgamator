@@ -20,9 +20,7 @@ class TestOauthInterface(unittest.TestCase):
         logger = LoggingHelper.generate_logger(logging.INFO, test_log_file, logger_name)
         self.logger = logger
         self.client = MastodonOAuthInterface(test_config_loc, logger)
-        self.client_domain = parser["APP_TOKENS"][
-            "client_domain"
-        ]  # Required to be passed in as a parameter
+        self.client_domain = parser["APP_TOKENS"]["client_domain"]  # Required to be passed in as a parameter
         self.user_auth_code = parser["APP_TOKENS"]["user_auth_code"]
 
     def test_verify_user_provided_domain(self):
@@ -30,9 +28,7 @@ class TestOauthInterface(unittest.TestCase):
         without_https = "www.mastodon.social"
 
         wanted_result = "mastodon.social"
-        self.assertEqual(
-            self.client.verify_user_provided_domain(with_https), (True, wanted_result)
-        )
+        self.assertEqual(self.client.verify_user_provided_domain(with_https), (True, wanted_result))
         self.assertEqual(
             self.client.verify_user_provided_domain(without_https),
             (True, wanted_result),
@@ -42,15 +38,11 @@ class TestOauthInterface(unittest.TestCase):
         self.assertEqual(self.client.verify_user_provided_domain(another_valid_domain), (True, another_valid_domain))
 
         mangled_domain = "mastodo.social"
-        self.assertEqual(
-            self.client.verify_user_provided_domain(mangled_domain)[0], False
-        )
+        self.assertEqual(self.client.verify_user_provided_domain(mangled_domain)[0], False)
 
     def test_generate_user_token(self):
         # No client has been started yet, AssertionError should be thrown
-        self.assertRaises(
-            AssertionError, self.client.generate_user_access_token("undefined")
-        )
+        self.assertRaises(AssertionError, self.client.generate_user_access_token("undefined"))
 
         self.client.start_app_api_client(self.client_domain)  # Sets self.api_client
 

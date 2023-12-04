@@ -63,9 +63,7 @@ def login():
             logger.error("No such user found")
             raise Exception  # TODO: We need to standardize how exceptions are raised and parsed in flask.
         elif not check_password_hash(user.password, password):
-            flash(
-                "Invalid Password"
-            )  # issue with hard coded error messages - see below
+            flash("Invalid Password")  # issue with hard coded error messages - see below
             logger.error(f"Invalid Password for user {username}")
             raise Exception  # TODO: We need to standardize how exceptions are raised and parsed in flask.
         else:

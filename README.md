@@ -18,9 +18,7 @@ Please follow the instructions below to run the application:
 
 7. Restart the terminal inside Pycharm.
 
-8. Run `flask --app feed_amalgamator init-db`. This will run the SQL script and create the necessary tables for the application.
+8. Put the client.ini file in instance directory.
 
-9. Put the client.ini file in instance directory.
-
-10. Run `flask --app feed_amalgamator run --debug` . This opens the site in your browser. In debug mode, you can make live changes in the code which will be reflected on the site without having to restart the server.
+9. Run `flask --app feed_amalgamator run --debug` . This opens the site in your browser. In debug mode, you can make live changes in the code which will be reflected on the site without having to restart the server.
 
