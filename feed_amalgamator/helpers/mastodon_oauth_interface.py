@@ -17,6 +17,7 @@ from feed_amalgamator.helpers.custom_exceptions import (
     InvalidApiInputError,
 )
 from feed_amalgamator.helpers.db_interface import dbi, ApplicationTokens
+
 # Add more logging levels (info etc. - forgot about this)
 # Segment https error types to become more descriptive
 # Need to test the third party api thoroughly (definitely need to sanity check the url)
@@ -31,15 +32,6 @@ class MastodonOAuthInterface:
     """
 
     def __init__(self, config_file_loc: Path, logger: logging.Logger):
-        parser = configparser.ConfigParser()
-        parser.read(config_file_loc)
-
-        client_dict = parser["APP_TOKENS"]
-
-        self.CLIENT_ID = client_dict["CLIENT_ID"]
-        self.CLIENT_SECRET = client_dict["CLIENT_SECRET"]
-        self.ACCESS_TOKEN = client_dict["ACCESS_TOKEN"]
-
         """We pass in a logger instead of creating a new one
         As we want logs to be logged to the program calling the interface
         rather than have separate logs for the interface layer specifically"""
@@ -69,7 +61,6 @@ class MastodonOAuthInterface:
                 "Accept": "application/json",
             }
             response = requests.get(endpoint_to_test, headers=headers)
-            print(response.content)
             if response.status_code == HTTPStatus.OK:
                 domain = json.loads(response.content)["domain"]
                 return (
@@ -203,6 +194,7 @@ class MastodonOAuthInterface:
     def check_if_domain_exists(self, domain_name):
         """
         Check if domain is already added in database with access token
+        @param domain_name: Check if client_id, client_secret already exist for domain_name
         """
         domain = ApplicationTokens.query.filter_by(server=domain_name).first()
         if domain is None:
@@ -213,6 +205,7 @@ class MastodonOAuthInterface:
     def add_domain(self, domain_name):
         """
         Add new domain to database. Fetch client id, client secret and access token and store it in database
+        @param domain_name: Add domain_name to database, with its client id, client secret and access token
         """
         api_url = "https://" + domain_name + "/api/v1/apps"
         token_url = "https://" + domain_name + "/oauth/token"
