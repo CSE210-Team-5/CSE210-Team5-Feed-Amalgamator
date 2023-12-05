@@ -23,6 +23,16 @@ a {
   padding: 16px;
 }
 
+.status-prepend {
+  color: #606984;
+  display: inline-flex;
+  font-size: 15px;
+  font-weight: 500;
+  gap: 10px;
+  line-height: 22px;
+  padding: 16px 16px 0;
+}
+
 .status-info {
   align-items: center;
   display: flex;
@@ -31,6 +41,11 @@ a {
   line-height: 22px;
   max-width: 100%;
   overflow: hidden;
+}
+
+.detailed-status-meta {
+  padding-top: 8px;
+  color: #606984;
 }
 
 .display-name-html {

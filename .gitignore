@@ -24,7 +24,7 @@ feed_amalgamator/.idea
 
 configuration/
 prototypes/
-tests/test_config
+test_config
 tests/test_logs
 src
 pdm.lock

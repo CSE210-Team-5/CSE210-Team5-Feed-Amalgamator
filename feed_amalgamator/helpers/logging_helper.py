@@ -11,9 +11,7 @@ class LoggingHelper:
     Structured logging implemented for shits and giggles"""
 
     @staticmethod
-    def generate_logger(
-        log_level: int, log_file_loc: Path, logger_name: str
-    ) -> logging.Logger:
+    def generate_logger(log_level: int, log_file_loc: Path, logger_name: str) -> logging.Logger:
         """
         Generates a logger with our standardized format based on arguments
         @param log_level:

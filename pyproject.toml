@@ -5,12 +5,14 @@ description = ""
 authors = [
     {name = "Srinivas Raman", email = "srinivasraman18@gmail.com"},
     {name = "BugsBunny", email = "bugsbunny@gmail.com"},
+    {name = "Brandon Wu",email = "brandonmwu888@gmail.com"},
+    {name = "Vancheeswaran Vaidyanathan", email = "vigneshvanchy@gmail.com"},
 ]
 dependencies = [
     "flask>=3.0.0",
     "Mastodon-py>=1.8.1",
     "ecs-logging==2.1.0",
-    "Flask-SQLAlchemy==3.1.1"
+    "Flask-SQLAlchemy==3.1.1",
 ]
 requires-python = ">=3.11"
 readme = "README.md"
