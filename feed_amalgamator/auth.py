@@ -33,7 +33,7 @@ parser.read(CONFIG_FILE_LOC)
 log_file_loc = Path(parser["LOG_SETTINGS"]["auth_log_loc"])
 logger = LoggingHelper.generate_logger(logging.INFO, log_file_loc, "auth_page")
 error = ""
-
+print(parser.sections())
 
 @bp.route("/register", methods=("GET", "POST"))
 def register():

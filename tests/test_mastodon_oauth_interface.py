@@ -13,6 +13,7 @@ class TestOauthInterface(unittest.TestCase):
         test_config_loc = Path("tests/test_config/test_mastodon_client_info.ini")
         parser = configparser.ConfigParser()
         parser.read(test_config_loc)
+        print(parser.sections())
         test_log_root = parser["TEST_SETTINGS"]["test_log_root"]
 
         logger_name = "oauth_interface_test"
@@ -21,6 +22,8 @@ class TestOauthInterface(unittest.TestCase):
         self.logger = logger
         self.client = MastodonOAuthInterface(test_config_loc, logger)
         self.client_domain = parser["APP_TOKENS"]["CLIENT_DOMAIN"]  # Required to be passed in as a parameter
+
+
 
     def test_verify_user_provided_domain(self):
         with_https = "https://mastodon.social"
@@ -43,6 +46,7 @@ class TestOauthInterface(unittest.TestCase):
         self.client.start_app_api_client(self.client_domain)  # Sets self.api_client
 
         wrong_auth_code = "Sousou no Frieren"
+
         self.assertRaises(InvalidApiInputError, self.client.generate_user_access_token,
                           wrong_auth_code)
 

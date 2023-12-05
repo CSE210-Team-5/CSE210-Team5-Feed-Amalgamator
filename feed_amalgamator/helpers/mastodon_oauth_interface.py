@@ -4,9 +4,8 @@ Any module interacting with the Mastodon API for Oauth purposes should do so str
 
 import configparser
 import logging
-import json
 from pathlib import Path
-
+import json
 import mastodon.errors
 import requests
 from urllib.parse import urlparse
@@ -17,6 +16,7 @@ from feed_amalgamator.helpers.custom_exceptions import (
     MastodonConnError,
     InvalidApiInputError,
 )
+from feed_amalgamator.helpers.db_interface import dbi, ApplicationTokens
 
 # Add more logging levels (info etc. - forgot about this)
 # Segment https error types to become more descriptive
@@ -32,15 +32,6 @@ class MastodonOAuthInterface:
     """
 
     def __init__(self, config_file_loc: Path, logger: logging.Logger):
-        parser = configparser.ConfigParser()
-        parser.read(config_file_loc)
-
-        client_dict = parser["APP_TOKENS"]
-
-        self.CLIENT_ID = client_dict["CLIENT_ID"]
-        self.CLIENT_SECRET = client_dict["CLIENT_SECRET"]
-        self.ACCESS_TOKEN = client_dict["ACCESS_TOKEN"]
-
         """We pass in a logger instead of creating a new one
         As we want logs to be logged to the program calling the interface
         rather than have separate logs for the interface layer specifically"""
@@ -63,14 +54,18 @@ class MastodonOAuthInterface:
 
         # Hardcoded endpoint for generally getting an instance's info
         endpoint_to_test = "https://{d}/api/v2/instance".format(d=wanted_domain)
-
         # As this is before any api client is created, we will use a simple https request
         try:
-            response = requests.get(endpoint_to_test)
+            headers = {
+                "User-Agent": "YourApp/1.0",
+                "Accept": "application/json",
+            }
+            response = requests.get(endpoint_to_test, headers=headers)
             if response.status_code == HTTPStatus.OK:
+                domain = json.loads(response.content)["domain"]
                 return (
                     True,
-                    json.loads(response.content)["domain"],
+                    domain,
                 )  # Obtain the cleansed content
         except requests.exceptions.ConnectionError as e:
             # If the user domain is invalid, it is indistinguishable from a connection error (cannot resolve
@@ -102,7 +97,7 @@ class MastodonOAuthInterface:
             wanted_domain = parsed_input.path
         return wanted_domain
 
-    def start_app_api_client(self, user_domain: str):
+    def start_app_api_client(self, user_domain: str,  client_id: str, client_secret: str, access_token: str):
         """
         Function to start the app client (client used by our app to authenticate users).
         This generated app client will be used to process user authorization requests
@@ -114,9 +109,9 @@ class MastodonOAuthInterface:
         """
         try:
             client = Mastodon(
-                client_id=self.CLIENT_ID,
-                client_secret=self.CLIENT_SECRET,
-                access_token=self.ACCESS_TOKEN,
+                client_id=client_id,
+                client_secret=client_secret,
+                access_token=access_token,
                 api_base_url=user_domain,
             )
             # Be careful: Wrong information used to start this client will not cause
@@ -183,3 +178,57 @@ class MastodonOAuthInterface:
         )
         self.logger.error(error_message)
         raise MastodonConnError(error_message)
+
+    def check_if_domain_exists(self, domain_name):
+        """
+        Check if domain is already added in database with access token
+        @param domain_name: Check if client_id, client_secret already exist for domain_name
+        """
+        domain = ApplicationTokens.query.filter_by(server=domain_name).first()
+        if domain is None:
+            return None
+        else:
+            return domain
+
+    def add_domain(self, domain_name):
+        """
+        Add new domain to database. Fetch client id, client secret and access token and store it in database
+        @param domain_name: Add domain_name to database, with its client id, client secret and access token
+        """
+        api_url = "https://" + domain_name + "/api/v1/apps"
+        token_url = "https://" + domain_name + "/oauth/token"
+        payload = {
+            'client_name': 'Test Application',
+            'redirect_uris': 'urn:ietf:wg:oauth:2.0:oob',
+            'scopes': 'read write push',
+            'website': 'https://myapp.example'
+        }
+        try:
+            headers = {
+                "User-Agent": "YourApp/1.0",
+                "Accept": "application/json",
+            }
+            response = requests.post(api_url, data=payload, headers=headers)
+            response.raise_for_status()  # Raises an HTTPError if the HTTP request returned an unsuccessful status code
+            response_dict = json.loads(response.text)
+            client_id = response_dict['client_id']
+            client_secret = response_dict['client_secret']
+            payload_token = {
+                'client_id': client_id,
+                'client_secret': client_secret,
+                'redirect_uri': 'urn:ietf:wg:oauth:2.0:oob',
+                'grant_type': 'client_credentials'
+            }
+            response = requests.post(token_url, data=payload_token, headers=headers)
+            response.raise_for_status()  # Raises an HTTPError if the HTTP request returned an unsuccessful status code
+            response_dict_token = json.loads(response.text)
+            access_token = response_dict_token['access_token']
+            app_token = ApplicationTokens(server=domain_name, client_id=client_id, client_secret=client_secret,
+                                          access_token=access_token)
+            dbi.session.add(app_token)
+            dbi.session.commit()
+            return client_id, client_secret, access_token
+        except requests.exceptions.RequestException as e:
+            # Handle exceptions that might occur during the request
+            print(f"Error: {e}")
+            return None, None, None

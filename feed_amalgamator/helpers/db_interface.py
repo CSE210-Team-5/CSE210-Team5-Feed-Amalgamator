@@ -28,3 +28,11 @@ class UserServer(dbi.Model):
     """TODO - For future versions of the project. The access token to the third party api is stored as plaintext
     at the moment. Coming up with a solution is not viable for this sprint"""
     token: Mapped[str] = mapped_column(dbi.String, nullable=False, name="token")
+
+class ApplicationTokens(dbi.Model):
+    __tablename__ = "application_tokens"
+    server_id: Mapped[int] = mapped_column(dbi.Integer, primary_key=True, autoincrement=True, name="id")
+    server: Mapped[str] = mapped_column(dbi.String, nullable=False, name="server")
+    client_id: Mapped[str] = mapped_column(dbi.String, nullable=False, name="client_id")
+    client_secret: Mapped[str] = mapped_column(dbi.String, nullable=False, name="client_secret")
+    access_token: Mapped[str] = mapped_column(dbi.String, nullable=False, name="access_token")
