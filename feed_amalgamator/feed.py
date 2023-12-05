@@ -3,7 +3,7 @@ import configparser
 import logging
 from pathlib import Path
 
-from flask import Blueprint, flash, redirect, render_template, request, session, url_for, jsonify
+from flask import Blueprint, flash, redirect, render_template, request, session, url_for
 from sqlalchemy import exc
 
 from feed_amalgamator.helpers.custom_exceptions import MastodonConnError
@@ -193,7 +193,7 @@ def delete_server():
 def delete_server_name(server_id):
 
     provided_user_id = session[USER_ID_FIELD]
-    user_servers = dbi.session.query(UserServer).filter_by(user_id=provided_user_id, user_server_id=server_id).delete()
+    dbi.session.query(UserServer).filter_by(user_id=provided_user_id, user_server_id=server_id).delete()
     dbi.session.commit()
 
     return redirect('/feed/home')
