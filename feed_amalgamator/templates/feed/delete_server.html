@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block header %}
+<h1 class="add-server-title">
+    {% block title %}Delete Server{% endblock %}
+</h1>
+{% endblock %}
+{% block content %}
+<div class="delete-server">
+    <div class="server-list">
+        {% if timelines is not none %}
+        {% for server in user_servers %}
+        <span id="server_{{ server[0].user_server_id }}" class="delete-list-item">{{server[0].server}} <button onclick="deleteServer('{{ server[0].user_server_id }}')" class="delete-server-button">Delete</button></span>
+        {% endfor %}
+        {% endif %}
+    </div>
+</div>
+
+<script>
+    function deleteServer(serverId) {
+        fetch(`/feed/delete_server/${serverId}`, {
+            method: 'POST',
+        }).then(response => {
+            if (response.ok) {
+                // Update the UI to reflect the deletion (remove the deleted server from the DOM)
+                const serverElement = document.getElementById(`server_${serverId}`);
+                serverElement.remove();
+            } else {
+                console.error('Failed to delete server');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+</script>
+{% endblock %}

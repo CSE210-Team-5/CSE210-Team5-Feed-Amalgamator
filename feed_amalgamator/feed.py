@@ -3,7 +3,7 @@ import configparser
 import logging
 from pathlib import Path
 
-from flask import Blueprint, flash, redirect, render_template, request, session, url_for
+from flask import Blueprint, flash, redirect, render_template, request, session, url_for, jsonify
 from sqlalchemy import exc
 
 from feed_amalgamator.helpers.custom_exceptions import MastodonConnError
@@ -173,3 +173,27 @@ def generate_auth_code_error_message(
     elif not user_domain:
         error = "Domain is required"
     return error
+
+@bp.route("/delete_server", methods=["GET"])
+def delete_server():
+    """Endpoint for the user to delete a server to their existing list"""
+    if request.method == "GET":
+        provided_user_id = session[USER_ID_FIELD]
+        user_servers = dbi.session.execute(dbi.select(UserServer).filter_by(user_id=provided_user_id)).all()
+        if user_servers is None:
+            flash("Invalid User")  # issue with hard coded error messages - see below
+            logger.error("No user servers found that are tied to user id {i}".format(i=provided_user_id))
+            raise Exception  # TODO: We need to standardize how exceptions are raised and parsed in flask
+        else:
+            logger.info("Found {n} servers tied to user id {i}".format(n=len(user_servers), i=provided_user_id))
+        
+    return render_template("feed/delete_server.html", user_servers=user_servers)
+
+@bp.route("/delete_server/<server_id>", methods=["POST"])
+def delete_server_name(server_id):
+
+    provided_user_id = session[USER_ID_FIELD]
+    user_servers = dbi.session.query(UserServer).filter_by(user_id=provided_user_id, user_server_id=server_id).delete()
+    dbi.session.commit()
+
+    return redirect('/feed/home')
