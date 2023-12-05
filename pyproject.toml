@@ -7,6 +7,7 @@ authors = [
     {name = "BugsBunny", email = "bugsbunny@gmail.com"},
     {name = "Brandon Wu",email = "brandonmwu888@gmail.com"},
     {name = "Vancheeswaran Vaidyanathan", email = "vigneshvanchy@gmail.com"},
+    {name = "Wei Jie CHIA",email = "wchia@ucsd.edu"},
 ]
 dependencies = [
     "flask>=3.0.0",
