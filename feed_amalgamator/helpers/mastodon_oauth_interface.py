@@ -67,7 +67,7 @@ class MastodonOAuthInterface:
                 "ConnectionError {e} trying to verify user provided domain. User provided domain"
                 "is either invalid, or there is a connection problem".format(e=e)
             )
-        except json.JSONDecodeError as err:
+        except json.JSONDecodeError:
             self.logger.error("JsonDecodeError {e}: Response obtained from server while verifying domain was "
                               "successful, but returned a value that cannot be parsed. Server is likely to "
                               "not be a legitimate server")
