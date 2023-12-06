@@ -13,11 +13,6 @@ from feed_amalgamator.helpers.mastodon_oauth_interface import MastodonOAuthInter
 from feed_amalgamator.helpers.db_interface import dbi, UserServer
 from . import CONFIG
 
-"""
-Notes from discussion with Professor:
-# No abstraction, security, happy path (code only thinks about things that right, not robust code)
-# magic values/strings, sql injection, robustness, Swagger file/OpenAPI format for documentation
-"""
 
 bp = Blueprint("feed", __name__, url_prefix="/feed")
 
@@ -27,7 +22,7 @@ parser = configparser.ConfigParser()
 parser.read(CONFIG_FILE_LOC)
 log_file_loc = Path(parser["LOG_SETTINGS"]["feed_log_loc"])
 logger = LoggingHelper.generate_logger(logging.INFO, log_file_loc, "feed_page")
-auth_api = MastodonOAuthInterface(CONFIG_FILE_LOC, logger)
+auth_api = MastodonOAuthInterface(logger)
 data_api = MastodonDataInterface(logger)
 
 # TODO - Add Swagger/OpenAPI documentation
@@ -42,9 +37,10 @@ LOGIN_TOKEN_FIELD = CONFIG.login_token
 USER_ID_FIELD = CONFIG.user_id
 
 
-def filter_sort_feed(timelines):
+def filter_sort_feed(timelines: list[dict]) -> list[dict]:
     """
     Function that sorts and fiters the timeline
+    @param timelines : timeline data to need to be filtered and sorted
     """
     for post in timelines:
         for delete in CONFIG.filter_list:
@@ -72,7 +68,7 @@ def feed_home():
                 server_domain = user_server.server
                 access_token = user_server.token
                 data_api.start_user_api_client(user_domain=server_domain, user_access_token=access_token)
-                # TODO: This will need to be processed (filtered, sorted etc.) by a helper class
+
                 timeline = data_api.get_timeline_data(HOME_TIMELINE_NAME, POSTS_PER_TIMELINE)
                 timelines.extend(timeline)
             timelines = filter_sort_feed(timelines)
@@ -98,25 +94,25 @@ def render_redirect_url_page():
 
     domain = request.form[USER_DOMAIN_FIELD]
     logger.info("Rendering redirect url for user inputted domain {d}".format(d=domain))
-    session[USER_DOMAIN_FIELD] = domain  # CWJ: What does this do
+    session[USER_DOMAIN_FIELD] = domain
 
     is_valid_domain, parsed_domain = auth_api.verify_user_provided_domain(domain)
+
     if not is_valid_domain:
-        logger.error(
-            "User inputted domain {d} was not a valid mastodon domain. " "Failed to render redirect url page".format(
-                d=domain
-            )
-        )
+        logger.error("User inputted domain {d} was not a valid mastodon domain." 
+                     "Failed to render redirect url page".format(d=domain))
         raise Exception  # TODO: We will need to standardize how to handle exceptions in the flask context.
 
-    domain = auth_api.check_if_domain_exists(parsed_domain)
-    if domain is not None:
-        client_id = domain.client_id
-        client_secret = domain.client_secret
-        access_token = domain.access_token
+    app_token_obj = auth_api.check_if_domain_exists_in_database(parsed_domain)
+    if app_token_obj is not None:
+        client_id = app_token_obj.client_id
+        client_secret = app_token_obj.client_secret
+        access_token = app_token_obj.access_token
     else:
-        client_id, client_secret, access_token = auth_api.add_domain(parsed_domain)
+        client_id, client_secret, access_token = auth_api.add_domain_to_database(parsed_domain)
         if client_id is None:
+            logger.error("Domain {d} did not return a proper API response when adding it"
+                         "to the database".format(d=domain))
             return render_template("feed/add_server.html", is_domain_set=False, error=True)
         logger.info("New domain added to the database")
 

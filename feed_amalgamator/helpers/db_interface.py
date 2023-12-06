@@ -29,7 +29,6 @@ class UserServer(dbi.Model):
     at the moment. Coming up with a solution is not viable for this sprint"""
     token: Mapped[str] = mapped_column(dbi.String, nullable=False, name="token")
 
-
 class ApplicationTokens(dbi.Model):
     __tablename__ = "application_tokens"
     server_id: Mapped[int] = mapped_column(dbi.Integer, primary_key=True, autoincrement=True, name="id")

@@ -1,4 +1,3 @@
-#[TODO] add requirements, setup directory for testing and refine yml
 ---
 name: python-tests
 on:
@@ -35,4 +34,6 @@ jobs:
           pdm list
       - name: Unit Testing
         run: |
-          pdm run python -m unittest discover tests
+          pdm run python -m coverage run -m unittest discover tests
+          pdm run python -m coverage report --format="markdown" > "$GITHUB_STEP_SUMMARY"
+        shell: bash

@@ -22,6 +22,10 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 from sqlalchemy import exc
 
+from . import CONFIG
+from .CONFIG import USERNAME_FIELD, PASSWORD_FIELD
+from .feed import USER_ID_FIELD
+
 bp = Blueprint("auth", __name__, url_prefix="/auth")
 
 # Setup for logging and interface layers
@@ -30,16 +34,19 @@ bp = Blueprint("auth", __name__, url_prefix="/auth")
 CONFIG_FILE_LOC = Path("configuration/app_settings.ini")  # Path is hardcoded, needs to be changed
 parser = configparser.ConfigParser()
 parser.read(CONFIG_FILE_LOC)
-log_file_loc = Path(parser["LOG_SETTINGS"]["feed_log_loc"])
-logger = LoggingHelper.generate_logger(logging.INFO, log_file_loc, "feed_page")
+log_file_loc = Path(parser["LOG_SETTINGS"]["auth_log_loc"])
+logger = LoggingHelper.generate_logger(logging.INFO, log_file_loc, "auth_page")
 error = ""
-print(parser.sections())
+
+# Constants for form fields
+
+# Problem: We need to inject the database layer instead of just calling it like that to make testing easier
 
 @bp.route("/register", methods=("GET", "POST"))
 def register():
     if request.method == "POST":
-        username = request.form["username"]
-        password = generate_password_hash(request.form["password"])
+        username = request.form[CONFIG.USERNAME_FIELD]
+        password = generate_password_hash(request.form[CONFIG.PASSWORD_FIELD])
         try:
             user = User(username=username, password=password)
             dbi.session.add(user)
@@ -49,14 +56,15 @@ def register():
         else:
             # Executes if there is no exception
             return redirect(url_for("auth.login"))
+    # Executes if there is an exception
     return render_template("auth/register.html")
 
 
 @bp.route("/login", methods=("GET", "POST"))
 def login():
     if request.method == "POST":
-        username = request.form["username"]
-        password = request.form["password"]
+        username = request.form[USERNAME_FIELD]
+        password = request.form[PASSWORD_FIELD]
         user = User.query.filter_by(username=username).first()
         if user is None:
             flash("Invalid User")  # issue with hard coded error messages - see below
@@ -68,7 +76,7 @@ def login():
             raise Exception  # TODO: We need to standardize how exceptions are raised and parsed in flask.
         else:
             session.clear()
-            session["user_id"] = user.user_id
+            session[USER_ID_FIELD] = user.user_id
             return redirect(url_for("feed.feed_home"))
 
         flash(error)

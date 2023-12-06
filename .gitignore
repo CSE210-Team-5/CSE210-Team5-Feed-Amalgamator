@@ -30,3 +30,4 @@ src
 pdm.lock
 .pdm-python
 ruff.toml
+.coverage

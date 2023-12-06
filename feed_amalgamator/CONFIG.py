@@ -6,3 +6,7 @@ login_token = "token"
 user_id = "user_id"
 sort_by = "favourites_count"
 filter_list = ["uri", "in_reply_to_id", "in_reply_to_account_id", "muted", "language"]
+
+# Constants
+USERNAME_FIELD = "username"
+PASSWORD_FIELD = "password"
