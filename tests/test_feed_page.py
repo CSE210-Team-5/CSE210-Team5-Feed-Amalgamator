@@ -10,7 +10,7 @@ from feed_amalgamator.helpers.db_interface import ApplicationTokens
 class TestFeedPage(unittest.TestCase):
     """Tests the endpoints in the feed page. These are closely to functional/integration tests than unit tests"""
     def setUp(self) -> None:
-        test_config_loc = Path("tests/test_config/test_mastodon_client_info.ini")
+        test_config_loc = Path("configuration/test_mastodon_client_info.ini")
         parser = configparser.ConfigParser()
         parser.read(test_config_loc)
         # test_log_root = parser["TEST_SETTINGS"]["test_log_root"]

@@ -15,7 +15,7 @@ from werkzeug.security import check_password_hash
 class TestAuthPage(unittest.TestCase):
     """Tests the endpoints in the auth page. These are closely to functional/integration tests than unit tests"""
     def setUp(self) -> None:
-        test_config_loc = Path("tests/test_config/test_mastodon_client_info.ini")
+        test_config_loc = Path("configuration/test_mastodon_client_info.ini")
         parser = configparser.ConfigParser()
         parser.read(test_config_loc)
         # test_log_root = parser["TEST_SETTINGS"]["test_log_root"]
@@ -44,7 +44,7 @@ class TestAuthPage(unittest.TestCase):
         test_user = "Gojo Satoru"
         test_password = "Infinite Void!"
         response_with_post = client.post(register_url, data={USERNAME_FIELD: test_user, PASSWORD_FIELD: test_password})
-        decoded_post_response = response_with_post.data.decode("utf-8")
+        # decoded_post_response = response_with_post.data.decode("utf-8")
         with self.app.app_context():
             # Test that db insertion was correct
             items = User.query.filter_by(username=test_user).all()
@@ -56,7 +56,7 @@ class TestAuthPage(unittest.TestCase):
         # Test that redirect after login works correctly
         # May need to be changed if the design of the page
         # TODO - Figure out how testing works with redirects
-        print(decoded_post_response)
+        # print(decoded_post_response)
         # self.assertIn('value="Log In"', decoded_post_response)
 
 
