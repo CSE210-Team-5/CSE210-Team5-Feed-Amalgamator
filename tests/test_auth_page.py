@@ -43,7 +43,9 @@ class TestAuthPage(unittest.TestCase):
         # Test the Post
         test_user = "Gojo Satoru"
         test_password = "Infinite Void!"
-        response_with_post = client.post(register_url, data={USERNAME_FIELD: test_user, PASSWORD_FIELD: test_password})
+
+        client.post(register_url, data={USERNAME_FIELD: test_user, PASSWORD_FIELD: test_password})
+
         # decoded_post_response = response_with_post.data.decode("utf-8")
         with self.app.app_context():
             # Test that db insertion was correct
