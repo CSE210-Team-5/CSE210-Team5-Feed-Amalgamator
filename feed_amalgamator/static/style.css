@@ -689,3 +689,13 @@ body::after {
 input[type="submit"]:hover {
   background-color: #2980b9;
 }
+
+ .error-message {
+      color: red;
+      background-color: #fff0f0;
+      border: 1px solid red;
+      padding: 5px;
+      margin-bottom: 10px;
+      border-radius: 4px;
+      display: none; /* Hide by default and only show when there is an error */
+    }
