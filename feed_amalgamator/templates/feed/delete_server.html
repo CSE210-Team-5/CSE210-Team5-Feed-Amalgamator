@@ -10,7 +10,7 @@
         {% if user_servers is not none %}
         <form method="post">
             {% for user_server in user_servers %}
-            <input type="checkbox" name="servers" value = "{{ user_server.server }}"> {{ user_server.server }} <br />
+            <input type="checkbox" name="servers" value="{{ user_server.server }}"> {{ user_server.server }} <br />
             {% endfor %}
             <input type="submit" value="Delete">
         </form>

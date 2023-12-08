@@ -1,7 +1,6 @@
 """Code for handling the main, feed page via flask"""
 import configparser
 import logging
-import os
 from pathlib import Path
 
 from flask import Blueprint, flash, redirect, render_template, request, session, url_for
@@ -184,7 +183,6 @@ def delete_server():
     if request.method == "POST":
         user_id = session[USER_ID_FIELD]
         servers = request.form.getlist('servers')
-        message = None
         for server in servers:
             server = UserServer.query.filter_by(user_id=user_id, server=server).first()
             if server:
