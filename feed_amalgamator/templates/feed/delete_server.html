@@ -7,30 +7,17 @@
 {% block content %}
 <div class="delete-server">
     <div class="server-list">
-        {% if timelines is not none %}
-        {% for server in user_servers %}
-        <span id="server_{{ server[0].user_server_id }}" class="delete-list-item">{{server[0].server}} <button onclick="deleteServer('{{ server[0].user_server_id }}')" class="delete-server-button">Delete</button></span>
-        {% endfor %}
+        {% if user_servers is not none %}
+        <form method="post">
+            {% for user_server in user_servers %}
+            <input type="checkbox" name="servers" value = "{{ user_server.server }}"> {{ user_server.server }} <br />
+            {% endfor %}
+            <input type="submit" value="Delete">
+        </form>
+        {% else %}
+        <h3>No server records found</h3>
         {% endif %}
     </div>
 </div>
 
-<script>
-    function deleteServer(serverId) {
-        fetch(`/feed/delete_server/${serverId}`, {
-            method: 'POST',
-        }).then(response => {
-            if (response.ok) {
-                // Update the UI to reflect the deletion (remove the deleted server from the DOM)
-                const serverElement = document.getElementById(`server_${serverId}`);
-                serverElement.remove();
-            } else {
-                console.error('Failed to delete server');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-    }
-</script>
 {% endblock %}

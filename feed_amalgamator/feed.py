@@ -1,6 +1,7 @@
 """Code for handling the main, feed page via flask"""
 import configparser
 import logging
+import os
 from pathlib import Path
 
 from flask import Blueprint, flash, redirect, render_template, request, session, url_for
@@ -15,11 +16,10 @@ from . import CONFIG
 
 
 bp = Blueprint("feed", __name__, url_prefix="/feed")
-
-# Setting up the loggers and interface layers
-CONFIG_FILE_LOC = Path(CONFIG.path)  # Path is hardcoded, needs to be changed
 parser = configparser.ConfigParser()
-parser.read(CONFIG_FILE_LOC)
+# Setting up the loggers and interface layers
+with open(CONFIG.path) as file:
+    parser.read_file(file)
 log_file_loc = Path(parser["LOG_SETTINGS"]["feed_log_loc"])
 logger = LoggingHelper.generate_logger(logging.INFO, log_file_loc, "feed_page")
 auth_api = MastodonOAuthInterface(logger)
@@ -170,26 +170,33 @@ def generate_auth_code_error_message(
         error = "Domain is required"
     return error
 
-@bp.route("/delete_server", methods=["GET"])
-def delete_server():
-    """Endpoint for the user to delete a server to their existing list"""
-    if request.method == "GET":
-        provided_user_id = session[USER_ID_FIELD]
-        user_servers = dbi.session.execute(dbi.select(UserServer).filter_by(user_id=provided_user_id)).all()
-        if user_servers is None:
-            flash("Invalid User")  # issue with hard coded error messages - see below
-            logger.error("No user servers found that are tied to user id {i}".format(i=provided_user_id))
-            raise Exception  # TODO: We need to standardize how exceptions are raised and parsed in flask
-        else:
-            logger.info("Found {n} servers tied to user id {i}".format(n=len(user_servers), i=provided_user_id))
-        
+
+def render_user_servers():
+    user_id = session[USER_ID_FIELD]
+    user_servers = UserServer.query.filter_by(user_id=user_id).all()
+    if len(user_servers) == 0:
+        user_servers = None
     return render_template("feed/delete_server.html", user_servers=user_servers)
 
-@bp.route("/delete_server/<server_id>", methods=["POST"])
-def delete_server_name(server_id):
+@bp.route("/delete_server", methods=["GET","POST"])
+def delete_server():
+    """Endpoint for the user to delete one or more servers from their existing list"""
+    if request.method == "POST":
+        user_id = session[USER_ID_FIELD]
+        servers = request.form.getlist('servers')
+        message = None
+        for server in servers:
+            server = UserServer.query.filter_by(user_id=user_id, server=server).first()
+            if server:
+                dbi.session.delete(server)
+                dbi.session.commit()
+                logger.info("Deleted server {} of user {}".format(server.server, server.user_id))
+            else:
+                logger.info("Invalid record for server {} of user {}".format(server.server, server.user_id))
+                flash("Invalid record for server {}".format(server))
+                raise Exception # TODO: We will need to standardize how to handle exceptions in the flask context.
+            return render_user_servers()
 
-    provided_user_id = session[USER_ID_FIELD]
-    dbi.session.query(UserServer).filter_by(user_id=provided_user_id, user_server_id=server_id).delete()
-    dbi.session.commit()
+    else:
+        return render_user_servers()
 
-    return redirect('/feed/home')
