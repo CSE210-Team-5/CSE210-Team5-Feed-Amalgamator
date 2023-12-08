@@ -69,6 +69,9 @@ def feed_home():
                 data_api.start_user_api_client(user_domain=server_domain, user_access_token=access_token)
 
                 timeline = data_api.get_timeline_data(HOME_TIMELINE_NAME, POSTS_PER_TIMELINE)
+                # Add server it was retrieved from to be accessed by frontend
+                for post in timeline:
+                    post["original_server"] = server_domain
                 timelines.extend(timeline)
             timelines = filter_sort_feed(timelines)
             return render_template("feed/home.html", timelines=timelines)
@@ -98,8 +101,9 @@ def render_redirect_url_page():
     is_valid_domain, parsed_domain = auth_api.verify_user_provided_domain(domain)
 
     if not is_valid_domain:
-        logger.error("User inputted domain {d} was not a valid mastodon domain." 
-                     "Failed to render redirect url page".format(d=domain))
+        logger.error(
+            "User inputted domain {d} was not a valid mastodon domain." "Failed to render redirect url page".format(d=domain)
+        )
         raise Exception  # TODO: We will need to standardize how to handle exceptions in the flask context.
 
     app_token_obj = auth_api.check_if_domain_exists_in_database(parsed_domain)
@@ -110,8 +114,7 @@ def render_redirect_url_page():
     else:
         client_id, client_secret, access_token = auth_api.add_domain_to_database(parsed_domain)
         if client_id is None:
-            logger.error("Domain {d} did not return a proper API response when adding it"
-                         "to the database".format(d=domain))
+            logger.error("Domain {d} did not return a proper API response when adding it" "to the database".format(d=domain))
             return render_template("feed/add_server.html", is_domain_set=False, error=True)
         logger.info("New domain added to the database")
 
@@ -177,12 +180,13 @@ def render_user_servers():
         user_servers = None
     return render_template("feed/delete_server.html", user_servers=user_servers)
 
-@bp.route("/delete_server", methods=["GET","POST"])
+
+@bp.route("/delete_server", methods=["GET", "POST"])
 def delete_server():
     """Endpoint for the user to delete one or more servers from their existing list"""
     if request.method == "POST":
         user_id = session[USER_ID_FIELD]
-        servers = request.form.getlist('servers')
+        servers = request.form.getlist("servers")
         for server in servers:
             server = UserServer.query.filter_by(user_id=user_id, server=server).first()
             if server:
@@ -192,9 +196,8 @@ def delete_server():
             else:
                 logger.info("Invalid record for server {} of user {}".format(server.server, server.user_id))
                 flash("Invalid record for server {}".format(server))
-                raise Exception # TODO: We will need to standardize how to handle exceptions in the flask context.
+                raise Exception  # TODO: We will need to standardize how to handle exceptions in the flask context.
             return render_user_servers()
 
     else:
         return render_user_servers()
-
