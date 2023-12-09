@@ -51,6 +51,10 @@ def filter_sort_feed(timelines: list[dict]) -> list[dict]:
 @bp.route("/home", methods=["GET"])
 def feed_home():
     if request.method == "GET":
+        user_id = session.get("user_id")
+        if user_id is None:
+            return redirect(url_for("auth.login"))
+
         provided_user_id = session[USER_ID_FIELD]
         user_servers = dbi.session.execute(dbi.select(UserServer).filter_by(user_id=provided_user_id)).all()
         if user_servers is None:
