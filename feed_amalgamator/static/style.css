@@ -200,3 +200,34 @@ input[type="text"] {
   background-color: #563acc;
   cursor: pointer;
 }
+
+.delete-server {
+  color: white;
+  text-align: center;
+}
+
+.server-list {
+  display: grid;
+}
+
+.delete-list-item {
+  margin: 10px;
+}
+
+.delete-server-button {
+  margin-top: 10px;
+  background-color: #6364ff;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  padding: 10px 25px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+
+.delete-server-button:hover {
+  background-color: #563acc;
+  cursor: pointer;
+}

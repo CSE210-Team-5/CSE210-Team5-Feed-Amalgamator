@@ -1,7 +1,8 @@
 {% extends 'base.html' %}
 {% block content %}
     <p>
-        <a href="{{ url_for("feed.add_server") }}">Add Server</a>
+        <a href="{{ url_for('feed.add_server') }}">Add Server</a>
+        <a href="{{ url_for('feed.delete_server') }}">Delete Server</a>
     </p>
     {% if timelines is not none %}
             {% for post in timelines %}

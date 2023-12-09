@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block header %}
+<h1 class="add-server-title">
+    {% block title %}Delete Server{% endblock %}
+</h1>
+{% endblock %}
+{% block content %}
+<div class="delete-server">
+    <div class="server-list">
+        {% if user_servers is not none %}
+        <form method="post">
+            {% for user_server in user_servers %}
+            <input type="checkbox" name="servers" value="{{ user_server.server }}"> {{ user_server.server }} <br />
+            {% endfor %}
+            <input type="submit" value="Delete">
+        </form>
+        {% else %}
+        <h3>No server records found</h3>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}
