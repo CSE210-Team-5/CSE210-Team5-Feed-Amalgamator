@@ -11,10 +11,25 @@
         <ul>
             {% if g.user %}
                 <li>
-                    <a href="{{ url_for("auth.logout") }}">Log Out</a>
-                </li>
-                <li>
-                    <a href="{{ url_for("feed.feed_home") }}">Home</a>
+                    <div class="dropdown">
+                        <button class="dropbtn">
+                            <i class="fa fa-bars menu-icon"></i>
+                        </button>
+                        <div class="dropdown-content">
+                            <a href="{{ url_for("feed.feed_home") }}">Home
+                                <i class="fa fa-home"></i>
+                            </a>
+                            <a href="{{ url_for("feed.add_server") }}">Add Server
+                                <i class="fa fa-plus"></i>
+                            </a>
+                            <a href="{{ url_for("feed.delete_server") }}">Delete Server
+                                <i class="fa fa-close"></i>
+                            </a>
+                            <a href="{{ url_for("auth.logout") }}">Log Out
+                                <i class="fa fa-sign-out"></i>
+                            </a>
+                        </div>
+                    </div>
                 </li>
                 <li>
                     <span class="username">
