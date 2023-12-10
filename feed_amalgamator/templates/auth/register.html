@@ -1,15 +1,27 @@
 {% extends 'base.html' %}
-{% block header %}
-    <h1>
-        {% block title %}Register{% endblock %}
-    </h1>
+
+{% block extra_head %}
+  {{ super() }}
+     <script src="{{ url_for('static', filename='register.js') }}"></script>
 {% endblock %}
+
 {% block content %}
-    <form method="post">
-        <label for="username">Username</label>
-        <input name="username" id="username" required>
-        <label for="password">Password</label>
-        <input type="password" name="password" id="password" required>
-        <input type="submit" value="Register">
-    </form>
+<div class="register-container">
+  <form method="post" class="register-form" novalidate> <!-- Removed onsubmit attribute -->
+    <div id="error-message" class="error-message"></div>
+    <h2 class="form-title">Register</h2>
+    <div class="form-group">
+      <input type="text" name="username" id="username" required placeholder="Username">
+    </div>
+    <div class="form-group">
+      <input type="password" name="password" id="password" required placeholder="Password">
+    </div>
+      <div class="form-group">
+  <input type="password" name="confirm_password" id="confirm_password" required placeholder="Confirm Password">
+</div>
+    <div class="form-group">
+      <input type="submit" value="Register" class="submit-btn">
+    </div>
+  </form>
+</div>
 {% endblock %}
