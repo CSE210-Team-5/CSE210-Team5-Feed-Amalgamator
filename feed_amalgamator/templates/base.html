@@ -33,7 +33,7 @@
                 </li>
                 <li>
                     <span class="username">
-                        {{ g.user['username'] }}
+                        {{ g.user[0].username }}
                         <img class="profile-picture"
                              src="{{ url_for('static', filename='mastodon_profile_default.png') }}"
                              alt="Profile Picture"
