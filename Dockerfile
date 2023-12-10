@@ -5,9 +5,7 @@ FROM python:3.11
 WORKDIR /code
 
 COPY . .
-RUN pip install -U pip setuptools wheel==0.42.0
-RUN pip install pdm==2.10.4
-RUN ls
+RUN pip install setuptools==69.0.2 wheel==0.42.0 pdm==2.10.4
 RUN pdm init -gn &&\
     pdm install &&\
     pdm list
