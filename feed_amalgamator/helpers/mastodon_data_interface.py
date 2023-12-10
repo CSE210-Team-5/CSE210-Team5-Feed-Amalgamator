@@ -28,8 +28,6 @@ class MastodonDataInterface:
         self.user_client = None
         """Hard coded required scopes for the app to work"""
         self.REQUIRED_SCOPES = ["read", "write", "push"]
-        """The redirect URI required by the API to generate certain urls"""
-        self.REDIRECT_URI = "urn:ietf:wg:oauth:2.0:oob"
 
     def start_user_api_client(self, user_domain: str, user_access_token: str):
         """

@@ -22,9 +22,7 @@
                 <div>
                     <label for="domain">Sever Domain/URL</label>
                     <input type="text" name="domain" id="domain" required>
-                        {% if error == true %}
-                            <span>Can't add this server, try again!</span>
-                        {% endif %}
+                    {% if error == true %}<span>Can't add this server, try again!</span>{% endif %}
                 </div>
                 <input type="submit" class="add-server-btn" value="Add Server">
             </form>

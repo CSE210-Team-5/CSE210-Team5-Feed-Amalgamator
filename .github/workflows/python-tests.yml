@@ -1,39 +1,47 @@
 ---
 name: python-tests
-on:
-    push:
-        branches: ["main"]
-    pull_request:
-        branches: ["main"]
+'on':
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 jobs:
   build:
-    runs-on: ${{ matrix.os }}
+    runs-on: '${{ matrix.os }}'
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
-        python-version: ["3.11.5"]
+        os:
+          - ubuntu-latest
+          - macos-latest
+          - windows-latest
+        python-version:
+          - 3.11.5
     steps:
       - uses: actions/checkout@v4
       - name: Setup Directory
         run: mkdir configuration
       - name: Setup Config Files
         env:
-          TEST_SECRET: ${{secrets.TEST_CONFIG}}
-          APP_SECRET: ${{secrets.APP_CONFIG}}
+          TEST_SECRET: '${{secrets.TEST_CONFIG}}'
+          APP_SECRET: '${{secrets.APP_CONFIG}}'
         shell: bash
         run: |
-            echo "$APP_SECRET" >> configuration/app_settings.ini
-            echo "$TEST_SECRET" >> configuration/test_mastodon_client_info.ini
+          echo "$APP_SECRET" >> configuration/app_settings.ini
+          echo "$TEST_SECRET" >> configuration/test_mastodon_client_info.ini
       - uses: pdm-project/setup-pdm@v3
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: '${{ matrix.python-version }}'
       - name: Install dependencies
         run: |
           pdm init -gn
-          pdm install 
+          pdm install
           pdm list
       - name: Unit Testing
-        run: |
+        run: >
           pdm run python -m coverage run -m unittest discover tests
-          pdm run python -m coverage report --format="markdown" > "$GITHUB_STEP_SUMMARY"
+
+          pdm run python -m coverage report --format="markdown" >
+          "$GITHUB_STEP_SUMMARY"
         shell: bash

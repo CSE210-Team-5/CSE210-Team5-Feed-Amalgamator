@@ -22,3 +22,13 @@ Please follow the instructions below to run the application:
 
 9. Run `flask --app feed_amalgamator run --debug` . This opens the site in your browser. In debug mode, you can make live changes in the code which will be reflected on the site without having to restart the server.
 
+## Using Makefiles to use Linters and run Tests locally
+
+1. Use `npm install` to install stylelint and ESLint.
+2. Use `npm init @eslint/config` to get config file for ESLint.
+3. Add Configuration Files for Testing in configuration directory.
+4. Use following commands to run linter, test and test-coverage respectively,
+
+`make lint`  
+`make test`  
+`make test-coverage`

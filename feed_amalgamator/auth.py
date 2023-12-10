@@ -31,9 +31,9 @@ bp = Blueprint("auth", __name__, url_prefix="/auth")
 # Setup for logging and interface layers
 
 # Setting up the loggers and interface layers
-CONFIG_FILE_LOC = Path("configuration/app_settings.ini")  # Path is hardcoded, needs to be changed
 parser = configparser.ConfigParser()
-parser.read(CONFIG_FILE_LOC)
+with open(CONFIG.path) as file:
+    parser.read_file(file)
 log_file_loc = Path(parser["LOG_SETTINGS"]["auth_log_loc"])
 logger = LoggingHelper.generate_logger(logging.INFO, log_file_loc, "auth_page")
 error = ""
@@ -41,6 +41,7 @@ error = ""
 # Constants for form fields
 
 # Problem: We need to inject the database layer instead of just calling it like that to make testing easier
+
 
 @bp.route("/register", methods=("GET", "POST"))
 def register():
@@ -97,7 +98,7 @@ def load_logged_in_user():
 @bp.route("/logout")
 def logout():
     session.clear()
-    return redirect(url_for("auth.register"))
+    return redirect(url_for("auth.login"))
 
 
 def login_required(view):
