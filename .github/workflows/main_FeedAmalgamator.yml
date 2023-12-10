@@ -1,12 +1,11 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy container app to Azure Web App - FeedAmalgamator
+name: Build and Deploy
 
 on:
-  push:
-    branches:
-      - main
+  release:
+    types: [published]
   workflow_dispatch:
 
 jobs:
@@ -14,7 +13,7 @@ jobs:
     runs-on: 'ubuntu-latest'
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
@@ -24,13 +23,26 @@ jobs:
       with:
         registry: https://gchr.io/feed-amalgamator/
         username: ${{ secrets.AzureAppService_ContainerUsername_d9f74ee8078843edb02877c1bbc0d7ff }}
-        password: ${{ secrets.AzureAppService_ContainerPassword_2cc546e126b44908857475ff8f7713ff }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Setup Directory
+      run: mkdir configuration
+
+    - name: Setup Config Files
+      env:
+        TEST_SECRET: ${{secrets.TEST_CONFIG}}
+        APP_SECRET: ${{secrets.APP_CONFIG}}
+      shell: bash
+      run: |
+        echo "$APP_SECRET" >> configuration/app_settings.ini
+        echo "$TEST_SECRET" >> configuration/test_mastodon_client_info.ini
 
     - name: Build and push container image to registry
       uses: docker/build-push-action@v3
       with:
+        context: .
         push: true
-        tags: gchr.io/feed-amalgamator/${{ secrets.AzureAppService_ContainerUsername_d9f74ee8078843edb02877c1bbc0d7ff }}/Feed-Amalgamator:${{ github.sha }}
+        tags: gchr.io/feed-amalgamator/Feed-Amalgamator:${{ github.sha }}
         file: ./Dockerfile
 
   deploy:
@@ -48,4 +60,4 @@ jobs:
         app-name: 'FeedAmalgamator'
         slot-name: 'production'
         publish-profile: ${{ secrets.AzureAppService_PublishProfile_9cda01e5ed4441acbb2bf60474ad5051 }}
-        images: 'gchr.io/feed-amalgamator/${{ secrets.AzureAppService_ContainerUsername_d9f74ee8078843edb02877c1bbc0d7ff }}/Feed-Amalgamator:${{ github.sha }}'
+        images: 'gchr.io/feed-amalgamator/Feed-Amalgamator:${{ github.sha }}'
