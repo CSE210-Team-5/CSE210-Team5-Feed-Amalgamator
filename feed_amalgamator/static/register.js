@@ -1,5 +1,5 @@
  document.addEventListener('DOMContentLoaded', (event) => {
-  const form = document.querySelector(".register-form");
+  const form = document.querySelector('.register-form');
   const username = document.getElementById('username');
   const password = document.getElementById('password');
   const errorMessage = document.getElementById('error-message');
