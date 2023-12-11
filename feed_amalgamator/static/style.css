@@ -18,18 +18,16 @@ time, mark, audio, video {
     vertical-align: baseline;
 }
 
-/* Global Styles */
-body, html {
-    font-family: Roboto, sans-serif;
-    background-color: #292c36;
-    color: #fff;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    flex-direction: column;
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #292c36;
+  font-family: Roboto, sans-serif;
+  color: #fff;
 }
 
 h1 {
@@ -138,29 +136,34 @@ a {
 input[type="text"],
 input[type="password"],
 input[type="submit"] {
-    width: 100%;
-    padding: 15px;
-    border-radius: 5px;
-    margin-bottom: 10px;
-    font-size: 16px;
-    border: 1px solid #34495e;
+  width: 100%; /* Full width of the form container */
+  padding: 16px; /* Increased padding for taller fields */
+  margin-bottom: 10px; /* Space between elements */
+  border-radius: 5px;
+  border: 1px solid #34495e;
+  box-sizing: border-box; /* Ensures padding is included in the width */
+  font-size: 18px; /* Larger font size for better readability */
 }
 
 input[type="submit"] {
-    background-color: #3498D8;
-    color: #fff;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+  background-color: #3498D8;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  text-align: center;
+  border: none;
+  padding: 18px; /* Slightly larger padding for the button */
 }
 
 input[type="submit"]:hover {
-    background-color: #2980b9;
+  background-color: #2980b9;
 }
 
 /* Additional Styles */
 .add-server-title, .enter-domain, .form-title {
     text-align: center;
     color: white;
+    margin-bottom: 20px;
 }
 
 .add-server-btn {
@@ -199,16 +202,17 @@ input[type="submit"]:hover {
       display: none;
     }
 
- .register-container,
+.register-container,
 .form-container{
   width: 100%;
   max-width: 320px;
   padding: 40px;
-background-color: rgba(255 255 255 /10%);
+  background: rgba(255 255 255 /10%);
   border-radius: 10px;
-box-shadow: 0 5px 20px rgba(0 0 0 /20%);
+  box-shadow: 0 5px 20px rgba(0 0 0 /20%);
   backdrop-filter: blur(10px);
 }
+
 
 
 .form-auth {
