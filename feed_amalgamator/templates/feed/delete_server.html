@@ -8,14 +8,22 @@
     <div class="delete-server">
         <div class="server-list">
             {% if user_servers is not none %}
-                <form method="post">
+            <table id="servers">
+                <tr>
+                    <th></th>
+                    <th>Server</th>
+                </tr>
+                <form id="delete-server" method="post">
                     {% for user_server in user_servers %}
-                        <input type="checkbox" name="servers" value="{{ user_server.server }}">
-                        {{ user_server.server }}
-                        <br />
+                    <tr>
+                        <td><input type="checkbox" name="servers" value="{{ user_server.server }}"></td>
+                        <td>{{ user_server.server }}</td>
+                        <!-- <br /> -->
+                    </tr>
                     {% endfor %}
-                    <input type="submit" value="Delete">
                 </form>
+            </table>
+            <input type="submit" form="delete-server" class="delete-server-button" value="Delete">
             {% else %}
                 <h3>No server records found</h3>
             {% endif %}

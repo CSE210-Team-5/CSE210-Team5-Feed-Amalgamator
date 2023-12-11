@@ -223,7 +223,7 @@ input[type="text"] {
   resize: vertical;
 }
 
-.add-server-btn {
+.add-server-btn, .delete-server-button {
   margin-top: 10px;
   background-color: #6364ff;
   border: none;
@@ -236,7 +236,7 @@ input[type="text"] {
   font-size: 16px;
 }
 
-.add-server-btn:hover {
+.add-server-btn:hover, .delete-server-button:hover {
   background-color: #563acc;
   cursor: pointer;
 }
@@ -251,31 +251,37 @@ input[type="text"] {
   text-align: center;
 }
 
-.server-list {
-  display: grid;
+#servers {
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: #1f232b;
 }
 
-.delete-list-item {
-  margin: 10px;
+#servers td, #servers th {
+  border: 1px solid #17191f;
+  padding: 8px;
+  text-align: left;
 }
 
-.delete-server-button {
-  margin-top: 10px;
+#servers tr:nth-child(even){background-color: #282c37;}
+
+#servers tr:hover {background-color: #563acc;}
+
+#servers th {
+  padding-top: 12px;
+  padding-bottom: 12px;
   background-color: #6364ff;
-  border: none;
-  border-radius: 8px;
-  color: white;
-  padding: 10px 25px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
+  color:white;
 }
 
-.delete-server-button:hover {
-  background-color: #563acc;
-  cursor: pointer;
-}
+/* .server-list {
+  display: grid;
+} */
+
+/* .delete-list-item {
+  margin: 10px;
+} */
 
 .feed-container {
   display: flex;
