@@ -67,14 +67,10 @@ class MastodonOAuthInterface:
                 "ConnectionError {e} trying to verify user provided domain. User provided domain"
                 "is either invalid, or there is a connection problem".format(e=e)
             )
-<<<<<<< HEAD
         except json.JSONDecodeError as err:
-=======
-        except json.JSONDecodeError:
->>>>>>> 0edafca5285e798e9b57c5aadf69ed335839d0f5
             self.logger.error("JsonDecodeError {e}: Response obtained from server while verifying domain was "
                               "successful, but returned a value that cannot be parsed. Server is likely to "
-                              "not be a legitimate server")
+                              "not be a legitimate server".format(e=err))
         return False, ""  # Failed. Could be due to connection errors or wrong domain provided
 
     def _generate_headers_for_api_call(self):

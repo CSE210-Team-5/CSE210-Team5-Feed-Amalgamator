@@ -55,3 +55,8 @@ class TestFeedPage(unittest.TestCase):
 
         # The auth token path cannot be tested as it requires an authorization code, which requires manual
         # intervention
+
+        # Write a checklist for human checkers, automate test procedure in the sense that you
+        # emulate a human. Playwright.dev for testing (more modern than Selenium). StorybookGPT (name of technology)
+        # you can do test automation using POSTman. DOM compare/Pixel compare to validate test cases.
+        # Start with the core thing and work upwards
