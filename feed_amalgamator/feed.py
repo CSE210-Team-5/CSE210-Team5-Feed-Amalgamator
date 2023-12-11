@@ -90,6 +90,9 @@ def add_server():
     if request.method == "POST":
         if USER_DOMAIN_FIELD in request.form:
             return render_redirect_url_page()
+    user_id = session.get("user_id")
+    if user_id is None:
+        return redirect(url_for("auth.login"))
     return render_template("feed/add_server.html", is_domain_set=False)
 
 
@@ -213,4 +216,7 @@ def delete_server():
             return render_user_servers()
 
     else:
+        user_id = session.get("user_id")
+        if user_id is None:
+            return redirect(url_for("auth.login"))
         return render_user_servers()
