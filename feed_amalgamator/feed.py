@@ -24,6 +24,7 @@ redirect_uri = parser["REDIRECT_URI"]["REDIRECT_URI"]
 logger = LoggingHelper.generate_logger(logging.INFO, log_file_loc, "feed_page")
 auth_api = MastodonOAuthInterface(logger, redirect_uri)
 data_api = MastodonDataInterface(logger)
+auth_login = "auth.login"
 
 # TODO - Add Swagger/OpenAPI documentation
 # TODO - Standardize how exceptions are raised and parsed throughout flask
@@ -54,7 +55,7 @@ def feed_home():
     if request.method == "GET":
         user_id = session.get("user_id")
         if user_id is None:
-            return redirect(url_for("auth.login"))
+            return redirect(url_for(auth_login))
 
         provided_user_id = session[USER_ID_FIELD]
         user_servers = dbi.session.execute(dbi.select(UserServer).filter_by(user_id=provided_user_id)).all()
@@ -92,7 +93,7 @@ def add_server():
             return render_redirect_url_page()
     user_id = session.get("user_id")
     if user_id is None:
-        return redirect(url_for("auth.login"))
+        return redirect(url_for(auth_login))
     return render_template("feed/add_server.html", is_domain_set=False)
 
 
@@ -218,5 +219,5 @@ def delete_server():
     else:
         user_id = session.get("user_id")
         if user_id is None:
-            return redirect(url_for("auth.login"))
+            return redirect(url_for(auth_login))
         return render_user_servers()

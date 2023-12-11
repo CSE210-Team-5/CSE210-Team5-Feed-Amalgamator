@@ -127,10 +127,6 @@ li a {
   padding-left: 5px;
 }
 
-/* li a:hover {
-  text-decoration: underline;
-} */
-
 .dropbtn {
   background-color: #6364ff;
   padding: 16px;
@@ -273,14 +269,6 @@ input[type="text"] {
   background-color: #6364ff;
   color:white;
 }
-
-/* .server-list {
-  display: grid;
-} */
-
-/* .delete-list-item {
-  margin: 10px;
-} */
 
 .feed-container {
   display: flex;
