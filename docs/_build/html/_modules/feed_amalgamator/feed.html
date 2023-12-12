@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>feed_amalgamator.feed &mdash; Feed-amalgamator  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Feed-amalgamator
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">feed_amalgamator</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Feed-amalgamator</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../feed_amalgamator.html">feed_amalgamator</a></li>
+      <li class="breadcrumb-item active">feed_amalgamator.feed</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for feed_amalgamator.feed</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Code for handling the main, feed page via flask&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">configparser</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Blueprint</span><span class="p">,</span> <span class="n">flash</span><span class="p">,</span> <span class="n">redirect</span><span class="p">,</span> <span class="n">render_template</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="n">url_for</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">exc</span>
+
+<span class="kn">from</span> <span class="nn">feed_amalgamator.helpers.custom_exceptions</span> <span class="kn">import</span> <span class="n">MastodonConnError</span>
+<span class="kn">from</span> <span class="nn">feed_amalgamator.helpers.logging_helper</span> <span class="kn">import</span> <span class="n">LoggingHelper</span>
+<span class="kn">from</span> <span class="nn">feed_amalgamator.helpers.mastodon_data_interface</span> <span class="kn">import</span> <span class="n">MastodonDataInterface</span>
+<span class="kn">from</span> <span class="nn">feed_amalgamator.helpers.mastodon_oauth_interface</span> <span class="kn">import</span> <span class="n">MastodonOAuthInterface</span>
+<span class="kn">from</span> <span class="nn">feed_amalgamator.helpers.db_interface</span> <span class="kn">import</span> <span class="n">dbi</span><span class="p">,</span> <span class="n">UserServer</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">CONFIG</span>
+
+
+<span class="n">bp</span> <span class="o">=</span> <span class="n">Blueprint</span><span class="p">(</span><span class="s2">&quot;feed&quot;</span><span class="p">,</span> <span class="vm">__name__</span><span class="p">,</span> <span class="n">url_prefix</span><span class="o">=</span><span class="s2">&quot;/feed&quot;</span><span class="p">)</span>
+<span class="n">parser</span> <span class="o">=</span> <span class="n">configparser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
+<span class="c1"># Setting up the loggers and interface layers</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">CONFIG</span><span class="o">.</span><span class="n">path</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+<span class="n">log_file_loc</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">parser</span><span class="p">[</span><span class="s2">&quot;LOG_SETTINGS&quot;</span><span class="p">][</span><span class="s2">&quot;feed_log_loc&quot;</span><span class="p">])</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">LoggingHelper</span><span class="o">.</span><span class="n">generate_logger</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span> <span class="n">log_file_loc</span><span class="p">,</span> <span class="s2">&quot;feed_page&quot;</span><span class="p">)</span>
+<span class="n">auth_api</span> <span class="o">=</span> <span class="n">MastodonOAuthInterface</span><span class="p">(</span><span class="n">logger</span><span class="p">)</span>
+<span class="n">data_api</span> <span class="o">=</span> <span class="n">MastodonDataInterface</span><span class="p">(</span><span class="n">logger</span><span class="p">)</span>
+
+<span class="c1"># TODO - Add Swagger/OpenAPI documentation</span>
+<span class="c1"># TODO - Standardize how exceptions are raised and parsed throughout flask</span>
+<span class="c1"># TODO - Business logic of home feed (deciding what to filter etc.)</span>
+
+<span class="c1"># Defining constants</span>
+<span class="n">POSTS_PER_TIMELINE</span> <span class="o">=</span> <span class="n">CONFIG</span><span class="o">.</span><span class="n">posts</span>  <span class="c1"># Better in a configuration file? Or hard code?</span>
+<span class="n">HOME_TIMELINE_NAME</span> <span class="o">=</span> <span class="n">CONFIG</span><span class="o">.</span><span class="n">home_timeline</span>
+<span class="n">USER_DOMAIN_FIELD</span> <span class="o">=</span> <span class="n">CONFIG</span><span class="o">.</span><span class="n">user_domain</span>
+<span class="n">LOGIN_TOKEN_FIELD</span> <span class="o">=</span> <span class="n">CONFIG</span><span class="o">.</span><span class="n">login_token</span>
+<span class="n">USER_ID_FIELD</span> <span class="o">=</span> <span class="n">CONFIG</span><span class="o">.</span><span class="n">user_id</span>
+
+
+<div class="viewcode-block" id="filter_sort_feed">
+<a class="viewcode-back" href="../../feed_amalgamator.html#feed_amalgamator.feed.filter_sort_feed">[docs]</a>
+<span class="k">def</span> <span class="nf">filter_sort_feed</span><span class="p">(</span><span class="n">timelines</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function that sorts and fiters the timeline</span>
+<span class="sd">    @param timelines : timeline data to need to be filtered and sorted</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">post</span> <span class="ow">in</span> <span class="n">timelines</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">delete</span> <span class="ow">in</span> <span class="n">CONFIG</span><span class="o">.</span><span class="n">filter_list</span><span class="p">:</span>
+            <span class="n">post</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">delete</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">timelines</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="n">CONFIG</span><span class="o">.</span><span class="n">sort_by</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="feed_home">
+<a class="viewcode-back" href="../../feed_amalgamator.html#feed_amalgamator.feed.feed_home">[docs]</a>
+<span class="nd">@bp</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/home&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;GET&quot;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">feed_home</span><span class="p">():</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;GET&quot;</span><span class="p">:</span>
+        <span class="n">provided_user_id</span> <span class="o">=</span> <span class="n">session</span><span class="p">[</span><span class="n">USER_ID_FIELD</span><span class="p">]</span>
+        <span class="n">user_servers</span> <span class="o">=</span> <span class="n">dbi</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">dbi</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">UserServer</span><span class="p">)</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">user_id</span><span class="o">=</span><span class="n">provided_user_id</span><span class="p">))</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">user_servers</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">flash</span><span class="p">(</span><span class="s2">&quot;Invalid User&quot;</span><span class="p">)</span>  <span class="c1"># issue with hard coded error messages - see below</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;No user servers found that are tied to user id </span><span class="si">{i}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="n">provided_user_id</span><span class="p">))</span>
+            <span class="k">raise</span> <span class="ne">Exception</span>  <span class="c1"># TODO: We need to standardize how exceptions are raised and parsed in flask.</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Found </span><span class="si">{n}</span><span class="s2"> servers tied to user id </span><span class="si">{i}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">user_servers</span><span class="p">),</span> <span class="n">i</span><span class="o">=</span><span class="n">provided_user_id</span><span class="p">))</span>
+            <span class="n">timelines</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">user_server_tuple</span> <span class="ow">in</span> <span class="n">user_servers</span><span class="p">:</span>
+                <span class="c1"># user_servers is a list of tuples. The object is the first element of the tuple</span>
+                <span class="n">user_server</span> <span class="o">=</span> <span class="n">user_server_tuple</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="c1"># These are user_server objects defined in the data interface. Treat them like python objects</span>
+                <span class="n">server_domain</span> <span class="o">=</span> <span class="n">user_server</span><span class="o">.</span><span class="n">server</span>
+                <span class="n">access_token</span> <span class="o">=</span> <span class="n">user_server</span><span class="o">.</span><span class="n">token</span>
+                <span class="n">data_api</span><span class="o">.</span><span class="n">start_user_api_client</span><span class="p">(</span><span class="n">user_domain</span><span class="o">=</span><span class="n">server_domain</span><span class="p">,</span> <span class="n">user_access_token</span><span class="o">=</span><span class="n">access_token</span><span class="p">)</span>
+
+                <span class="n">timeline</span> <span class="o">=</span> <span class="n">data_api</span><span class="o">.</span><span class="n">get_timeline_data</span><span class="p">(</span><span class="n">HOME_TIMELINE_NAME</span><span class="p">,</span> <span class="n">POSTS_PER_TIMELINE</span><span class="p">)</span>
+                <span class="n">timelines</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">timeline</span><span class="p">)</span>
+            <span class="n">timelines</span> <span class="o">=</span> <span class="n">filter_sort_feed</span><span class="p">(</span><span class="n">timelines</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s2">&quot;feed/home.html&quot;</span><span class="p">,</span> <span class="n">timelines</span><span class="o">=</span><span class="n">timelines</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s2">&quot;feed/home.html&quot;</span><span class="p">,</span> <span class="n">timelines</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>  <span class="c1"># Default return</span></div>
+
+
+
+<div class="viewcode-block" id="add_server">
+<a class="viewcode-back" href="../../feed_amalgamator.html#feed_amalgamator.feed.add_server">[docs]</a>
+<span class="nd">@bp</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/add_server&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="s2">&quot;POST&quot;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">add_server</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Endpoint for the user to add a server to their existing list&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;POST&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">USER_DOMAIN_FIELD</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">render_redirect_url_page</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">LOGIN_TOKEN_FIELD</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">render_input_auth_code_page</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s2">&quot;feed/add_server.html&quot;</span><span class="p">,</span> <span class="n">is_domain_set</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="render_redirect_url_page">
+<a class="viewcode-back" href="../../feed_amalgamator.html#feed_amalgamator.feed.render_redirect_url_page">[docs]</a>
+<span class="k">def</span> <span class="nf">render_redirect_url_page</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Helper function to handle the logic for redirecting users to the Mastodon OAuth flow</span>
+<span class="sd">    Should inherit the request and session of add_server&quot;&quot;&quot;</span>
+
+    <span class="n">domain</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="n">USER_DOMAIN_FIELD</span><span class="p">]</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Rendering redirect url for user inputted domain </span><span class="si">{d}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="n">domain</span><span class="p">))</span>
+    <span class="n">session</span><span class="p">[</span><span class="n">USER_DOMAIN_FIELD</span><span class="p">]</span> <span class="o">=</span> <span class="n">domain</span>
+
+    <span class="n">is_valid_domain</span><span class="p">,</span> <span class="n">parsed_domain</span> <span class="o">=</span> <span class="n">auth_api</span><span class="o">.</span><span class="n">verify_user_provided_domain</span><span class="p">(</span><span class="n">domain</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">is_valid_domain</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;User inputted domain </span><span class="si">{d}</span><span class="s2"> was not a valid mastodon domain.&quot;</span> 
+                     <span class="s2">&quot;Failed to render redirect url page&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="n">domain</span><span class="p">))</span>
+        <span class="k">raise</span> <span class="ne">Exception</span>  <span class="c1"># TODO: We will need to standardize how to handle exceptions in the flask context.</span>
+
+    <span class="n">app_token_obj</span> <span class="o">=</span> <span class="n">auth_api</span><span class="o">.</span><span class="n">check_if_domain_exists_in_database</span><span class="p">(</span><span class="n">parsed_domain</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">app_token_obj</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">client_id</span> <span class="o">=</span> <span class="n">app_token_obj</span><span class="o">.</span><span class="n">client_id</span>
+        <span class="n">client_secret</span> <span class="o">=</span> <span class="n">app_token_obj</span><span class="o">.</span><span class="n">client_secret</span>
+        <span class="n">access_token</span> <span class="o">=</span> <span class="n">app_token_obj</span><span class="o">.</span><span class="n">access_token</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">client_id</span><span class="p">,</span> <span class="n">client_secret</span><span class="p">,</span> <span class="n">access_token</span> <span class="o">=</span> <span class="n">auth_api</span><span class="o">.</span><span class="n">add_domain_to_database</span><span class="p">(</span><span class="n">parsed_domain</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">client_id</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Domain </span><span class="si">{d}</span><span class="s2"> did not return a proper API response when adding it&quot;</span>
+                         <span class="s2">&quot;to the database&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="n">domain</span><span class="p">))</span>
+            <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s2">&quot;feed/add_server.html&quot;</span><span class="p">,</span> <span class="n">is_domain_set</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;New domain added to the database&quot;</span><span class="p">)</span>
+
+    <span class="n">auth_api</span><span class="o">.</span><span class="n">start_app_api_client</span><span class="p">(</span><span class="n">parsed_domain</span><span class="p">,</span> <span class="n">client_id</span><span class="p">,</span> <span class="n">client_secret</span><span class="p">,</span> <span class="n">access_token</span><span class="p">)</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="n">auth_api</span><span class="o">.</span><span class="n">generate_redirect_url</span><span class="p">()</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Generated redirect url: </span><span class="si">{u}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">u</span><span class="o">=</span><span class="n">url</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s2">&quot;feed/add_server.html&quot;</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span> <span class="n">is_domain_set</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="render_input_auth_code_page">
+<a class="viewcode-back" href="../../feed_amalgamator.html#feed_amalgamator.feed.render_input_auth_code_page">[docs]</a>
+<span class="k">def</span> <span class="nf">render_input_auth_code_page</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Helper function to handle the logic for allowing users to input the auth code.</span>
+<span class="sd">    Should inherit the request and session of add_server&quot;&quot;&quot;</span>
+    <span class="n">auth_token</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="n">LOGIN_TOKEN_FIELD</span><span class="p">]</span>
+    <span class="n">user_id</span> <span class="o">=</span> <span class="n">session</span><span class="p">[</span><span class="n">USER_ID_FIELD</span><span class="p">]</span>
+    <span class="n">domain</span> <span class="o">=</span> <span class="n">session</span><span class="p">[</span><span class="n">USER_DOMAIN_FIELD</span><span class="p">]</span>
+
+    <span class="n">error</span> <span class="o">=</span> <span class="n">generate_auth_code_error_message</span><span class="p">(</span><span class="n">auth_token</span><span class="p">,</span> <span class="n">user_id</span><span class="p">,</span> <span class="n">domain</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">error</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># The auth_token input by the user is a one-time token used to generate the actual login token</span>
+            <span class="c1"># Once the auth_token is used, it cannot be reused. We need to save the actual login token</span>
+            <span class="n">access_token</span> <span class="o">=</span> <span class="n">auth_api</span><span class="o">.</span><span class="n">generate_user_access_token</span><span class="p">(</span><span class="n">auth_token</span><span class="p">)</span>
+
+            <span class="n">user_server_obj</span> <span class="o">=</span> <span class="n">UserServer</span><span class="p">(</span><span class="n">user_id</span><span class="o">=</span><span class="n">user_id</span><span class="p">,</span> <span class="n">server</span><span class="o">=</span><span class="n">domain</span><span class="p">,</span> <span class="n">token</span><span class="o">=</span><span class="n">access_token</span><span class="p">)</span>
+            <span class="n">dbi</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">user_server_obj</span><span class="p">)</span>
+            <span class="n">dbi</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+        <span class="k">except</span> <span class="n">exc</span><span class="o">.</span><span class="n">IntegrityError</span><span class="p">:</span>
+            <span class="n">error</span> <span class="o">=</span> <span class="s2">&quot;Record already exists.&quot;</span>  <span class="c1"># Hardcore error messages, or abstract further?</span>
+        <span class="k">except</span> <span class="n">MastodonConnError</span><span class="p">:</span>
+            <span class="n">error</span> <span class="o">=</span> <span class="s2">&quot;Error: Could not generate valid login token&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Executes if there is no exception</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s2">&quot;feed.add_server&quot;</span><span class="p">,</span> <span class="n">is_domain_set</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+    <span class="n">flash</span><span class="p">(</span><span class="n">error</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="generate_auth_code_error_message">
+<a class="viewcode-back" href="../../feed_amalgamator.html#feed_amalgamator.feed.generate_auth_code_error_message">[docs]</a>
+<span class="k">def</span> <span class="nf">generate_auth_code_error_message</span><span class="p">(</span>
+    <span class="n">authentication_token</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="n">user_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="n">user_domain</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Helper function to generate different error messages that will be shown to the user depending</span>
+<span class="sd">    on what went wrong</span>
+<span class="sd">    @param authentication_token: auth_token field in the request form</span>
+<span class="sd">    @param user_id: user_id field in the session</span>
+<span class="sd">    @param user_domain: user_domain field in the session</span>
+<span class="sd">    @return: Either the error message, or None</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">error</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="c1"># Hardcode error messages, or abstract further? For localization. If shown to user, will have to localize further</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">authentication_token</span><span class="p">:</span>
+        <span class="n">error</span> <span class="o">=</span> <span class="s2">&quot;Authorization Token in Required&quot;</span>
+    <span class="k">elif</span> <span class="ow">not</span> <span class="n">user_id</span><span class="p">:</span>
+        <span class="n">error</span> <span class="o">=</span> <span class="s2">&quot;Password is required.&quot;</span>
+    <span class="k">elif</span> <span class="ow">not</span> <span class="n">user_domain</span><span class="p">:</span>
+        <span class="n">error</span> <span class="o">=</span> <span class="s2">&quot;Domain is required&quot;</span>
+    <span class="k">return</span> <span class="n">error</span></div>
+
+
+
+<div class="viewcode-block" id="render_user_servers">
+<a class="viewcode-back" href="../../feed_amalgamator.html#feed_amalgamator.feed.render_user_servers">[docs]</a>
+<span class="k">def</span> <span class="nf">render_user_servers</span><span class="p">():</span>
+    <span class="n">user_id</span> <span class="o">=</span> <span class="n">session</span><span class="p">[</span><span class="n">USER_ID_FIELD</span><span class="p">]</span>
+    <span class="n">user_servers</span> <span class="o">=</span> <span class="n">UserServer</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">user_id</span><span class="o">=</span><span class="n">user_id</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">user_servers</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">user_servers</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s2">&quot;feed/delete_server.html&quot;</span><span class="p">,</span> <span class="n">user_servers</span><span class="o">=</span><span class="n">user_servers</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="delete_server">
+<a class="viewcode-back" href="../../feed_amalgamator.html#feed_amalgamator.feed.delete_server">[docs]</a>
+<span class="nd">@bp</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/delete_server&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span><span class="s2">&quot;POST&quot;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">delete_server</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Endpoint for the user to delete one or more servers from their existing list&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;POST&quot;</span><span class="p">:</span>
+        <span class="n">user_id</span> <span class="o">=</span> <span class="n">session</span><span class="p">[</span><span class="n">USER_ID_FIELD</span><span class="p">]</span>
+        <span class="n">servers</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">getlist</span><span class="p">(</span><span class="s1">&#39;servers&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">server</span> <span class="ow">in</span> <span class="n">servers</span><span class="p">:</span>
+            <span class="n">server</span> <span class="o">=</span> <span class="n">UserServer</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">user_id</span><span class="o">=</span><span class="n">user_id</span><span class="p">,</span> <span class="n">server</span><span class="o">=</span><span class="n">server</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">server</span><span class="p">:</span>
+                <span class="n">dbi</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">server</span><span class="p">)</span>
+                <span class="n">dbi</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Deleted server </span><span class="si">{}</span><span class="s2"> of user </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">server</span><span class="o">.</span><span class="n">server</span><span class="p">,</span> <span class="n">server</span><span class="o">.</span><span class="n">user_id</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Invalid record for server </span><span class="si">{}</span><span class="s2"> of user </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">server</span><span class="o">.</span><span class="n">server</span><span class="p">,</span> <span class="n">server</span><span class="o">.</span><span class="n">user_id</span><span class="p">))</span>
+                <span class="n">flash</span><span class="p">(</span><span class="s2">&quot;Invalid record for server </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">server</span><span class="p">))</span>
+                <span class="k">raise</span> <span class="ne">Exception</span> <span class="c1"># TODO: We will need to standardize how to handle exceptions in the flask context.</span>
+            <span class="k">return</span> <span class="n">render_user_servers</span><span class="p">()</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">render_user_servers</span><span class="p">()</span></div>
+
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Team 5.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
