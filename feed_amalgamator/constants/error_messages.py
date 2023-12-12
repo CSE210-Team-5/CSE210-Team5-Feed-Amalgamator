@@ -19,3 +19,4 @@ INVALID_MASTODON_DOMAIN_MSG = "The desired domain was not a valid mastodon domai
                               "page for domain:"
 INVALID_JSON_RESPONSE_MSG = "Server returned a value that cannot be parsed. Server is likely to not be a " \
                              "legitimate server"
+SERVICE_UNAVAILABLE_MSG = "Something is wrong. Not sure if it us or Mastodon. Please try again later"

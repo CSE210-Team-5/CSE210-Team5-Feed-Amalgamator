@@ -12,8 +12,8 @@ from feed_amalgamator.helpers.db_interface import User, ApplicationTokens, UserS
 
 
 class TestFeedPage(unittest.TestCase):
-    """Tests the endpoints in the feed page. These are closely to functional/integration tests than unit tests"""
-
+    """Tests the endpoints in the feed page. These are closely to functional/integration tests than unit tests,
+    and do depend on tokens such as app tokens that were previous generated for exclusive test use"""
     def setUp(self) -> None:
         test_config_loc = Path("configuration/test_mastodon_client_info.ini")
         parser = configparser.ConfigParser()
@@ -37,9 +37,42 @@ class TestFeedPage(unittest.TestCase):
         test_client_settings = parser["APP_TOKENS"]
         self.client_id = test_client_settings["CLIENT_ID"]
         self.client_secret = test_client_settings["CLIENT_SECRET"]
-        self.access_token = test_client_settings["ACCESS_TOKEN"]
+        self.access_token = test_client_settings["ACCESS_TOKEN"]  # Bot's access token
         self.client_domain = test_client_settings["CLIENT_DOMAIN"]
+        self.user_token_server_one = test_client_settings["USER_TOKEN_SERVER_ONE"]  # User token generated after oauth
 
+        # Credentials for second client for another server
+        self.alt_client_id = test_client_settings["ALT_CLIENT_ID"]
+        self.alt_client_secret = test_client_settings["ALT_CLIENT_SECRET"]
+        self.alt_access_token = test_client_settings["ALT_ACCESS_TOKEN"]
+        self.alt_client_domain = test_client_settings["ALT_CLIENT_DOMAIN"]
+        self.user_token_server_two = test_client_settings["USER_TOKEN_SERVER_TWO"]
+
+    def test_feed_amalgamation(self):
+        client = self.app.test_client()
+        home_url = "{r}/home".format(r=self.page_root)
+        test_user = "Meowmaster"
+        test_password = "Infinite4oid!"
+
+        with self.app.app_context():
+            user = User(username=test_user, password=generate_password_hash(test_password))
+            dbi.session.add(user)
+            dbi.session.commit()
+
+            user_server_one = UserServer(user_id=1, server=self.client_domain, token=self.user_token_server_one)
+            user_server_two = UserServer(user_id=1, server=self.alt_client_domain, token=self.user_token_server_two)
+            dbi.session.add(user_server_one)
+            dbi.session.add(user_server_two)
+            dbi.session.commit()
+
+        with client.session_transaction() as sess:
+            sess[USER_ID_FIELD] = 1
+
+        response = client.get(home_url)
+        decoded_resp = response.data.decode("utf-8")
+
+        self.assertIn(self.client_domain, decoded_resp)
+        self.assertIn(self.alt_client_domain, decoded_resp)
 
     def test_no_servers_added(self):
         """Proper error message should be found when the user has no servers added but visits the home page"""
@@ -127,7 +160,3 @@ class TestFeedPage(unittest.TestCase):
             # Test deleting server that does not exist
             error_resp = client.post(delete_server_url, data={SERVERS_FIELD: ["MEOW"]})
             self.assertIn(INVALID_DELETE_SERVER_RECORD_MSG, error_resp.data.decode("utf-8"))
-
-
-
-

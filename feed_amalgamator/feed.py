@@ -7,7 +7,7 @@ from flask import Blueprint, flash, redirect, render_template, request, session,
 from sqlalchemy import exc
 
 from feed_amalgamator.constants.common_constants import CONFIG_LOC, FILTER_LIST, USER_ID_FIELD, HOME_TIMELINE_NAME, \
-    NUM_POSTS_TO_GET, USER_DOMAIN_FIELD, SORT_BY, SERVERS_FIELD
+    NUM_POSTS_TO_GET, USER_DOMAIN_FIELD, SORT_BY, SERVERS_FIELD, ORIGINAL_SERVER_FIELD
 from feed_amalgamator.helpers.custom_exceptions import (
     MastodonConnError, NoContentFoundError, InvalidDomainError, IntegrityError, ServiceUnavailableError,
     InvalidCredentialsError, InvalidApiInputError)
@@ -69,7 +69,7 @@ def feed_home():
                 timeline = data_api.get_timeline_data(HOME_TIMELINE_NAME, NUM_POSTS_TO_GET)
                 # Add server it was retrieved from to be accessed by frontend
                 for post in timeline:
-                    post["original_server"] = server_domain
+                    post[ORIGINAL_SERVER_FIELD] = server_domain
                 timelines.extend(timeline)
             timelines = filter_sort_feed(timelines)
             return render_template("feed/home.html", timelines=timelines)
