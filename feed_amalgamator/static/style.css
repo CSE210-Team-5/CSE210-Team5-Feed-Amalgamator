@@ -1,61 +1,29 @@
-html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
-b, u, i, center,
-dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed,
-figure, figcaption, footer, header, hgroup,
-menu, nav, output, ruby, section, summary,
-time, mark, audio, video {
-    margin: 0;
-    padding: 0;
-    border: 0;
-    font: inherit;
-    vertical-align: baseline;
-}
-
-html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #292c36;
-  font-family: Roboto, sans-serif;
-  color: #fff;
-}
-
 h1 {
     color: #fff;
-    margin-bottom: 1em;
 }
 
-a {
-    color: #8c8dff;
+body {
+    font-family: sans-serif;
+    background: #191b22;
+    text-decoration: none;
+    margin: 0;
+    padding: 0;
 }
+
 
 /* Navbar Styles */
 .navbar {
-    background-color: #1D0023E6;
-    width: 100%;
-    position: fixed;
-    top: 0;
-    z-index: 1000;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.5em 1em;
+    background-color: #6464f8;
+
+    /* padding: 5px; */
+    padding-right: 15px;
+    padding-left: 15px;
 }
 
 .navbar-container {
-    width: 90%;
-    margin: auto;
-    padding: 1rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .logo {
@@ -75,15 +43,16 @@ a {
 }
 
 .nav-links li {
-    display: inline;
-    margin: 0 10px;
+    list-style: none;
+    display: inline-block;
 }
 
 .nav-links a {
-    text-decoration: none;
     color: white;
-    padding: 10px 15px;
-    display: block;
+    font-size: 18px;
+    font-weight: bold;
+    margin-right: 25px;
+    text-decoration: none;
 }
 
 .nav-links a:hover {
@@ -91,132 +60,27 @@ a {
     color: black;
 }
 
-/* Content Styles */
-.content {
-    padding-top: 60px; /* Adjust this value to your navbar's height */
-    width: 90%;
-    margin: auto;
-}
-
-/* Status Styles */
-.status, .status-prepend, .status-info, .detailed-status-meta, .status-content {
-    color: #fff;
-    font-size: 15px;
-    font-weight: 400;
-    line-height: 22px;
-    animation: fade 0.15s linear;
-    border-bottom: 1px solid #393f4f;
-    cursor: auto;
-    min-height: 54px;
-    opacity: 1;
-    padding: 16px;
-}
-
-.status-content p {
-    margin-bottom: 22px;
-    unicode-bidi: plaintext;
-    white-space: pre-wrap;
-}
-
-/* Avatar Styles */
-.status-avatar, .profile-picture {
-    height: 46px;
-    width: 46px;
-    border-radius: 100%;
-}
-
-.account-avatar img {
-    display: block;
-    height: 100%;
-    object-fit: cover;
-    width: 100%;
-}
-
-/* Input and Button Styles */
-input[type="text"],
-input[type="password"],
-input[type="submit"] {
-  width: 100%; /* Full width of the form container */
-  padding: 16px; /* Increased padding for taller fields */
-  margin-bottom: 10px; /* Space between elements */
-  border-radius: 5px;
-  border: 1px solid #34495e;
-  box-sizing: border-box; /* Ensures padding is included in the width */
-  font-size: 18px; /* Larger font size for better readability */
-}
-
-input[type="submit"] {
-  background-color: #3498D8;
-  color: #fff;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  text-align: center;
-  border: none;
-  padding: 18px; /* Slightly larger padding for the button */
-}
-
-input[type="submit"]:hover {
-  background-color: #2980b9;
-}
-
-/* Additional Styles */
-.add-server-title, .enter-domain, .form-title {
-    text-align: center;
+.navbar li .username {
     color: white;
-    margin-bottom: 20px;
+    font-size: 18px;
+    font-weight: bold;
+    margin-right: 25px;
+    display: flex;
+    align-items: center;
 }
 
-.add-server-btn {
-    margin-top: 10px;
-    background-color: #6364ff;
-    border: none;
-    border-radius: 8px;
+.navbar li .username:hover {
     color: white;
-    padding: 15px 32px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-}
-
-.add-server-btn:hover {
-    background-color: #563acc;
+    font-size: 18px;
+    font-weight: bold;
+    margin-right: 25px;
+    text-decoration: underline;
     cursor: pointer;
 }
 
-/* Responsive Adjustments */
-@media (width <= 768px) {
-    .container {
-        width: 90%;
-        margin: 10px;
-    }
-}
-
- .error-message {
-      color: red;
-      background-color: #fff0f0;
-      border: 1px solid red;
-      padding: 5px;
-      margin-bottom: 10px;
-      border-radius: 4px;
-      display: none;
-    }
-
-.register-container,
-.form-container{
-  width: 100%;
-  max-width: 320px;
-  padding: 40px;
-  background: rgba(255 255 255 /10%);
-  border-radius: 10px;
-  box-shadow: 0 5px 20px rgba(0 0 0 /20%);
-  backdrop-filter: blur(10px);
-}
-
-
-
-.form-auth {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
+.profile-picture {
+    border-radius: 100%;
+    height: 36px;
+    width: 36px;
+    padding-left: 5px;
 }
