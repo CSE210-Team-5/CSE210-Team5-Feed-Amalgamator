@@ -16,5 +16,22 @@
     "eslint-config-google": "^0.14.0",
     "stylelint": "^15.11.0",
     "stylelint-config-standard": "^34.0.0"
-  }
+  },
+  "dependencies": {
+    "standard": "^17.1.0"
+  },
+  "standard": {
+  "ignore": [
+    "/docs/_build/html/_static/js/theme.js",
+    "/docs/_build/html/_static/searchtools.js",
+    "/docs/_build/html/searchindex.js",
+    "/docs/_build/html/_static/sphinx_highlight.js",
+    "/docs/_build/html/_static/language_data.js",
+    "/docs/_build/html/_static/js/badge_only.js/docs/_build/html/_static/js/badge_only.js",
+    "/docs/_build/html/_static/js/",
+    "/docs/_build/html/_static/documentation_options.js",
+    "/docs/_build/html/_static/doctools.js",
+    "/docs/_build/html/_static/_sphinx_javascript_frameworks_compat.js"
+  ]
+}
 }
