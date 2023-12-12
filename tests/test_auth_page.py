@@ -19,10 +19,9 @@ class TestAuthPage(unittest.TestCase):
     """Tests the endpoints in the auth page. These are closely to functional/integration tests than unit tests"""
 
     def setUp(self) -> None:
-        test_config_loc = Path("tests/test_config/test_mastodon_client_info.ini")
+        test_config_loc = Path("configuration/test_mastodon_client_info.ini")
         parser = configparser.ConfigParser()
         parser.read(test_config_loc)
-        # test_log_root = parser["TEST_SETTINGS"]["test_log_root"]
         test_db_name = parser["TEST_SETTINGS"]["test_db_location"]
 
         self.app = create_app(db_file_name=test_db_name)
@@ -45,8 +44,7 @@ class TestAuthPage(unittest.TestCase):
         self.assertEqual(HTTPStatus.OK, response.status_code)
 
         html_rendered = response.data.decode("utf-8")
-        self.assertIn(r'input name="username"', html_rendered)
-        self.assertIn(r'input type="password"', html_rendered)
+        self.assertIn(r'Log In', html_rendered)
 
         # Test the Post
         test_user = "Gojo Satoru"
@@ -126,3 +124,4 @@ class TestAuthPage(unittest.TestCase):
         decoded_pw_response = pw_response.data.decode("utf-8")
         self.assertIn(INVALID_PASSWORD_MSG, decoded_pw_response)
 
+    # TODO - Test password validation

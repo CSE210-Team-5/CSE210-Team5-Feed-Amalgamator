@@ -7,18 +7,17 @@ from flask import Blueprint, flash, redirect, render_template, request, session,
 from sqlalchemy import exc
 
 from feed_amalgamator.constants.common_constants import CONFIG_LOC, FILTER_LIST, USER_ID_FIELD, HOME_TIMELINE_NAME, \
-    NUM_POSTS_TO_GET, USER_DOMAIN_FIELD, SORT_BY
+    NUM_POSTS_TO_GET, USER_DOMAIN_FIELD, SORT_BY, SERVERS_FIELD
 from feed_amalgamator.helpers.custom_exceptions import (
     MastodonConnError, NoContentFoundError, InvalidDomainError, IntegrityError, ServiceUnavailableError,
-    InvalidCredentialsError)
+    InvalidCredentialsError, InvalidApiInputError)
 from feed_amalgamator.helpers.logging_helper import LoggingHelper
 from feed_amalgamator.helpers.mastodon_data_interface import MastodonDataInterface
 from feed_amalgamator.helpers.mastodon_oauth_interface import MastodonOAuthInterface
 from feed_amalgamator.helpers.db_interface import dbi, UserServer
 from feed_amalgamator.constants.error_messages import NO_CONTENT_FOUND_MSG, USER_SERVER_COMBI_ALREADY_EXISTS_MSG, \
     LOGIN_TOKEN_ERROR_MSG, AUTHORIZATION_TOKEN_REQUIRED_MSG, PASSWORD_REQUIRED_MSG, DOMAIN_REQUIRED_MSG, \
-    INVALID_DELETE_SERVER_RECORD_MSG
-
+    INVALID_DELETE_SERVER_RECORD_MSG, AUTH_CODE_ERROR_MSG
 
 bp = Blueprint("feed", __name__, url_prefix="/feed")
 parser = configparser.ConfigParser()
@@ -50,11 +49,10 @@ def filter_sort_feed(timelines: list[dict]) -> list[dict]:
 @bp.route("/home", methods=["GET"])
 def feed_home():
     if request.method == "GET":
-        user_id = session.get(USER_ID_FIELD)
-        if user_id is None:
+        provided_user_id = session.get(USER_ID_FIELD)
+        if provided_user_id is None:
             return redirect(url_for("auth.login"))
 
-        provided_user_id = session[USER_ID_FIELD]
         user_servers = UserServer.query.filter_by(user_id=provided_user_id).all()
         if len(user_servers) == 0:
             raise NoContentFoundError({"redirect_path": "feed/home.html",
@@ -99,12 +97,14 @@ def render_redirect_url_page():
     is_valid_domain, parsed_domain = auth_api.verify_user_provided_domain(domain)
 
     if not is_valid_domain:
+        error_message = parsed_domain  # If verify fails, error is returned in place of the domain
         raise InvalidDomainError({
             "redirect_path": "feed/add_server.html",
-            "message": parsed_domain})
+            "message": error_message})
 
     app_token_obj = auth_api.check_if_domain_exists_in_database(parsed_domain)
     if app_token_obj is not None:
+        logger.info("App token for domain found in database")
         client_id = app_token_obj.client_id
         client_secret = app_token_obj.client_secret
         access_token = app_token_obj.access_token
@@ -118,10 +118,9 @@ def render_redirect_url_page():
     return redirect(url)
 
 
-def render_input_auth_code_page(auth_token):
+def process_provided_auth_token(auth_token):
     """Helper function to handle the logic for allowing users to input the auth code.
     Should inherit the request and session of add_server"""
-    # auth_token = request.form[LOGIN_TOKEN_FIELD]
     user_id = session[USER_ID_FIELD]
     domain = session[USER_DOMAIN_FIELD]
 
@@ -141,6 +140,9 @@ def render_input_auth_code_page(auth_token):
         except MastodonConnError:
             raise ServiceUnavailableError({"redirect_path": "feed/add_server.html",
                                            "message": LOGIN_TOKEN_ERROR_MSG})
+        except InvalidApiInputError:
+            raise InvalidCredentialsError({"redirect_path": "feed/add_server.html",
+                                           "message": AUTH_CODE_ERROR_MSG})
         else:
             # Executes if there is no exception
             return redirect(url_for("feed.add_server", is_domain_set=False))
@@ -176,7 +178,7 @@ def generate_auth_code_error_message(
 @bp.route("/handle_oauth", methods=["GET"])
 def handle_oauth():
     """Endpoint for the user to add a server to their existing list"""
-    render_input_auth_code_page(request.args.get('code'))
+    process_provided_auth_token(request.args.get('code'))
     flash('Server added Successfully!!')
     return redirect("/feed/add_server")
 
@@ -194,7 +196,8 @@ def delete_server():
     """Endpoint for the user to delete one or more servers from their existing list"""
     if request.method == "POST":
         user_id = session[USER_ID_FIELD]
-        servers = request.form.getlist("servers")
+        servers = request.form.getlist(SERVERS_FIELD)
+
         for server in servers:
             server = UserServer.query.filter_by(user_id=user_id, server=server).first()
             if server:
@@ -202,13 +205,12 @@ def delete_server():
                 dbi.session.commit()
                 logger.info("Deleted server {} of user {}".format(server.server, server.user_id))
             else:
-                invalid_record_msg = "{base}. Server: {s}, user: {u}".format(base=INVALID_DELETE_SERVER_RECORD_MSG,
-                                                                             s=server.server, u=server.user_id)
+                invalid_record_msg = "{base}. Server: {s}".format(base=INVALID_DELETE_SERVER_RECORD_MSG, s=server)
                 raise IntegrityError({
                     "redirect_path": "feed/delete_server.html",
                     "message": invalid_record_msg
                 })
-            return render_user_servers()
+        return render_user_servers()
 
     else:
         return render_user_servers()

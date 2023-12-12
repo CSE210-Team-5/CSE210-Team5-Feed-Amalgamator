@@ -10,6 +10,8 @@ from urllib.parse import urlparse
 from http import HTTPStatus
 
 from mastodon import Mastodon, MastodonAPIError  # pip install Mastodon.py
+
+from feed_amalgamator.constants.error_messages import INVALID_MASTODON_DOMAIN_MSG, INVALID_JSON_RESPONSE_MSG
 from feed_amalgamator.helpers.custom_exceptions import (
     MastodonConnError,
     InvalidApiInputError,
@@ -65,12 +67,11 @@ class MastodonOAuthInterface:
             # If the user domain is invalid, it is indistinguishable from a connection error (cannot resolve
             # the domain of the redirected url)
             # Increase granularity of http error logging (500?400?)
-            error_message = "User inputted domain {d} was not a valid mastodon domain." \
-                            "Failed to render redirect url page".format(d=wanted_domain)
-
+            error_message = "{msg_base}:{d}".format(msg_base=INVALID_MASTODON_DOMAIN_MSG,
+                                                    d=wanted_domain)
         except json.JSONDecodeError:
-            error_message = "Server returned a value that cannot be parsed. Server is likely to not be a " \
-                             "legitimate server"
+            error_message = "{msg_base}:{d}".format(msg_base=INVALID_JSON_RESPONSE_MSG,
+                                                    d=wanted_domain)
 
         return False, error_message  # Failed. Could be due to connection errors or wrong domain provided
 

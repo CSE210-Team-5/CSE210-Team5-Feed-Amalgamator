@@ -13,3 +13,9 @@ AUTHORIZATION_TOKEN_REQUIRED_MSG = "Authorization Token is Required"
 PASSWORD_REQUIRED_MSG = "Password is required."
 DOMAIN_REQUIRED_MSG = "Domain is required"
 INVALID_DELETE_SERVER_RECORD_MSG = "Invalid record for server and user:"
+AUTH_CODE_ERROR_MSG = "User authorization code provided is likely invalid"
+USER_DOES_NOT_EXIST_MSG = "Sorry, the following user actually does not exist in our database:"
+INVALID_MASTODON_DOMAIN_MSG = "The desired domain was not a valid mastodon domain. Failed to render redirect url " \
+                              "page for domain:"
+INVALID_JSON_RESPONSE_MSG = "Server returned a value that cannot be parsed. Server is likely to not be a " \
+                             "legitimate server"

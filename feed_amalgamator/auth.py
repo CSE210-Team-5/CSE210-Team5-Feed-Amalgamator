@@ -3,6 +3,7 @@ import logging
 import configparser
 from pathlib import Path
 
+import sqlalchemy.exc
 from flask import (
     Blueprint,
     g,
@@ -24,7 +25,8 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from sqlalchemy import exc
 
 from feed_amalgamator.constants.common_constants import USERNAME_FIELD, PASSWORD_FIELD, USER_ID_FIELD, CONFIG_LOC
-from feed_amalgamator.constants.error_messages import USER_ALREADY_EXISTS_MSG, INVALID_USERNAME_MSG, INVALID_PASSWORD_MSG
+from feed_amalgamator.constants.error_messages import USER_ALREADY_EXISTS_MSG, INVALID_USERNAME_MSG, \
+    INVALID_PASSWORD_MSG, USER_DOES_NOT_EXIST_MSG
 
 bp = Blueprint("auth", __name__, url_prefix="/auth")
 
@@ -88,7 +90,13 @@ def load_logged_in_user():
     if user_id is None:
         g.user = None
     else:
-        g.user = dbi.session.execute(dbi.select(User).filter_by(user_id=user_id)).one()
+        try:
+            g.user = dbi.session.execute(dbi.select(User).filter_by(user_id=user_id)).one()
+        except sqlalchemy.exc.NoResultFound:
+            raise IntegrityError(
+                {"message": USER_DOES_NOT_EXIST_MSG + ":{u}".format(u=user_id),
+                 "redirect_path": "auth/register.html"})
+
 
 
 @bp.route("/logout")
