@@ -6,6 +6,8 @@ from pathlib import Path
 from flask import Blueprint, flash, redirect, render_template, request, session, url_for
 from sqlalchemy import exc
 
+from feed_amalgamator.constants.common_constants import CONFIG_LOC, FILTER_LIST, USER_ID_FIELD, HOME_TIMELINE_NAME, \
+    NUM_POSTS_TO_GET, USER_DOMAIN_FIELD, SORT_BY
 from feed_amalgamator.helpers.custom_exceptions import (
     MastodonConnError, NoContentFoundError, InvalidDomainError, IntegrityError, ServiceUnavailableError,
     InvalidCredentialsError)
@@ -13,13 +15,15 @@ from feed_amalgamator.helpers.logging_helper import LoggingHelper
 from feed_amalgamator.helpers.mastodon_data_interface import MastodonDataInterface
 from feed_amalgamator.helpers.mastodon_oauth_interface import MastodonOAuthInterface
 from feed_amalgamator.helpers.db_interface import dbi, UserServer
-from feed_amalgamator.constants.error_messages import NO_CONTENT_FOUND_MSG, USER_SERVER_COMBI_ALREADY_EXISTS_MSG, LOGIN_TOKEN_ERROR_MSG, \
-    AUTHORIZATION_TOKEN_REQUIRED_MSG, PASSWORD_REQUIRED_MSG, DOMAIN_REQUIRED_MSG, INVALID_DELETE_SERVER_RECORD_MSG
+from feed_amalgamator.constants.error_messages import NO_CONTENT_FOUND_MSG, USER_SERVER_COMBI_ALREADY_EXISTS_MSG, \
+    LOGIN_TOKEN_ERROR_MSG, AUTHORIZATION_TOKEN_REQUIRED_MSG, PASSWORD_REQUIRED_MSG, DOMAIN_REQUIRED_MSG, \
+    INVALID_DELETE_SERVER_RECORD_MSG
+
 
 bp = Blueprint("feed", __name__, url_prefix="/feed")
 parser = configparser.ConfigParser()
 # Setting up the loggers and interface layers
-with open(CONFIG.path) as file:
+with open(CONFIG_LOC) as file:
     parser.read_file(file)
 log_file_loc = Path(parser["LOG_SETTINGS"]["feed_log_loc"])
 redirect_uri = parser["REDIRECT_URI"]["REDIRECT_URI"]
@@ -37,20 +41,20 @@ def filter_sort_feed(timelines: list[dict]) -> list[dict]:
     @param timelines : timeline data to need to be filtered and sorted
     """
     for post in timelines:
-        for delete in CONFIG.FILTER_LIST:
+        for delete in FILTER_LIST:
             post.pop(delete)
 
-    return sorted(timelines, key=lambda x: x[CONFIG.SORT_BY], reverse=True)
+    return sorted(timelines, key=lambda x: x[SORT_BY], reverse=True)
 
 
 @bp.route("/home", methods=["GET"])
 def feed_home():
     if request.method == "GET":
-        user_id = session.get(CONFIG.USER_ID_FIELD)
+        user_id = session.get(USER_ID_FIELD)
         if user_id is None:
             return redirect(url_for("auth.login"))
 
-        provided_user_id = session[CONFIG.USER_ID_FIELD]
+        provided_user_id = session[USER_ID_FIELD]
         user_servers = UserServer.query.filter_by(user_id=provided_user_id).all()
         if len(user_servers) == 0:
             raise NoContentFoundError({"redirect_path": "feed/home.html",
@@ -64,7 +68,7 @@ def feed_home():
                 access_token = user_server.token
                 data_api.start_user_api_client(user_domain=server_domain, user_access_token=access_token)
 
-                timeline = data_api.get_timeline_data(CONFIG.HOME_TIMELINE_NAME, CONFIG.NUM_POSTS_TO_GET)
+                timeline = data_api.get_timeline_data(HOME_TIMELINE_NAME, NUM_POSTS_TO_GET)
                 # Add server it was retrieved from to be accessed by frontend
                 for post in timeline:
                     post["original_server"] = server_domain
@@ -79,7 +83,7 @@ def feed_home():
 def add_server():
     """Endpoint for the user to add a server to their existing list"""
     if request.method == "POST":
-        if CONFIG.USER_DOMAIN_FIELD in request.form:
+        if USER_DOMAIN_FIELD in request.form:
             return render_redirect_url_page()
     return render_template("feed/add_server.html", is_domain_set=False)
 
@@ -88,9 +92,9 @@ def render_redirect_url_page():
     """Helper function to handle the logic for redirecting users to the Mastodon OAuth flow
     Should inherit the request and session of add_server"""
 
-    domain = request.form[CONFIG.USER_DOMAIN_FIELD]
+    domain = request.form[USER_DOMAIN_FIELD]
     logger.info("Rendering redirect url for user inputted domain {d}".format(d=domain))
-    session[CONFIG.USER_DOMAIN_FIELD] = domain
+    session[USER_DOMAIN_FIELD] = domain
 
     is_valid_domain, parsed_domain = auth_api.verify_user_provided_domain(domain)
 
@@ -118,8 +122,8 @@ def render_input_auth_code_page(auth_token):
     """Helper function to handle the logic for allowing users to input the auth code.
     Should inherit the request and session of add_server"""
     # auth_token = request.form[LOGIN_TOKEN_FIELD]
-    user_id = session[CONFIG.USER_ID_FIELD]
-    domain = session[CONFIG.USER_DOMAIN_FIELD]
+    user_id = session[USER_ID_FIELD]
+    domain = session[USER_DOMAIN_FIELD]
 
     error = generate_auth_code_error_message(auth_token, user_id, domain)
     if error is None:
@@ -178,7 +182,7 @@ def handle_oauth():
 
 
 def render_user_servers():
-    user_id = session[CONFIG.USER_ID_FIELD]
+    user_id = session[USER_ID_FIELD]
     user_servers = UserServer.query.filter_by(user_id=user_id).all()
     if len(user_servers) == 0:
         user_servers = None
@@ -189,7 +193,7 @@ def render_user_servers():
 def delete_server():
     """Endpoint for the user to delete one or more servers from their existing list"""
     if request.method == "POST":
-        user_id = session[CONFIG.USER_ID_FIELD]
+        user_id = session[USER_ID_FIELD]
         servers = request.form.getlist("servers")
         for server in servers:
             server = UserServer.query.filter_by(user_id=user_id, server=server).first()

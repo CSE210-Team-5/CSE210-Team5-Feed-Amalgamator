@@ -23,7 +23,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 from sqlalchemy import exc
 
-from feed_amalgamator.constants.common_constants import USERNAME_FIELD, PASSWORD_FIELD, USER_ID_FIELD
+from feed_amalgamator.constants.common_constants import USERNAME_FIELD, PASSWORD_FIELD, USER_ID_FIELD, CONFIG_LOC
 from feed_amalgamator.constants.error_messages import USER_ALREADY_EXISTS_MSG, INVALID_USERNAME_MSG, INVALID_PASSWORD_MSG
 
 bp = Blueprint("auth", __name__, url_prefix="/auth")
@@ -32,7 +32,7 @@ bp = Blueprint("auth", __name__, url_prefix="/auth")
 
 # Setting up the loggers and interface layers
 parser = configparser.ConfigParser()
-with open(CONFIG.path) as file:
+with open(CONFIG_LOC) as file:
     parser.read_file(file)
 log_file_loc = Path(parser["LOG_SETTINGS"]["auth_log_loc"])
 logger = LoggingHelper.generate_logger(logging.INFO, log_file_loc, "auth_page")
@@ -45,8 +45,8 @@ logger = LoggingHelper.generate_logger(logging.INFO, log_file_loc, "auth_page")
 @bp.route("/register", methods=("GET", "POST"))
 def register():
     if request.method == "POST":
-        username = request.form[CONFIG.USERNAME_FIELD]
-        password = generate_password_hash(request.form[CONFIG.PASSWORD_FIELD])
+        username = request.form[USERNAME_FIELD]
+        password = generate_password_hash(request.form[PASSWORD_FIELD])
         try:
             user = User(username=username, password=password)
             dbi.session.add(user)

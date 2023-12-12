@@ -1,4 +1,4 @@
-path = "configuration/app_settings.ini"
+CONFIG_LOC = "configuration/app_settings.ini"
 NUM_POSTS_TO_GET = 20
 HOME_TIMELINE_NAME = "home"
 USER_DOMAIN_FIELD = "domain"

@@ -2,6 +2,8 @@ import logging
 import configparser
 from flask import render_template
 from pathlib import Path
+
+from feed_amalgamator.constants.common_constants import CONFIG_LOC
 from feed_amalgamator.helpers.custom_exceptions import (
     InvalidCredentialsError, NoContentFoundError, InvalidDomainError,
     ServiceUnavailableError, IntegrityError)
@@ -11,7 +13,7 @@ from feed_amalgamator.helpers.logging_helper import LoggingHelper
 
 parser = configparser.ConfigParser()
 # Setting up the loggers and interface layers
-with open(CONFIG.path) as file:
+with open(CONFIG_LOC) as file:
     parser.read_file(file)
 log_file_loc = Path(parser["LOG_SETTINGS"]["feed_log_loc"])
 redirect_uri = parser["REDIRECT_URI"]["REDIRECT_URI"]
