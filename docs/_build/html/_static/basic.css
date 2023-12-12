@@ -122,7 +122,11 @@ ul.search {
 
 ul.search li {
     padding: 5px 0 5px 20px;
+<<<<<<< HEAD
     background-image: url("file.png");
+=======
+    background-image: url(file.png);
+>>>>>>> 23e1822 (Added documentation)
     background-repeat: no-repeat;
     background-position: 0 7px;
 }
@@ -181,7 +185,11 @@ table.indextable ul {
 }
 
 table.indextable > tbody > tr > td > ul {
+<<<<<<< HEAD
     padding-left: 0;
+=======
+    padding-left: 0em;
+>>>>>>> 23e1822 (Added documentation)
 }
 
 table.indextable tr.pcap {
@@ -202,14 +210,22 @@ img.toggler {
 div.modindex-jumpbox {
     border-top: 1px solid #ddd;
     border-bottom: 1px solid #ddd;
+<<<<<<< HEAD
     margin: 1em 0;
+=======
+    margin: 1em 0 1em 0;
+>>>>>>> 23e1822 (Added documentation)
     padding: 0.4em;
 }
 
 div.genindex-jumpbox {
     border-top: 1px solid #ddd;
     border-bottom: 1px solid #ddd;
+<<<<<<< HEAD
     margin: 1em 0;
+=======
+    margin: 1em 0 1em 0;
+>>>>>>> 23e1822 (Added documentation)
     padding: 0.4em;
 }
 
@@ -228,6 +244,12 @@ div.body {
 }
 
 div.body p, div.body dd, div.body li, div.body blockquote {
+<<<<<<< HEAD
+=======
+    -moz-hyphens: auto;
+    -ms-hyphens: auto;
+    -webkit-hyphens: auto;
+>>>>>>> 23e1822 (Added documentation)
     hyphens: auto;
 }
 
@@ -340,7 +362,11 @@ aside.topic,
 div.topic {
     border: 1px solid #ccc;
     padding: 7px;
+<<<<<<< HEAD
     margin: 10px 0;
+=======
+    margin: 10px 0 10px 0;
+>>>>>>> 23e1822 (Added documentation)
 }
 
 p.topic-title {
@@ -362,7 +388,11 @@ div.admonition dt {
 }
 
 p.admonition-title {
+<<<<<<< HEAD
     margin: 0 10px 5px 0;
+=======
+    margin: 0px 10px 5px 0px;
+>>>>>>> 23e1822 (Added documentation)
     font-weight: bold;
 }
 
@@ -444,12 +474,20 @@ table.citation td {
 
 th > :first-child,
 td > :first-child {
+<<<<<<< HEAD
     margin-top: 0;
+=======
+    margin-top: 0px;
+>>>>>>> 23e1822 (Added documentation)
 }
 
 th > :last-child,
 td > :last-child {
+<<<<<<< HEAD
     margin-bottom: 0;
+=======
+    margin-bottom: 0px;
+>>>>>>> 23e1822 (Added documentation)
 }
 
 /* -- figures --------------------------------------------------------------- */
@@ -488,6 +526,12 @@ table.field-list td, table.field-list th {
 }
 
 .field-name {
+<<<<<<< HEAD
+=======
+    -moz-hyphens: manual;
+    -ms-hyphens: manual;
+    -webkit-hyphens: manual;
+>>>>>>> 23e1822 (Added documentation)
     hyphens: manual;
 }
 
@@ -504,7 +548,11 @@ table.hlist td {
 /* -- object description styles --------------------------------------------- */
 
 .sig {
+<<<<<<< HEAD
 	font-family: Consolas, Menlo, 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', monospace;
+=======
+	font-family: 'Consolas', 'Menlo', 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', monospace;
+>>>>>>> 23e1822 (Added documentation)
 }
 
 .sig-name, code.descname {
@@ -583,12 +631,20 @@ ol.upperroman {
 
 :not(li) > ol > li:first-child > :first-child,
 :not(li) > ul > li:first-child > :first-child {
+<<<<<<< HEAD
     margin-top: 0;
+=======
+    margin-top: 0px;
+>>>>>>> 23e1822 (Added documentation)
 }
 
 :not(li) > ol > li:last-child > :last-child,
 :not(li) > ul > li:last-child > :last-child {
+<<<<<<< HEAD
     margin-bottom: 0;
+=======
+    margin-bottom: 0px;
+>>>>>>> 23e1822 (Added documentation)
 }
 
 ol.simple ol p,
@@ -612,11 +668,15 @@ aside.footnote > span,
 div.citation > span {
     float: left;
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 23e1822 (Added documentation)
 aside.footnote > span:last-of-type,
 div.citation > span:last-of-type {
   padding-right: 0.5em;
 }
+<<<<<<< HEAD
 
 aside.footnote > p {
   margin-left: 2em;
@@ -633,6 +693,20 @@ div.citation > p:last-of-type {
 
 aside.footnote > p:last-of-type::after,
 div.citation > p:last-of-type::after {
+=======
+aside.footnote > p {
+  margin-left: 2em;
+}
+div.citation > p {
+  margin-left: 4em;
+}
+aside.footnote > p:last-of-type,
+div.citation > p:last-of-type {
+    margin-bottom: 0em;
+}
+aside.footnote > p:last-of-type:after,
+div.citation > p:last-of-type:after {
+>>>>>>> 23e1822 (Added documentation)
     content: "";
     clear: both;
 }
@@ -651,9 +725,15 @@ dl.field-list > dt {
 
 dl.field-list > dd {
     padding-left: 0.5em;
+<<<<<<< HEAD
     margin-top: 0;
     margin-left: 0;
     margin-bottom: 0;
+=======
+    margin-top: 0em;
+    margin-left: 0em;
+    margin-bottom: 0em;
+>>>>>>> 23e1822 (Added documentation)
 }
 
 dl {
@@ -661,7 +741,11 @@ dl {
 }
 
 dd > :first-child {
+<<<<<<< HEAD
     margin-top: 0;
+=======
+    margin-top: 0px;
+>>>>>>> 23e1822 (Added documentation)
 }
 
 dd ul, dd table {
@@ -675,6 +759,7 @@ dd {
 }
 
 .sig dd {
+<<<<<<< HEAD
     margin-top: 0;
     margin-bottom: 0;
 }
@@ -682,6 +767,15 @@ dd {
 .sig dl {
     margin-top: 0;
     margin-bottom: 0;
+=======
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+.sig dl {
+    margin-top: 0px;
+    margin-bottom: 0px;
+>>>>>>> 23e1822 (Added documentation)
 }
 
 dl > dd:last-child,
@@ -740,7 +834,11 @@ dl.glossary dt {
     font-style: oblique;
 }
 
+<<<<<<< HEAD
 .classifier::before {
+=======
+.classifier:before {
+>>>>>>> 23e1822 (Added documentation)
     font-style: normal;
     margin: 0 0.5em;
     content: ":";
@@ -753,11 +851,19 @@ abbr, acronym {
 }
 
 .translated {
+<<<<<<< HEAD
     background-color: rgb(207 255 207 / 20%)
 }
 
 .untranslated {
     background-color: rgb(255 207 207 / 20%)
+=======
+    background-color: rgba(207, 255, 207, 0.2)
+}
+
+.untranslated {
+    background-color: rgba(255, 207, 207, 0.2)
+>>>>>>> 23e1822 (Added documentation)
 }
 
 /* -- code displays --------------------------------------------------------- */
@@ -772,6 +878,12 @@ pre, div[class*="highlight-"] {
 }
 
 span.pre {
+<<<<<<< HEAD
+=======
+    -moz-hyphens: none;
+    -ms-hyphens: none;
+    -webkit-hyphens: none;
+>>>>>>> 23e1822 (Added documentation)
     hyphens: none;
     white-space: nowrap;
 }
@@ -838,8 +950,16 @@ div.code-block-caption code {
 table.highlighttable td.linenos,
 span.linenos,
 div.highlight span.gp {  /* gp: Generic.Prompt */
+<<<<<<< HEAD
   user-select: text; /* Safari fallback only */ /* Chrome/Safari */ /* Firefox */
   user-select: none; /* IE10+ */
+=======
+  user-select: none;
+  -webkit-user-select: text; /* Safari fallback only */
+  -webkit-user-select: none; /* Chrome/Safari */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+ */
+>>>>>>> 23e1822 (Added documentation)
 }
 
 div.code-block-caption span.caption-number {
