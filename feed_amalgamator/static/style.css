@@ -164,6 +164,7 @@ input[type="submit"]:hover {
     text-align: center;
     color: white;
     margin-bottom: 20px;
+    width: 400px;
 }
 
 .add-server-btn {
@@ -191,7 +192,13 @@ input[type="submit"]:hover {
         margin: 10px;
     }
 }
-
+#add_server_error{
+    color:red;
+    width: 400px;
+}
+.error{
+    color:red;
+}
  .error-message {
       color: red;
       background-color: #fff0f0;

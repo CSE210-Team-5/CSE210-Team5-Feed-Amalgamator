@@ -21,5 +21,8 @@
       <input type="submit" value="Log In" class="submit-btn">
     </div>
   </form>
+{% if error_message is not none %}
+    <h3 class="error">{{ error_message }}</h3>
+    {% endif %}
 </div>
 {% endblock %}

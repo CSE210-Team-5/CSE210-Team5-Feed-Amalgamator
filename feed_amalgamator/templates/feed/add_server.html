@@ -16,9 +16,6 @@ window.history.replaceState( null, null, window.location.href );
 </script>
 {% endblock %}
 {% block content %}
-    {% if error_message is not none %}
-    <h3>{{ error_message }}</h3>
-    {% endif %}
     {% if is_domain_set == true %}
         <div class="get-auth-token">
             <p>
@@ -42,4 +39,7 @@ window.history.replaceState( null, null, window.location.href );
             </form>
         </div>
     {% endif %}
+    {% if error_message is not none %}
+        <h3 id="add_server_error">{{ error_message }}</h3>
+        {% endif %}
 {% endblock %}
