@@ -1,12 +1,13 @@
 path = "configuration/app_settings.ini"
-posts = 20
-home_timeline = "home"
-user_domain = "domain"
-login_token = "token"
-user_id = "user_id"
-sort_by = "favourites_count"
-filter_list = ["uri", "in_reply_to_id", "in_reply_to_account_id", "muted", "language"]
+NUM_POSTS_TO_GET = 20
+HOME_TIMELINE_NAME = "home"
+USER_DOMAIN_FIELD = "domain"
+LOGIN_TOKEN_FIELD = "token"
+
+SORT_BY = "favourites_count"
+FILTER_LIST = ["uri", "in_reply_to_id", "in_reply_to_account_id", "muted", "language"]
 
 # Constants
 USERNAME_FIELD = "username"
 PASSWORD_FIELD = "password"
+USER_ID_FIELD = "user_id"

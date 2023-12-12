@@ -25,8 +25,8 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from sqlalchemy import exc
 
 from . import CONFIG
-from .CONFIG import USERNAME_FIELD, PASSWORD_FIELD
-from .feed import USER_ID_FIELD
+from .CONFIG import USERNAME_FIELD, PASSWORD_FIELD, USER_ID_FIELD
+from .helpers.error_messages import USER_ALREADY_EXISTS_MSG, INVALID_USERNAME_MSG, INVALID_PASSWORD_MSG
 
 bp = Blueprint("auth", __name__, url_prefix="/auth")
 
@@ -55,7 +55,7 @@ def register():
             dbi.session.commit()
         except exc.IntegrityError:
             raise IntegrityError(
-                {"message": "User already exists. Please Log in to continue",
+                {"message": USER_ALREADY_EXISTS_MSG,
                  "redirect_path": "auth/register.html"})
         else:
             # Executes if there is no exception
@@ -71,10 +71,10 @@ def login():
         password = request.form[PASSWORD_FIELD]
         user = User.query.filter_by(username=username).first()
         if user is None:
-            raise InvalidCredentialsError({"message": "Invalid user. Please try again.",
+            raise InvalidCredentialsError({"message": INVALID_USERNAME_MSG,
                                            "redirect_path": "auth/login.html"})
         elif not check_password_hash(user.password, password):
-            raise InvalidCredentialsError({"message": "Invalid Password. Please try again.",
+            raise InvalidCredentialsError({"message": INVALID_PASSWORD_MSG,
                                            "redirect_path": "auth/login.html"})
         else:
             session.clear()
