@@ -1,38 +1,34 @@
-<!DOCTYPE html>
-<title>
-    {% block title %}{% endblock %}
-- Feed Amalgamator</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-<link rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<nav>
-    <div class="navdiv">
-        <h1 class="logo">Feed Amalgamator</h1>
-        <ul>
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A brief description of Feed Amalgamator page content">
+    <meta name="keywords" content="feed, amalgamator, news, aggregation">
+    <title>{% block title %}{% endblock %} - Feed Amalgamator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+<nav class="navbar">
+    <div class="navbar-container">
+        <a class="logo">
+            <i class="fab fa-mastodon"></i> <strong><i>Feed Amalgamator</i></strong>
+        </a>
+        <ul class="nav-links">
             {% if g.user %}
-                <li>
-                    <a href="{{ url_for("auth.logout") }}">Log Out</a>
-                </li>
-                <li>
-                    <a href="{{ url_for("feed.feed_home") }}">Home</a>
-                </li>
-                <li>
-                    <span class="username">
-                        {{ g.user['username'] }}
-                        <img class="profile-picture"
-                             src="{{ url_for('static', filename='mastodon_profile_default.png') }}"
-                             alt="Profile Picture"
-                             height="50"
-                             width="50" />
-                    </span>
+                <li><a href="{{ url_for('auth.logout') }}">Log Out</a></li>
+                <li><a href="{{ url_for('feed.feed_home') }}">Home</a></li>
+                <li class="username">
+                    {{ g.user['username'] }}
+                    <img class="profile-picture" src="{{ url_for('static', filename='mastodon_profile_default.png') }}"
+                         alt="Profile Picture" height="30" width="30"/>
                 </li>
             {% else %}
-                <li>
-                    <a href="{{ url_for("auth.register") }}">Register</a>
-                </li>
-                <li>
-                    <a href="{{ url_for("auth.login") }}">Log In</a>
-                </li>
+                <li><a href="{{ url_for('auth.register') }}">Register</a></li>
+                <li><a href="{{ url_for('auth.login') }}">Log In</a></li>
             {% endif %}
         </ul>
     </div>
@@ -41,6 +37,12 @@
     <header>
         {% block header %}{% endblock %}
     </header>
-    {% for message in get_flashed_messages() %}<div class="flash">{{ message }}</div>{% endfor %}
+    {% for message in get_flashed_messages() %}
+        <div class="flash">{{ message }}</div>
+    {% endfor %}
     {% block content %}{% endblock %}
 </section>
+{% block scripts %}
+{% endblock %}
+</body>
+</html>
