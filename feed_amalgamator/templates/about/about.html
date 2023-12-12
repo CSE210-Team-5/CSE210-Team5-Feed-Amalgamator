@@ -8,7 +8,7 @@
         </h1>
 
         <div class="cover-image">
-            <img src="{{ url_for('static', filename='bugs_bunny_mastodon.jpeg')}}" alt="Bigs Bunny looking at Mastodon Servers"/>
+            <img src="{{ url_for('static', filename='bugs_bunny_mastodon.jpeg')}}" alt="Bigs Bunny looking at Mastodon Servers" width="400px"/>
         </div>
         <div>Welcome to Feed Amalgamator, the ultimate solution for streamlining your Mastodon experience!</div>
 
@@ -27,7 +27,7 @@
         <span>
             <ol>
                 <li>
-                    <h3>Register An Account</h3>
+                    <h3><a href="/auth/register">Register An Account</a></h3>
                     <span>
                         Getting started with Feed Amalgamator is quick and easy. Begin by registering an account using your 
                         preferred username and password. Head to our Registration Page to create your account and unlock the 
@@ -35,15 +35,7 @@
                     </span>
                 </li>
                 <li>
-                    <h3>Register An Account</h3>
-                    <span>
-                        Getting started with Feed Amalgamator is quick and easy. Begin by registering an account using your 
-                        preferred username and password. Head to our Registration Page to create your account and unlock the 
-                        full potential of a unified Mastodon feed.
-                    </span>
-                </li>
-                <li>
-                    <h3>Add Mastodon Server Instances</h3>
+                    <h3><a href="/feed/add_server">Add Mastodon Server Instances</a></h3>
                     <span>
                         In your account settings, locate the "Add Server" option. Here, you can link various Mastodon server 
                         instances to amalgamate your feeds. Enter the server instance details, such as mastodon.social or mastodon.world, 
@@ -51,7 +43,7 @@
                     </span>
                 </li>
                 <li>
-                    <h3>OAuth Procedure</h3>
+                    <h3><a href="/feed/add_server">OAuth Procedure</a></h3>
                     <span>
                         For each Mastodon server instance you add, you'll need to complete the OAuth procedure. 
                         This is a secure authentication process that establishes a connection between Feed Amalgamator 
@@ -59,11 +51,10 @@
                     </span>
                 </li>
                 <li>
-                    <h3>Home Page: Your Amalgamated Feed</h3>
+                    <h3><a href="/feed/home">Home Page: Your Amalgamated Feed</a></h3>
                     <span>
                         Once you've added and authenticated your Mastodon server instances, head to the Feed Amalgamator homepage. 
-                        Here, you'll find your newly created amalgamated feed— a single, centralized stream that combines all your Mastodon accounts. 
-                        Scroll through, engage with posts, and stay connected without the need to switch between instances.
+                        Here, you'll find your newly created amalgamated feed— a single, centralized stream that combines all your Mastodon accounts.
                     </span>
                 </li>
             </ol>
