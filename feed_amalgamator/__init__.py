@@ -2,7 +2,7 @@ import os
 
 from flask import Flask, redirect, url_for
 
-from . import auth, feed
+from . import auth, feed, about
 from feed_amalgamator.helpers.db_interface import dbi
 from feed_amalgamator.helpers import error_handler # noqa
 
@@ -30,6 +30,7 @@ def create_app(test_config=None, db_file_name=None):
 
     app.register_blueprint(auth.bp)
     app.register_blueprint(feed.bp)
+    app.register_blueprint(about.bp)
 
     if db_file_name is None:
         # Default db location
