@@ -14,6 +14,8 @@ from flask import (
     url_for,
 )
 
+from feed_amalgamator.helpers.custom_exceptions import InvalidCredentialsError, IntegrityError
+
 from feed_amalgamator.helpers.db_interface import dbi, User
 
 from feed_amalgamator.helpers.logging_helper import LoggingHelper
@@ -36,7 +38,6 @@ with open(CONFIG.path) as file:
     parser.read_file(file)
 log_file_loc = Path(parser["LOG_SETTINGS"]["auth_log_loc"])
 logger = LoggingHelper.generate_logger(logging.INFO, log_file_loc, "auth_page")
-error = ""
 
 # Constants for form fields
 
@@ -53,7 +54,9 @@ def register():
             dbi.session.add(user)
             dbi.session.commit()
         except exc.IntegrityError:
-            pass  # Hardcore error messages, or abstract further?
+            raise IntegrityError(
+                {"message": "User already exists. Please Log in to continue",
+                 "redirect_path": "auth/register.html"})
         else:
             # Executes if there is no exception
             return redirect(url_for("auth.login"))
@@ -68,20 +71,15 @@ def login():
         password = request.form[PASSWORD_FIELD]
         user = User.query.filter_by(username=username).first()
         if user is None:
-            flash("Invalid User")  # issue with hard coded error messages - see below
-            logger.error("No such user found")
-            raise Exception  # TODO: We need to standardize how exceptions are raised and parsed in flask.
+            raise InvalidCredentialsError({"message": "Invalid user. Please try again.",
+                                           "redirect_path": "auth/login.html"})
         elif not check_password_hash(user.password, password):
-            flash("Invalid Password")  # issue with hard coded error messages - see below
-            logger.error(f"Invalid Password for user {username}")
-            raise Exception  # TODO: We need to standardize how exceptions are raised and parsed in flask.
+            raise InvalidCredentialsError({"message": "Invalid Password. Please try again.",
+                                           "redirect_path": "auth/login.html"})
         else:
             session.clear()
             session[USER_ID_FIELD] = user.user_id
             return redirect(url_for("feed.feed_home"))
-
-        flash(error)
-
     return render_template("auth/login.html")
 
 

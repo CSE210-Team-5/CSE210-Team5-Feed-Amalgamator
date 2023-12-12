@@ -6,7 +6,9 @@ from pathlib import Path
 from flask import Blueprint, flash, redirect, render_template, request, session, url_for
 from sqlalchemy import exc
 
-from feed_amalgamator.helpers.custom_exceptions import MastodonConnError
+from feed_amalgamator.helpers.custom_exceptions import (
+    MastodonConnError, NoContentFoundError, InvalidDomainError, IntegrityError, ServiceUnavailableError,
+    InvalidCredentialsError)
 from feed_amalgamator.helpers.logging_helper import LoggingHelper
 from feed_amalgamator.helpers.mastodon_data_interface import MastodonDataInterface
 from feed_amalgamator.helpers.mastodon_oauth_interface import MastodonOAuthInterface
@@ -26,7 +28,6 @@ auth_api = MastodonOAuthInterface(logger, redirect_uri)
 data_api = MastodonDataInterface(logger)
 
 # TODO - Add Swagger/OpenAPI documentation
-# TODO - Standardize how exceptions are raised and parsed throughout flask
 # TODO - Business logic of home feed (deciding what to filter etc.)
 
 # Defining constants
@@ -57,17 +58,14 @@ def feed_home():
             return redirect(url_for("auth.login"))
 
         provided_user_id = session[USER_ID_FIELD]
-        user_servers = dbi.session.execute(dbi.select(UserServer).filter_by(user_id=provided_user_id)).all()
-        if user_servers is None:
-            flash("Invalid User")  # issue with hard coded error messages - see below
-            logger.error("No user servers found that are tied to user id {i}".format(i=provided_user_id))
-            raise Exception  # TODO: We need to standardize how exceptions are raised and parsed in flask.
+        user_servers = UserServer.query.filter_by(user_id=provided_user_id).all()
+        if len(user_servers) == 0:
+            raise NoContentFoundError({"redirect_path": "feed/home.html",
+                                       "message": "No Mastodon servers exist. Please add one or more servers to view your feed"})
         else:
             logger.info("Found {n} servers tied to user id {i}".format(n=len(user_servers), i=provided_user_id))
             timelines = []
-            for user_server_tuple in user_servers:
-                # user_servers is a list of tuples. The object is the first element of the tuple
-                user_server = user_server_tuple[0]
+            for user_server in user_servers:
                 # These are user_server objects defined in the data interface. Treat them like python objects
                 server_domain = user_server.server
                 access_token = user_server.token
@@ -104,12 +102,9 @@ def render_redirect_url_page():
     is_valid_domain, parsed_domain = auth_api.verify_user_provided_domain(domain)
 
     if not is_valid_domain:
-        logger.error(
-            "User inputted domain {d} was not a valid mastodon domain." "Failed to render redirect url page".format(
-                d=domain
-            )
-        )
-        raise Exception  # TODO: We will need to standardize how to handle exceptions in the flask context.
+        raise InvalidDomainError({
+            "redirect_path": "feed/add_server.html",
+            "message": parsed_domain})
 
     app_token_obj = auth_api.check_if_domain_exists_in_database(parsed_domain)
     if app_token_obj is not None:
@@ -118,11 +113,6 @@ def render_redirect_url_page():
         access_token = app_token_obj.access_token
     else:
         client_id, client_secret, access_token = auth_api.add_domain_to_database(parsed_domain)
-        if client_id is None:
-            logger.error(
-                "Domain {d} did not return a proper API response when adding it" "to the database".format(d=domain)
-            )
-            return render_template("feed/add_server.html", is_domain_set=False, error=True)
         logger.info("New domain added to the database")
 
     auth_api.start_app_api_client(parsed_domain, client_id, client_secret, access_token)
@@ -149,13 +139,19 @@ def render_input_auth_code_page(auth_token):
             dbi.session.add(user_server_obj)
             dbi.session.commit()
         except exc.IntegrityError:
-            error = "Record already exists."  # Hardcore error messages, or abstract further?
+            raise IntegrityError({"redirect_path": "feed/add_server.html",
+                                  "message": "This particular combination of User and Server already exists"})
         except MastodonConnError:
-            error = "Error: Could not generate valid login token"
+            raise ServiceUnavailableError({"redirect_path": "feed/add_server.html",
+                                           "message": "Could not generate valid login token"})
         else:
             # Executes if there is no exception
             return redirect(url_for("feed.add_server", is_domain_set=False))
-    flash(error)
+
+    else:
+        raise InvalidCredentialsError({
+            {"redirect_path": "feed/add_server.html", "message": error}
+        })
 
 
 def generate_auth_code_error_message(
@@ -207,9 +203,10 @@ def delete_server():
                 dbi.session.commit()
                 logger.info("Deleted server {} of user {}".format(server.server, server.user_id))
             else:
-                logger.info("Invalid record for server {} of user {}".format(server.server, server.user_id))
-                flash("Invalid record for server {}".format(server))
-                raise Exception  # TODO: We will need to standardize how to handle exceptions in the flask context.
+                raise IntegrityError({
+                    "redirect_path": "feed/delete_server.html",
+                    "message": "Invalid record for server {} of user {}".format(server.server, server.user_id)
+                })
             return render_user_servers()
 
     else:

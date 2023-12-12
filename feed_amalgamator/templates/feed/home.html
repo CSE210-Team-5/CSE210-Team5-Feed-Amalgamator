@@ -6,6 +6,9 @@
     </p>
     <div class="feed-container">
         <div class="feed-div">
+            {% if error_message is not none %}
+        <h3>{{ error_message }}</h3>
+        {% endif %}
             {% if timelines is not none %}
                 {% for post in timelines %}
                     <article>
