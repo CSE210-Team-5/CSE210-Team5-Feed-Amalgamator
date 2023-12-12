@@ -75,7 +75,7 @@ class TestAuthPage(unittest.TestCase):
 
         # Register new user
         test_user = "Gojo Satoru"
-        test_password = "Infinite Void!"
+        test_password = "Infinite4oid!"
 
         client.post(register_url, data={USERNAME_FIELD: test_user, PASSWORD_FIELD: test_password})
 
@@ -91,7 +91,7 @@ class TestAuthPage(unittest.TestCase):
         client.get(login_url)
 
         test_user = "Meowmaster"
-        test_password = "testpw1!"
+        test_password = "Infinite4oid!"
 
         with self.app.app_context():
             # Insert the user inside the db first
@@ -110,7 +110,7 @@ class TestAuthPage(unittest.TestCase):
         client.get(login_url)
 
         test_user = "Meowmaster"
-        test_password = "testpw1!"
+        test_password = "Infinite4oid!"
 
         with self.app.app_context():
             # Insert the user inside the db first
