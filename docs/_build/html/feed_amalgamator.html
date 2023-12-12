@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>feed_amalgamator package &mdash; Feed-amalgamator  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="feed_amalgamator.helpers package" href="feed_amalgamator.helpers.html" />
+    <link rel="prev" title="feed_amalgamator" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Feed-amalgamator
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">feed_amalgamator</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">feed_amalgamator package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="feed_amalgamator.helpers.html">feed_amalgamator.helpers package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="feed_amalgamator.test_directory.html">feed_amalgamator.test_directory package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-feed_amalgamator.CONFIG">feed_amalgamator.CONFIG module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-feed_amalgamator.auth">feed_amalgamator.auth module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#feed_amalgamator.auth.load_logged_in_user"><code class="docutils literal notranslate"><span class="pre">load_logged_in_user()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#feed_amalgamator.auth.login"><code class="docutils literal notranslate"><span class="pre">login()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#feed_amalgamator.auth.login_required"><code class="docutils literal notranslate"><span class="pre">login_required()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#feed_amalgamator.auth.logout"><code class="docutils literal notranslate"><span class="pre">logout()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#feed_amalgamator.auth.register"><code class="docutils literal notranslate"><span class="pre">register()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-feed_amalgamator.feed">feed_amalgamator.feed module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#feed_amalgamator.feed.add_server"><code class="docutils literal notranslate"><span class="pre">add_server()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#feed_amalgamator.feed.delete_server"><code class="docutils literal notranslate"><span class="pre">delete_server()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#feed_amalgamator.feed.feed_home"><code class="docutils literal notranslate"><span class="pre">feed_home()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#feed_amalgamator.feed.filter_sort_feed"><code class="docutils literal notranslate"><span class="pre">filter_sort_feed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#feed_amalgamator.feed.generate_auth_code_error_message"><code class="docutils literal notranslate"><span class="pre">generate_auth_code_error_message()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#feed_amalgamator.feed.render_input_auth_code_page"><code class="docutils literal notranslate"><span class="pre">render_input_auth_code_page()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#feed_amalgamator.feed.render_redirect_url_page"><code class="docutils literal notranslate"><span class="pre">render_redirect_url_page()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#feed_amalgamator.feed.render_user_servers"><code class="docutils literal notranslate"><span class="pre">render_user_servers()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-feed_amalgamator">Module contents</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#feed_amalgamator.create_app"><code class="docutils literal notranslate"><span class="pre">create_app()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Feed-amalgamator</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">feed_amalgamator</a></li>
+      <li class="breadcrumb-item active">feed_amalgamator package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/feed_amalgamator.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="feed-amalgamator-package">
+<h1>feed_amalgamator package<a class="headerlink" href="#feed-amalgamator-package" title="Link to this heading"></a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="feed_amalgamator.helpers.html">feed_amalgamator.helpers package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="feed_amalgamator.helpers.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="feed_amalgamator.helpers.html#module-feed_amalgamator.helpers.custom_exceptions">feed_amalgamator.helpers.custom_exceptions module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="feed_amalgamator.helpers.html#feed_amalgamator.helpers.custom_exceptions.InvalidApiInputError"><code class="docutils literal notranslate"><span class="pre">InvalidApiInputError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="feed_amalgamator.helpers.html#feed_amalgamator.helpers.custom_exceptions.MastodonConnError"><code class="docutils literal notranslate"><span class="pre">MastodonConnError</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="feed_amalgamator.helpers.html#module-feed_amalgamator.helpers.db_interface">feed_amalgamator.helpers.db_interface module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="feed_amalgamator.helpers.html#feed_amalgamator.helpers.db_interface.ApplicationTokens"><code class="docutils literal notranslate"><span class="pre">ApplicationTokens</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="feed_amalgamator.helpers.html#feed_amalgamator.helpers.db_interface.ApplicationTokens.access_token"><code class="docutils literal notranslate"><span class="pre">ApplicationTokens.access_token</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="feed_amalgamator.helpers.html#feed_amalgamator.helpers.db_interface.ApplicationTokens.client_id"><code class="docutils literal notranslate"><span class="pre">ApplicationTokens.client_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="feed_amalgamator.helpers.html#feed_amalgamator.helpers.db_interface.ApplicationTokens.client_secret"><code class="docutils literal notranslate"><span class="pre">ApplicationTokens.client_secret</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="feed_amalgamator.helpers.html#feed_amalgamator.helpers.db_interface.ApplicationTokens.server"><code class="docutils literal notranslate"><span class="pre">ApplicationTokens.server</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="feed_amalgamator.helpers.html#feed_amalgamator.helpers.db_interface.ApplicationTokens.server_id"><code class="docutils literal notranslate"><span class="pre">ApplicationTokens.server_id</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="feed_amalgamator.helpers.html#feed_amalgamator.helpers.db_interface.Base"><code class="docutils literal notranslate"><span class="pre">Base</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="feed_amalgamator.helpers.html#feed_amalgamator.helpers.db_interface.Base.metadata"><code class="docutils literal notranslate"><span class="pre">Base.metadata</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="feed_amalgamator.helpers.html#feed_amalgamator.helpers.db_interface.Base.registry"><code class="docutils literal notranslate"><span class="pre">Base.registry</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="feed_amalgamator.helpers.html#feed_amalgamator.helpers.db_interface.User"><code class="docutils literal notranslate"><span class="pre">User</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="feed_amalgamator.helpers.html#feed_amalgamator.helpers.db_interface.User.password"><code class="docutils literal notranslate"><span class="pre">User.password</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="feed_amalgamator.helpers.html#feed_amalgamator.helpers.db_interface.User.user_id"><code class="docutils literal notranslate"><span class="pre">User.user_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="feed_amalgamator.helpers.html#feed_amalgamator.helpers.db_interface.User.username"><code class="docutils literal notranslate"><span class="pre">User.username</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="feed_amalgamator.helpers.html#feed_amalgamator.helpers.db_interface.UserServer"><code class="docutils literal notranslate"><span class="pre">UserServer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="feed_amalgamator.helpers.html#feed_amalgamator.helpers.db_interface.UserServer.server"><code class="docutils literal notranslate"><span class="pre">UserServer.server</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="feed_amalgamator.helpers.html#feed_amalgamator.helpers.db_interface.UserServer.token"><code class="docutils literal notranslate"><span class="pre">UserServer.token</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="feed_amalgamator.helpers.html#feed_amalgamator.helpers.db_interface.UserServer.user_id"><code class="docutils literal notranslate"><span class="pre">UserServer.user_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="feed_amalgamator.helpers.html#feed_amalgamator.helpers.db_interface.UserServer.user_server_id"><code class="docutils literal notranslate"><span class="pre">UserServer.user_server_id</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="feed_amalgamator.helpers.html#module-feed_amalgamator.helpers.logging_helper">feed_amalgamator.helpers.logging_helper module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="feed_amalgamator.helpers.html#feed_amalgamator.helpers.logging_helper.LoggingHelper"><code class="docutils literal notranslate"><span class="pre">LoggingHelper</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="feed_amalgamator.helpers.html#feed_amalgamator.helpers.logging_helper.LoggingHelper.create_directory"><code class="docutils literal notranslate"><span class="pre">LoggingHelper.create_directory()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="feed_amalgamator.helpers.html#feed_amalgamator.helpers.logging_helper.LoggingHelper.generate_logger"><code class="docutils literal notranslate"><span class="pre">LoggingHelper.generate_logger()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="feed_amalgamator.helpers.html#module-feed_amalgamator.helpers.mastodon_data_interface">feed_amalgamator.helpers.mastodon_data_interface module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="feed_amalgamator.helpers.html#feed_amalgamator.helpers.mastodon_data_interface.MastodonDataInterface"><code class="docutils literal notranslate"><span class="pre">MastodonDataInterface</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="feed_amalgamator.helpers.html#feed_amalgamator.helpers.mastodon_data_interface.MastodonDataInterface.REQUIRED_SCOPES"><code class="docutils literal notranslate"><span class="pre">MastodonDataInterface.REQUIRED_SCOPES</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="feed_amalgamator.helpers.html#feed_amalgamator.helpers.mastodon_data_interface.MastodonDataInterface.get_timeline_data"><code class="docutils literal notranslate"><span class="pre">MastodonDataInterface.get_timeline_data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="feed_amalgamator.helpers.html#feed_amalgamator.helpers.mastodon_data_interface.MastodonDataInterface.logger"><code class="docutils literal notranslate"><span class="pre">MastodonDataInterface.logger</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="feed_amalgamator.helpers.html#feed_amalgamator.helpers.mastodon_data_interface.MastodonDataInterface.start_user_api_client"><code class="docutils literal notranslate"><span class="pre">MastodonDataInterface.start_user_api_client()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="feed_amalgamator.helpers.html#feed_amalgamator.helpers.mastodon_data_interface.MastodonDataInterface.user_client"><code class="docutils literal notranslate"><span class="pre">MastodonDataInterface.user_client</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="feed_amalgamator.helpers.html#module-feed_amalgamator.helpers.mastodon_oauth_interface">feed_amalgamator.helpers.mastodon_oauth_interface module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="feed_amalgamator.helpers.html#feed_amalgamator.helpers.mastodon_oauth_interface.MastodonOAuthInterface"><code class="docutils literal notranslate"><span class="pre">MastodonOAuthInterface</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="feed_amalgamator.helpers.html#feed_amalgamator.helpers.mastodon_oauth_interface.MastodonOAuthInterface.REQUIRED_SCOPES"><code class="docutils literal notranslate"><span class="pre">MastodonOAuthInterface.REQUIRED_SCOPES</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="feed_amalgamator.helpers.html#feed_amalgamator.helpers.mastodon_oauth_interface.MastodonOAuthInterface.add_domain_to_database"><code class="docutils literal notranslate"><span class="pre">MastodonOAuthInterface.add_domain_to_database()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="feed_amalgamator.helpers.html#feed_amalgamator.helpers.mastodon_oauth_interface.MastodonOAuthInterface.app_client"><code class="docutils literal notranslate"><span class="pre">MastodonOAuthInterface.app_client</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="feed_amalgamator.helpers.html#feed_amalgamator.helpers.mastodon_oauth_interface.MastodonOAuthInterface.check_if_domain_exists_in_database"><code class="docutils literal notranslate"><span class="pre">MastodonOAuthInterface.check_if_domain_exists_in_database()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="feed_amalgamator.helpers.html#feed_amalgamator.helpers.mastodon_oauth_interface.MastodonOAuthInterface.generate_redirect_url"><code class="docutils literal notranslate"><span class="pre">MastodonOAuthInterface.generate_redirect_url()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="feed_amalgamator.helpers.html#feed_amalgamator.helpers.mastodon_oauth_interface.MastodonOAuthInterface.generate_user_access_token"><code class="docutils literal notranslate"><span class="pre">MastodonOAuthInterface.generate_user_access_token()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="feed_amalgamator.helpers.html#feed_amalgamator.helpers.mastodon_oauth_interface.MastodonOAuthInterface.logger"><code class="docutils literal notranslate"><span class="pre">MastodonOAuthInterface.logger</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="feed_amalgamator.helpers.html#feed_amalgamator.helpers.mastodon_oauth_interface.MastodonOAuthInterface.start_app_api_client"><code class="docutils literal notranslate"><span class="pre">MastodonOAuthInterface.start_app_api_client()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="feed_amalgamator.helpers.html#feed_amalgamator.helpers.mastodon_oauth_interface.MastodonOAuthInterface.verify_user_provided_domain"><code class="docutils literal notranslate"><span class="pre">MastodonOAuthInterface.verify_user_provided_domain()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="feed_amalgamator.helpers.html#module-feed_amalgamator.helpers">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="feed_amalgamator.test_directory.html">feed_amalgamator.test_directory package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="feed_amalgamator.test_directory.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="feed_amalgamator.test_directory.html#module-feed_amalgamator.test_directory.t1">feed_amalgamator.test_directory.t1 module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="feed_amalgamator.test_directory.html#feed_amalgamator.test_directory.t1.Dog"><code class="docutils literal notranslate"><span class="pre">Dog</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="feed_amalgamator.test_directory.html#feed_amalgamator.test_directory.t1.Dog.bark"><code class="docutils literal notranslate"><span class="pre">Dog.bark()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="feed_amalgamator.test_directory.html#feed_amalgamator.test_directory.t1.Dog.friends"><code class="docutils literal notranslate"><span class="pre">Dog.friends</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="feed_amalgamator.test_directory.html#feed_amalgamator.test_directory.t1.Dog.name"><code class="docutils literal notranslate"><span class="pre">Dog.name</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="feed_amalgamator.test_directory.html#module-feed_amalgamator.test_directory">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-feed_amalgamator.CONFIG">
+<span id="feed-amalgamator-config-module"></span><h2>feed_amalgamator.CONFIG module<a class="headerlink" href="#module-feed_amalgamator.CONFIG" title="Link to this heading"></a></h2>
+</section>
+<section id="module-feed_amalgamator.auth">
+<span id="feed-amalgamator-auth-module"></span><h2>feed_amalgamator.auth module<a class="headerlink" href="#module-feed_amalgamator.auth" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="feed_amalgamator.auth.load_logged_in_user">
+<span class="sig-prename descclassname"><span class="pre">feed_amalgamator.auth.</span></span><span class="sig-name descname"><span class="pre">load_logged_in_user</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/feed_amalgamator/auth.html#load_logged_in_user"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#feed_amalgamator.auth.load_logged_in_user" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="feed_amalgamator.auth.login">
+<span class="sig-prename descclassname"><span class="pre">feed_amalgamator.auth.</span></span><span class="sig-name descname"><span class="pre">login</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/feed_amalgamator/auth.html#login"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#feed_amalgamator.auth.login" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="feed_amalgamator.auth.login_required">
+<span class="sig-prename descclassname"><span class="pre">feed_amalgamator.auth.</span></span><span class="sig-name descname"><span class="pre">login_required</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">view</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/feed_amalgamator/auth.html#login_required"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#feed_amalgamator.auth.login_required" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="feed_amalgamator.auth.logout">
+<span class="sig-prename descclassname"><span class="pre">feed_amalgamator.auth.</span></span><span class="sig-name descname"><span class="pre">logout</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/feed_amalgamator/auth.html#logout"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#feed_amalgamator.auth.logout" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="feed_amalgamator.auth.register">
+<span class="sig-prename descclassname"><span class="pre">feed_amalgamator.auth.</span></span><span class="sig-name descname"><span class="pre">register</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/feed_amalgamator/auth.html#register"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#feed_amalgamator.auth.register" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-feed_amalgamator.feed">
+<span id="feed-amalgamator-feed-module"></span><h2>feed_amalgamator.feed module<a class="headerlink" href="#module-feed_amalgamator.feed" title="Link to this heading"></a></h2>
+<p>Code for handling the main, feed page via flask</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="feed_amalgamator.feed.add_server">
+<span class="sig-prename descclassname"><span class="pre">feed_amalgamator.feed.</span></span><span class="sig-name descname"><span class="pre">add_server</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/feed_amalgamator/feed.html#add_server"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#feed_amalgamator.feed.add_server" title="Link to this definition"></a></dt>
+<dd><p>Endpoint for the user to add a server to their existing list</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="feed_amalgamator.feed.delete_server">
+<span class="sig-prename descclassname"><span class="pre">feed_amalgamator.feed.</span></span><span class="sig-name descname"><span class="pre">delete_server</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/feed_amalgamator/feed.html#delete_server"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#feed_amalgamator.feed.delete_server" title="Link to this definition"></a></dt>
+<dd><p>Endpoint for the user to delete one or more servers from their existing list</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="feed_amalgamator.feed.feed_home">
+<span class="sig-prename descclassname"><span class="pre">feed_amalgamator.feed.</span></span><span class="sig-name descname"><span class="pre">feed_home</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/feed_amalgamator/feed.html#feed_home"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#feed_amalgamator.feed.feed_home" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="feed_amalgamator.feed.filter_sort_feed">
+<span class="sig-prename descclassname"><span class="pre">feed_amalgamator.feed.</span></span><span class="sig-name descname"><span class="pre">filter_sort_feed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timelines</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/feed_amalgamator/feed.html#filter_sort_feed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#feed_amalgamator.feed.filter_sort_feed" title="Link to this definition"></a></dt>
+<dd><p>Function that sorts and fiters the timeline
+&#64;param timelines : timeline data to need to be filtered and sorted</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="feed_amalgamator.feed.generate_auth_code_error_message">
+<span class="sig-prename descclassname"><span class="pre">feed_amalgamator.feed.</span></span><span class="sig-name descname"><span class="pre">generate_auth_code_error_message</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">authentication_token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user_domain</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="_modules/feed_amalgamator/feed.html#generate_auth_code_error_message"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#feed_amalgamator.feed.generate_auth_code_error_message" title="Link to this definition"></a></dt>
+<dd><p>Helper function to generate different error messages that will be shown to the user depending
+on what went wrong
+&#64;param authentication_token: auth_token field in the request form
+&#64;param user_id: user_id field in the session
+&#64;param user_domain: user_domain field in the session
+&#64;return: Either the error message, or None</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="feed_amalgamator.feed.render_input_auth_code_page">
+<span class="sig-prename descclassname"><span class="pre">feed_amalgamator.feed.</span></span><span class="sig-name descname"><span class="pre">render_input_auth_code_page</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/feed_amalgamator/feed.html#render_input_auth_code_page"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#feed_amalgamator.feed.render_input_auth_code_page" title="Link to this definition"></a></dt>
+<dd><p>Helper function to handle the logic for allowing users to input the auth code.
+Should inherit the request and session of add_server</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="feed_amalgamator.feed.render_redirect_url_page">
+<span class="sig-prename descclassname"><span class="pre">feed_amalgamator.feed.</span></span><span class="sig-name descname"><span class="pre">render_redirect_url_page</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/feed_amalgamator/feed.html#render_redirect_url_page"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#feed_amalgamator.feed.render_redirect_url_page" title="Link to this definition"></a></dt>
+<dd><p>Helper function to handle the logic for redirecting users to the Mastodon OAuth flow
+Should inherit the request and session of add_server</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="feed_amalgamator.feed.render_user_servers">
+<span class="sig-prename descclassname"><span class="pre">feed_amalgamator.feed.</span></span><span class="sig-name descname"><span class="pre">render_user_servers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/feed_amalgamator/feed.html#render_user_servers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#feed_amalgamator.feed.render_user_servers" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-feed_amalgamator">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-feed_amalgamator" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="feed_amalgamator.create_app">
+<span class="sig-prename descclassname"><span class="pre">feed_amalgamator.</span></span><span class="sig-name descname"><span class="pre">create_app</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">test_config</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db_file_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/feed_amalgamator.html#create_app"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#feed_amalgamator.create_app" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="modules.html" class="btn btn-neutral float-left" title="feed_amalgamator" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="feed_amalgamator.helpers.html" class="btn btn-neutral float-right" title="feed_amalgamator.helpers package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Team 5.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
