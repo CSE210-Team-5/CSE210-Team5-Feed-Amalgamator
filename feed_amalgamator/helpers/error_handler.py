@@ -1,4 +1,3 @@
-import flask
 import logging
 import configparser
 from flask import render_template
@@ -9,8 +8,6 @@ from feed_amalgamator.helpers.custom_exceptions import (
 from feed_amalgamator.auth import bp as auth_bp
 from feed_amalgamator.feed import bp as feed_bp
 from feed_amalgamator.helpers.logging_helper import LoggingHelper
-from feed_amalgamator import CONFIG
-
 
 parser = configparser.ConfigParser()
 # Setting up the loggers and interface layers

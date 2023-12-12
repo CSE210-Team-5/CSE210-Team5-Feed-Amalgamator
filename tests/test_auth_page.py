@@ -6,13 +6,13 @@ from pathlib import Path
 
 from feed_amalgamator import create_app
 from http import HTTPStatus
-from feed_amalgamator.CONFIG import USERNAME_FIELD, PASSWORD_FIELD
+from feed_amalgamator.constants.common_constants import USERNAME_FIELD, PASSWORD_FIELD
 from feed_amalgamator.helpers.db_interface import User
 
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from feed_amalgamator.helpers.db_interface import dbi
-from feed_amalgamator.helpers.error_messages import USER_ALREADY_EXISTS_MSG, INVALID_USERNAME_MSG, INVALID_PASSWORD_MSG
+from feed_amalgamator.constants.error_messages import USER_ALREADY_EXISTS_MSG, INVALID_USERNAME_MSG, INVALID_PASSWORD_MSG
 
 
 class TestAuthPage(unittest.TestCase):

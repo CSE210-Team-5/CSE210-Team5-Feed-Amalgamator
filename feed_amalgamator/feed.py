@@ -13,8 +13,7 @@ from feed_amalgamator.helpers.logging_helper import LoggingHelper
 from feed_amalgamator.helpers.mastodon_data_interface import MastodonDataInterface
 from feed_amalgamator.helpers.mastodon_oauth_interface import MastodonOAuthInterface
 from feed_amalgamator.helpers.db_interface import dbi, UserServer
-from . import CONFIG
-from .helpers.error_messages import NO_CONTENT_FOUND_MSG, USER_SERVER_COMBI_ALREADY_EXISTS_MSG, LOGIN_TOKEN_ERROR_MSG, \
+from feed_amalgamator.constants.error_messages import NO_CONTENT_FOUND_MSG, USER_SERVER_COMBI_ALREADY_EXISTS_MSG, LOGIN_TOKEN_ERROR_MSG, \
     AUTHORIZATION_TOKEN_REQUIRED_MSG, PASSWORD_REQUIRED_MSG, DOMAIN_REQUIRED_MSG, INVALID_DELETE_SERVER_RECORD_MSG
 
 bp = Blueprint("feed", __name__, url_prefix="/feed")

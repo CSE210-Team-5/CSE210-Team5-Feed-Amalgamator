@@ -5,7 +5,6 @@ from pathlib import Path
 
 from flask import (
     Blueprint,
-    flash,
     g,
     redirect,
     render_template,
@@ -24,9 +23,8 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 from sqlalchemy import exc
 
-from . import CONFIG
-from .CONFIG import USERNAME_FIELD, PASSWORD_FIELD, USER_ID_FIELD
-from .helpers.error_messages import USER_ALREADY_EXISTS_MSG, INVALID_USERNAME_MSG, INVALID_PASSWORD_MSG
+from feed_amalgamator.constants.common_constants import USERNAME_FIELD, PASSWORD_FIELD, USER_ID_FIELD
+from feed_amalgamator.constants.error_messages import USER_ALREADY_EXISTS_MSG, INVALID_USERNAME_MSG, INVALID_PASSWORD_MSG
 
 bp = Blueprint("auth", __name__, url_prefix="/auth")
 
