@@ -63,10 +63,9 @@ class MastodonOAuthInterface:
             if response.status_code == HTTPStatus.OK:
                 wanted_domain = json.loads(response.content)["domain"]
                 return True, wanted_domain  # Obtain the cleansed content
-        except requests.exceptions.ConnectionError as e:
+        except requests.exceptions.ConnectionError:
             # If the user domain is invalid, it is indistinguishable from a connection error (cannot resolve
             # the domain of the redirected url)
-            # Increase granularity of http error logging (500?400?)
             error_message = "{msg_base}:{d}".format(msg_base=INVALID_MASTODON_DOMAIN_MSG,
                                                     d=wanted_domain)
         except json.JSONDecodeError:
@@ -230,7 +229,7 @@ class MastodonOAuthInterface:
             dbi.session.add(app_token)
             dbi.session.commit()
             return client_id, client_secret, access_token
-        except requests.exceptions.RequestException as e:
+        except requests.exceptions.RequestException:
             # Handle exceptions that might occur during the request
             raise ServiceUnavailableError({
                 "redirect_path": "feed/add_sever.html",

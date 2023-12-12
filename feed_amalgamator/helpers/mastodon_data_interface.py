@@ -8,7 +8,6 @@ import mastodon.errors
 from mastodon import MastodonAPIError, Mastodon
 
 from feed_amalgamator.helpers.custom_exceptions import (
-    InvalidApiInputError,
     MastodonConnError,
     InvalidCredentialsError,
     ServiceUnavailableError
