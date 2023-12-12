@@ -29,6 +29,7 @@ class UserServer(dbi.Model):
     at the moment. Coming up with a solution is not viable for this sprint"""
     token: Mapped[str] = mapped_column(dbi.String, nullable=False, name="token")
 
+
 class ApplicationTokens(dbi.Model):
     __tablename__ = "application_tokens"
     server_id: Mapped[int] = mapped_column(dbi.Integer, primary_key=True, autoincrement=True, name="id")
@@ -36,3 +37,4 @@ class ApplicationTokens(dbi.Model):
     client_id: Mapped[str] = mapped_column(dbi.String, nullable=False, name="client_id")
     client_secret: Mapped[str] = mapped_column(dbi.String, nullable=False, name="client_secret")
     access_token: Mapped[str] = mapped_column(dbi.String, nullable=False, name="access_token")
+    redirect_uri: Mapped[str] = mapped_column(dbi.String, nullable=False, name="redirect_uri")

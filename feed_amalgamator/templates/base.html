@@ -3,7 +3,8 @@
     {% block title %}{% endblock %}
 - Feed Amalgamator</title>
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <nav>
     <div class="navdiv">
         <h1 class="logo">Feed Amalgamator</h1>
@@ -20,7 +21,9 @@
                         {{ g.user['username'] }}
                         <img class="profile-picture"
                              src="{{ url_for('static', filename='mastodon_profile_default.png') }}"
-                             alt="Profile Picture" height="50" width="50" />
+                             alt="Profile Picture"
+                             height="50"
+                             width="50" />
                     </span>
                 </li>
             {% else %}

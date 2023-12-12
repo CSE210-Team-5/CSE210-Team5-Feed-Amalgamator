@@ -3,12 +3,11 @@ import unittest
 from pathlib import Path
 
 from feed_amalgamator import create_app
-from feed_amalgamator.feed import USER_DOMAIN_FIELD
-from feed_amalgamator.helpers.db_interface import ApplicationTokens
 
 
 class TestFeedPage(unittest.TestCase):
     """Tests the endpoints in the feed page. These are closely to functional/integration tests than unit tests"""
+
     def setUp(self) -> None:
         test_config_loc = Path("configuration/test_mastodon_client_info.ini")
         parser = configparser.ConfigParser()
@@ -17,9 +16,11 @@ class TestFeedPage(unittest.TestCase):
         test_db_name = parser["TEST_SETTINGS"]["test_db_location"]
 
         self.app = create_app(db_file_name=test_db_name)
-        self.app.config.update({
-            "TESTING": True,
-        })
+        self.app.config.update(
+            {
+                "TESTING": True,
+            }
+        )
 
         self.page_root = "feed"
 
@@ -32,8 +33,9 @@ class TestFeedPage(unittest.TestCase):
     with client:
         # No users existing so far
         self.assertRaises(Exception, client.get(home_url))
-    """
 
+    """
+    """
     def test_add_server_redirect_url(self):
         client = self.app.test_client()
         add_server_url = "{r}/add_server".format(r=self.page_root)
@@ -60,3 +62,5 @@ class TestFeedPage(unittest.TestCase):
         # emulate a human. Playwright.dev for testing (more modern than Selenium). StorybookGPT (name of technology)
         # you can do test automation using POSTman. DOM compare/Pixel compare to validate test cases.
         # Start with the core thing and work upwards
+        """
+

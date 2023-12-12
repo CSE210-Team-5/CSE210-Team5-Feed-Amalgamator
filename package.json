@@ -1,0 +1,20 @@
+{
+  "name": "cse210-team5-feed-amalgamator",
+  "version": "1.0.0",
+  "description": "This branch contains the initial version of the web application feed-amalgmator developed using Flask.",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^8.55.0",
+    "eslint-config-google": "^0.14.0",
+    "stylelint": "^15.11.0",
+    "stylelint-config-standard": "^34.0.0"
+  }
+}

@@ -42,7 +42,7 @@ def create_app(test_config=None, db_file_name=None):
 
     @app.route("/", methods=["GET"])
     def redirect_internal():
-        return redirect(url_for("auth.register"))
+        return redirect(url_for("feed.feed_home"))
 
     with app.app_context():
         dbi.create_all()

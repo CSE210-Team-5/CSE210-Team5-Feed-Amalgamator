@@ -1,55 +1,85 @@
 {% extends 'base.html' %}
 {% block content %}
     <p>
-        <a href="{{ url_for('feed.add_server') }}">Add Server</a>
-        <a href="{{ url_for('feed.delete_server') }}">Delete Server</a>
+        <a href="{{ url_for("feed.add_server") }}">Add Server</a>
+        <a href="{{ url_for("feed.delete_server") }}">Delete Server</a>
     </p>
-    {% if timelines is not none %}
-            {% for post in timelines %}
-                <article>
-                    {% if post['reblog'] != None %}
+    <div class="feed-container">
+        <div class="feed-div">
+            {% if timelines is not none %}
+                {% for post in timelines %}
+                    <article>
                         <span class="status-prepend">
-                            <i class="fa fa-retweet"></i>
-                            <strong>{{ post['account']['display_name'] }} boosted</strong>
+                            <p>{{ post['original_server'] }}</p>
+                            {% if post['reblog'] != None %}
+                                <i class="fa fa-retweet"></i>
+                                <strong>{{ post['account']['display_name'] }} boosted</strong>
+                                {% set post = post['reblog'] %}
+                            {% endif %}
                         </span>
-                        {% set post = post['reblog'] %}
-                    {% endif %}
-                    <div class="status">
-                        <div class="status-info">
-                            <div class="status-avatar">
-                                <div class="account-avatar">
-                                    <img src="{{ post['account']['avatar'] }}"
-                                         alt="avatar"
-                                         height="50"
-                                         width="50">
+                        <div class="status">
+                            <div class="status-info">
+                                <div class="status-avatar">
+                                    <div class="account-avatar">
+                                        <img src="{{ post['account']['avatar'] }}"
+                                             alt="avatar"
+                                             height="50"
+                                             width="50">
+                                    </div>
+                                </div>
+                                <span class="display-name">
+                                    <bdi>
+                                        <strong class="display-name-html">{{ post['account']['display_name'] }}</strong>
+                                    </bdi>
+                                    <span class="display-name-account">{{ post['account']['acct'] }}</span>
+                                </span>
+                            </div>
+                            <div class="detailed-status-meta">
+                                <span class="detailed-status-datetime">{{ post['created_at'].strftime("%b %d, %Y, %I:%M") }}</span>
+                                ·
+                                <span class="status-visibility-icon">
+                                    {% if post['visibility'] == 'public' %}<i class="fa fa-globe" title="Public"></i>{% endif %}
+                                    {% if post['visibility'] == 'unlisted' %}
+                                        <i class="fa fa-unlock" title="Unlisted"></i>
+                                    {% endif
+                                    %}
+                                    {% if post['visibility'] == 'private' %}
+                                        <i class="fa fa-lock" title="Followers only"></i>{%
+                                        endif %}
+                                        {% if post['visibility'] == 'direct' %}
+                                            <i class="fa fa-at" title="Followers only"></i>
+                                        {% endif
+                                        %}
+                                    </span>
+                                    ·
+                                    <i class="fa fa-retweet"></i>
+                                    <span class="detailed-status-reblogs">{{ post['reblogs_count'] }}</span>
+                                    ·
+                                    <i class="fa fa-star"></i>
+                                    <span class="detailed-status-favourites">{{ post['favourites_count'] }}</span>
+                                </div>
+                                <div class="status-content">{{ post['content']|safe }}</div>
+                                <div class="media">
+                                    {% if post['media_attachments'] != [] %}
+                                        {% for media in post['media_attachments'] %}
+                                            {% if media['type'] == 'image' %}
+                                                <img src="{{ media.url }}"
+                                                     alt="{{ media.description }}"
+                                                     width="75%"
+                                                     height="auto">
+                                            {% elif media['type'] == 'video' %}
+                                                <video controls width="500px">
+                                                    <source src="{{ media.url }}" type="video/mp4">
+                                                    Your browser does not support the video tag.
+                                                </video>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
                                 </div>
                             </div>
-                            <span class="display-name">
-                                <bdi>
-                                    <strong class="display-name-html">{{ post['account']['display_name'] }}</strong>
-                                </bdi>
-                                <span class="display-name-account">{{ post['account']['acct'] }}</span>
-                            </span>
-                        </div>
-                        <div class="detailed-status-meta">
-                            <span class="detailed-status-datetime">{{ post['created_at'].strftime("%b %d, %Y, %I:%M") }}</span>
-                            ·
-                            <span class="status-visibility-icon">
-                                {% if post['visibility'] == 'public' %}<i class="fa fa-globe" title="Public"></i>{% endif %}
-                                {% if post['visibility'] == 'unlisted' %}<i class="fa fa-unlock" title="Unlisted"></i>{% endif %}
-                                {% if post['visibility'] == 'private' %}<i class="fa fa-lock" title="Followers only"></i>{% endif %}
-                                {% if post['visibility'] == 'direct' %}<i class="fa fa-at" title="Followers only"></i>{% endif %}
-                            </span>
-                            ·
-                            <i class="fa fa-retweet"></i>
-                            <span class="detailed-status-reblogs">{{ post['reblogs_count'] }}</span>
-                            ·
-                            <i class="fa fa-star"></i>
-                            <span class="detailed-status-favourites">{{ post['favourites_count'] }}</span>
-                        </div>
-                        <div class="status-content">{{ post['content']|safe }}</div>
-                    </div>
-                </article>
-            {% endfor %}
-    {% endif %}
-{% endblock %}
+                        </article>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+    {% endblock %}

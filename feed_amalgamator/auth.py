@@ -42,6 +42,7 @@ error = ""
 
 # Problem: We need to inject the database layer instead of just calling it like that to make testing easier
 
+
 @bp.route("/register", methods=("GET", "POST"))
 def register():
     if request.method == "POST":
@@ -97,7 +98,7 @@ def load_logged_in_user():
 @bp.route("/logout")
 def logout():
     session.clear()
-    return redirect(url_for("auth.register"))
+    return redirect(url_for("auth.login"))
 
 
 def login_required(view):

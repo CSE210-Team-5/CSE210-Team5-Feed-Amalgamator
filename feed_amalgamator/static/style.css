@@ -4,7 +4,7 @@ h1 {
 
 body {
   font-family: sans-serif;
-  background: #292c36;
+  background: #191b22;
   text-decoration: none;
   margin: 0;
   padding: 0;
@@ -25,7 +25,7 @@ a {
 
 .status-prepend {
   color: #606984;
-  display: inline-flex;
+  display: block;
   font-size: 15px;
   font-weight: 500;
   gap: 10px;
@@ -71,9 +71,9 @@ a {
   width: 100%;
 }
 
-article {
+/* article {
   border-bottom: 1px solid #393f4f;
-}
+} */
 
 .status-content {
   word-wrap: break-word;
@@ -166,6 +166,7 @@ li .username:hover {
 .enter-domain {
   text-align: center;
   color: white;
+  margin: 10px;
 }
 
 input[type="text"] {
@@ -201,6 +202,11 @@ input[type="text"] {
   cursor: pointer;
 }
 
+.flash{
+  text-align: center;
+  color: white;
+}
+
 .delete-server {
   color: white;
   text-align: center;
@@ -230,4 +236,41 @@ input[type="text"] {
 .delete-server-button:hover {
   background-color: #563acc;
   cursor: pointer;
+}
+
+.feed-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.feed-div {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+  max-width: 800px;
+  background-color: #282c37;
+}
+
+article {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px;
+  border: 1px #393f4f solid;
+  border-bottom: none;
+  border-top: none;
+}
+
+.media{
+  display: block;
+  text-align: center;
+}
+
+.media img{
+  width: 75%;
+  margin: 10px;
+  border-radius: 5%;
+  cursor: zoom-in;
 }
