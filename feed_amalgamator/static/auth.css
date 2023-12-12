@@ -1,0 +1,74 @@
+input[type="submit"] {
+    background-color: #3498D8;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-align: center;
+    border: none;
+    padding: 18px;
+    /* Slightly larger padding for the button */
+}
+
+
+input[type="submit"]:hover {
+    background-color: #2980b9;
+}
+
+
+.form-auth {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.center-container {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    vertical-align: baseline;
+    color: white;
+    text-align: center;
+}
+
+.register-container,
+.form-container {
+    width: 50%;
+    max-width: 320px;
+    padding: 40px;
+    background: rgba(255 255 255 /10%);
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0 0 0 /20%);
+    backdrop-filter: blur(10px);
+}
+
+
+
+.error-message {
+    color: red;
+    background-color: #fff0f0;
+    border: 1px solid red;
+    padding: 5px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    display: none;
+}
+
+
+/* Input and Button Styles */
+input[type="text"],
+input[type="password"],
+input[type="submit"] {
+    width: 100%;
+    /* Full width of the form container */
+    padding: 16px;
+    /* Increased padding for taller fields */
+    margin-bottom: 10px;
+    /* Space between elements */
+    border-radius: 5px;
+    border: 1px solid #34495e;
+    box-sizing: border-box;
+    /* Ensures padding is included in the width */
+    font-size: 18px;
+    /* Larger font size for better readability */
+}
