@@ -146,10 +146,6 @@ h1 {
     text-align: center;
   }
   
-  .server-list {
-    display: grid;
-  }
-  
   .delete-list-item {
     margin: 10px;
   }
