@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="about">
+    <link rel="stylesheet" href="{{ url_for('static', filename='about.css') }}">
     <div>
         <h1 class="about-header">
             {% block title %}About Feed Amalgamator{% endblock %}
