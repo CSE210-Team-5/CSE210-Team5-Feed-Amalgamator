@@ -201,15 +201,16 @@ class MastodonOAuthInterface:
         @param domain_name: Add domain_name to database, with its client id, client secret and access token
         """
         try:
+            self.logger.info("Adding domain {d} to database".format(d=domain_name))
             client_id, client_secret = self._create_new_mastodon_client(domain_name)
             access_token = self._request_auth_token_from_mastodon(client_id, client_secret, domain_name)
             app_token = ApplicationTokens(server=domain_name, client_id=client_id, client_secret=client_secret,
                                           access_token=access_token, redirect_uri=self.REDIRECT_URI)
             dbi.session.add(app_token)
             dbi.session.commit()
+            self.logger.info("Completed adding domain {d} to database".format(d=domain_name))
             return client_id, client_secret, access_token
         except sqlalchemy.exc.SQLAlchemyError:
-            # Handle exceptions that might occur during the request
             raise ServiceUnavailableError({
                 "redirect_path": "feed/add_sever.html",
                 "message": SERVICE_UNAVAILABLE_MSG
@@ -224,14 +225,13 @@ class MastodonOAuthInterface:
 
         payload = {
             "client_name": "Feed Amalgamator",
-            "redirect_uris": self.REDIRECT_URI,  # "http://127.0.0.1:5000/feed/handle_oauth"
+            "redirect_uris": self.REDIRECT_URI,
             "scopes": " ".join(self.REQUIRED_SCOPES)  # Join as this needs to be a string not a line
         }
         response = None
         try:
             headers = self._generate_headers_for_api_call()
             response = requests.post(api_url, data=payload, headers=headers)
-            self.logger.info(response.status_code)
             response.raise_for_status()  # Raises an HTTPError if the HTTP request returned an unsuccessful status code
             response_dict = json.loads(response.text)
             client_id = response_dict["client_id"]
@@ -267,11 +267,13 @@ class MastodonOAuthInterface:
         }
         response = None
         try:
+            self.logger.info("Requesting auth token from domain {d}".format(d=domain_name))
             headers = self._generate_headers_for_api_call()
             response = requests.post(token_url, data=payload_token, headers=headers)
             response.raise_for_status()  # Raises an HTTPError if the HTTP request returned an unsuccessful status code
             response_dict_token = json.loads(response.text)
             access_token = response_dict_token['access_token']
+            self.logger.info("Successfully requested auth token from domain {d}".format(d=domain_name))
             return access_token
         except requests.exceptions.RequestException as e:
             # Handle exceptions that might occur during the request
