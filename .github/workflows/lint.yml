@@ -20,6 +20,10 @@ jobs:
         run: |
           pip install djlint
           djlint . --lint
+      - name: Setup Ruff
+        run: |
+          echo exclude = ["./feed_amalgamator/__init__.py"] > ruff.toml
+        shell: bash
       - name: Ruff Linting
         uses: chartboost/ruff-action@v1
       - name: Lint other files
