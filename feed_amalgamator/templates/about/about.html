@@ -2,11 +2,15 @@
 {% block content %}
 <div class="about">
     <link rel="stylesheet" href="{{ url_for('static', filename='about.css') }}">
-    <div>
+    <div class="content">
         <h1 class="about-header">
-            {% block title %}About Feed Amalgamator{% endblock %}
+            {% block title %}Feed Amalgamator{% endblock %}
         </h1>
-        <span>Welcome to Feed Amalgamator, the ultimate solution for streamlining your Mastodon experience!</span>
+
+        <div class="cover-image">
+            <img src="{{ url_for('static', filename='bugs_bunny_mastodon.jpeg')}}" alt="Bigs Bunny looking at Mastodon Servers"/>
+        </div>
+        <div>Welcome to Feed Amalgamator, the ultimate solution for streamlining your Mastodon experience!</div>
 
         <h2>
             What is Feed Amalgamator?

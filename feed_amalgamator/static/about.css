@@ -1,0 +1,38 @@
+.about{
+    display: flex;
+    background-color: black;
+    margin: 10px;
+    padding: 10px;
+}
+
+.content h1{
+    font-size: xxx-large;
+}
+
+.content h2{
+    font-size: xx-large;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.content{
+    width: 75%;
+}
+
+.cover-image{
+    text-align: center;
+}
+
+.about img{
+    margin: 10px;
+    border-radius: 5%;
+}
+
+li{
+    margin: 10px;
+}
+
+h3{
+    font-weight: 600;
+    margin-bottom: 5px;
+}
