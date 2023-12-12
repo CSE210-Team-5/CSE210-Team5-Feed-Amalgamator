@@ -1,4 +1,4 @@
-path = "./configuration/app_settings.ini"
+path = "configuration/app_settings.ini"
 posts = 20
 home_timeline = "home"
 user_domain = "domain"
