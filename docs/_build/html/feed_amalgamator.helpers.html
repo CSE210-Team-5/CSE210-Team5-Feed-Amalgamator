@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>feed_amalgamator.helpers package &mdash; Feed-amalgamator  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="feed_amalgamator.test_directory package" href="feed_amalgamator.test_directory.html" />
+    <link rel="prev" title="feed_amalgamator package" href="feed_amalgamator.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Feed-amalgamator
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">feed_amalgamator</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="feed_amalgamator.html">feed_amalgamator package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="feed_amalgamator.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">feed_amalgamator.helpers package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="feed_amalgamator.test_directory.html">feed_amalgamator.test_directory package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="feed_amalgamator.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="feed_amalgamator.html#feed-amalgamator-config-module">feed_amalgamator.CONFIG module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="feed_amalgamator.html#feed-amalgamator-auth-module">feed_amalgamator.auth module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="feed_amalgamator.html#feed-amalgamator-feed-module">feed_amalgamator.feed module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="feed_amalgamator.html#module-contents">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Feed-amalgamator</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">feed_amalgamator</a></li>
+          <li class="breadcrumb-item"><a href="feed_amalgamator.html">feed_amalgamator package</a></li>
+      <li class="breadcrumb-item active">feed_amalgamator.helpers package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/feed_amalgamator.helpers.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="feed-amalgamator-helpers-package">
+<h1>feed_amalgamator.helpers package<a class="headerlink" href="#feed-amalgamator-helpers-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-feed_amalgamator.helpers.custom_exceptions">
+<span id="feed-amalgamator-helpers-custom-exceptions-module"></span><h2>feed_amalgamator.helpers.custom_exceptions module<a class="headerlink" href="#module-feed_amalgamator.helpers.custom_exceptions" title="Link to this heading"></a></h2>
+<p>“Custom exception class is used instead of the third-party MastdonAPIError in order to insulate
+internal code from breaking third party API changes</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="feed_amalgamator.helpers.custom_exceptions.InvalidApiInputError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">feed_amalgamator.helpers.custom_exceptions.</span></span><span class="sig-name descname"><span class="pre">InvalidApiInputError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">error_message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/feed_amalgamator/helpers/custom_exceptions.html#InvalidApiInputError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#feed_amalgamator.helpers.custom_exceptions.InvalidApiInputError" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>Custom exception class for errors encountered when communicating with the Mastodon API.
+In general, thrown if a provided input to the api (eg. a user token or a redirect uri) is invalid</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="feed_amalgamator.helpers.custom_exceptions.MastodonConnError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">feed_amalgamator.helpers.custom_exceptions.</span></span><span class="sig-name descname"><span class="pre">MastodonConnError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">error_message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/feed_amalgamator/helpers/custom_exceptions.html#MastodonConnError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#feed_amalgamator.helpers.custom_exceptions.MastodonConnError" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>Custom exception class for errors encountered when communicating with the Mastodon API.
+In general, thrown after several repeated tries have failed.</p>
+</dd></dl>
+
+</section>
+<section id="module-feed_amalgamator.helpers.db_interface">
+<span id="feed-amalgamator-helpers-db-interface-module"></span><h2>feed_amalgamator.helpers.db_interface module<a class="headerlink" href="#module-feed_amalgamator.helpers.db_interface" title="Link to this heading"></a></h2>
+<p>Abstraction layer for connecting to the database.
+This allows for easier manipulation of the data. More importantly, it allows the program to work
+with any SQL backend, be it PostGRE or MySQl.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="feed_amalgamator.helpers.db_interface.ApplicationTokens">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">feed_amalgamator.helpers.db_interface.</span></span><span class="sig-name descname"><span class="pre">ApplicationTokens</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/feed_amalgamator/helpers/db_interface.html#ApplicationTokens"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#feed_amalgamator.helpers.db_interface.ApplicationTokens" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="feed_amalgamator.helpers.db_interface.ApplicationTokens.access_token">
+<span class="sig-name descname"><span class="pre">access_token</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Mapped</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#feed_amalgamator.helpers.db_interface.ApplicationTokens.access_token" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="feed_amalgamator.helpers.db_interface.ApplicationTokens.client_id">
+<span class="sig-name descname"><span class="pre">client_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Mapped</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#feed_amalgamator.helpers.db_interface.ApplicationTokens.client_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="feed_amalgamator.helpers.db_interface.ApplicationTokens.client_secret">
+<span class="sig-name descname"><span class="pre">client_secret</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Mapped</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#feed_amalgamator.helpers.db_interface.ApplicationTokens.client_secret" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="feed_amalgamator.helpers.db_interface.ApplicationTokens.server">
+<span class="sig-name descname"><span class="pre">server</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Mapped</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#feed_amalgamator.helpers.db_interface.ApplicationTokens.server" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="feed_amalgamator.helpers.db_interface.ApplicationTokens.server_id">
+<span class="sig-name descname"><span class="pre">server_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Mapped</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#feed_amalgamator.helpers.db_interface.ApplicationTokens.server_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="feed_amalgamator.helpers.db_interface.Base">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">feed_amalgamator.helpers.db_interface.</span></span><span class="sig-name descname"><span class="pre">Base</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/feed_amalgamator/helpers/db_interface.html#Base"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#feed_amalgamator.helpers.db_interface.Base" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">DeclarativeBase</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="feed_amalgamator.helpers.db_interface.Base.metadata">
+<span class="sig-name descname"><span class="pre">metadata</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">MetaData</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">MetaData()</span></em><a class="headerlink" href="#feed_amalgamator.helpers.db_interface.Base.metadata" title="Link to this definition"></a></dt>
+<dd><p>Refers to the <code class="xref py py-class docutils literal notranslate"><span class="pre">_schema.MetaData</span></code> collection that will be used
+for new <code class="xref py py-class docutils literal notranslate"><span class="pre">_schema.Table</span></code> objects.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><span class="xref std std-ref">orm_declarative_metadata</span></p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="feed_amalgamator.helpers.db_interface.Base.registry">
+<span class="sig-name descname"><span class="pre">registry</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">_RegistryType</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;sqlalchemy.orm.decl_api.registry</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#feed_amalgamator.helpers.db_interface.Base.registry" title="Link to this definition"></a></dt>
+<dd><p>Refers to the <code class="xref py py-class docutils literal notranslate"><span class="pre">_orm.registry</span></code> in use where new
+<code class="xref py py-class docutils literal notranslate"><span class="pre">_orm.Mapper</span></code> objects will be associated.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="feed_amalgamator.helpers.db_interface.User">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">feed_amalgamator.helpers.db_interface.</span></span><span class="sig-name descname"><span class="pre">User</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/feed_amalgamator/helpers/db_interface.html#User"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#feed_amalgamator.helpers.db_interface.User" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="feed_amalgamator.helpers.db_interface.User.password">
+<span class="sig-name descname"><span class="pre">password</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Mapped</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#feed_amalgamator.helpers.db_interface.User.password" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="feed_amalgamator.helpers.db_interface.User.user_id">
+<span class="sig-name descname"><span class="pre">user_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Mapped</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#feed_amalgamator.helpers.db_interface.User.user_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="feed_amalgamator.helpers.db_interface.User.username">
+<span class="sig-name descname"><span class="pre">username</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Mapped</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#feed_amalgamator.helpers.db_interface.User.username" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="feed_amalgamator.helpers.db_interface.UserServer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">feed_amalgamator.helpers.db_interface.</span></span><span class="sig-name descname"><span class="pre">UserServer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/feed_amalgamator/helpers/db_interface.html#UserServer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#feed_amalgamator.helpers.db_interface.UserServer" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="feed_amalgamator.helpers.db_interface.UserServer.server">
+<span class="sig-name descname"><span class="pre">server</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Mapped</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#feed_amalgamator.helpers.db_interface.UserServer.server" title="Link to this definition"></a></dt>
+<dd><p>TODO - For future versions of the project. The access token to the third party api is stored as plaintext
+at the moment. Coming up with a solution is not viable for this sprint</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="feed_amalgamator.helpers.db_interface.UserServer.token">
+<span class="sig-name descname"><span class="pre">token</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Mapped</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#feed_amalgamator.helpers.db_interface.UserServer.token" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="feed_amalgamator.helpers.db_interface.UserServer.user_id">
+<span class="sig-name descname"><span class="pre">user_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Mapped</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#feed_amalgamator.helpers.db_interface.UserServer.user_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="feed_amalgamator.helpers.db_interface.UserServer.user_server_id">
+<span class="sig-name descname"><span class="pre">user_server_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Mapped</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#feed_amalgamator.helpers.db_interface.UserServer.user_server_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-feed_amalgamator.helpers.logging_helper">
+<span id="feed-amalgamator-helpers-logging-helper-module"></span><h2>feed_amalgamator.helpers.logging_helper module<a class="headerlink" href="#module-feed_amalgamator.helpers.logging_helper" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="feed_amalgamator.helpers.logging_helper.LoggingHelper">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">feed_amalgamator.helpers.logging_helper.</span></span><span class="sig-name descname"><span class="pre">LoggingHelper</span></span><a class="reference internal" href="_modules/feed_amalgamator/helpers/logging_helper.html#LoggingHelper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#feed_amalgamator.helpers.logging_helper.LoggingHelper" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Centralized class for handling logging. This creates human-readable logs.
+Structured logging implemented for shits and giggles</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="feed_amalgamator.helpers.logging_helper.LoggingHelper.create_directory">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create_directory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_loc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/feed_amalgamator/helpers/logging_helper.html#LoggingHelper.create_directory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#feed_amalgamator.helpers.logging_helper.LoggingHelper.create_directory" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="feed_amalgamator.helpers.logging_helper.LoggingHelper.generate_logger">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">generate_logger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">log_level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log_file_loc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logger_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Logger</span></span></span><a class="reference internal" href="_modules/feed_amalgamator/helpers/logging_helper.html#LoggingHelper.generate_logger"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#feed_amalgamator.helpers.logging_helper.LoggingHelper.generate_logger" title="Link to this definition"></a></dt>
+<dd><p>Generates a logger with our standardized format based on arguments
+&#64;param log_level:
+&#64;param log_file_loc:
+&#64;param logger_name:
+&#64;return:</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-feed_amalgamator.helpers.mastodon_data_interface">
+<span id="feed-amalgamator-helpers-mastodon-data-interface-module"></span><h2>feed_amalgamator.helpers.mastodon_data_interface module<a class="headerlink" href="#module-feed_amalgamator.helpers.mastodon_data_interface" title="Link to this heading"></a></h2>
+<p>This interface provides an abstraction (ports/adapter model) to insulate internal code from external API changes.</p>
+<p>Any module interacting with the Mastodon API post-oauth (for data collection) should do so strictly through this layer</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="feed_amalgamator.helpers.mastodon_data_interface.MastodonDataInterface">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">feed_amalgamator.helpers.mastodon_data_interface.</span></span><span class="sig-name descname"><span class="pre">MastodonDataInterface</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logger</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Logger</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/feed_amalgamator/helpers/mastodon_data_interface.html#MastodonDataInterface"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#feed_amalgamator.helpers.mastodon_data_interface.MastodonDataInterface" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Adapter Class for responsible for handling API calls for data processing AFTER Oauth.
+All calls to the API after oauth should go through this layer to insulate code from third party
+libraries.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="feed_amalgamator.helpers.mastodon_data_interface.MastodonDataInterface.REQUIRED_SCOPES">
+<span class="sig-name descname"><span class="pre">REQUIRED_SCOPES</span></span><a class="headerlink" href="#feed_amalgamator.helpers.mastodon_data_interface.MastodonDataInterface.REQUIRED_SCOPES" title="Link to this definition"></a></dt>
+<dd><p>The redirect URI required by the API to generate certain urls</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="feed_amalgamator.helpers.mastodon_data_interface.MastodonDataInterface.get_timeline_data">
+<span class="sig-name descname"><span class="pre">get_timeline_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timeline_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_posts_to_get</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_tries</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/feed_amalgamator/helpers/mastodon_data_interface.html#MastodonDataInterface.get_timeline_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#feed_amalgamator.helpers.mastodon_data_interface.MastodonDataInterface.get_timeline_data" title="Link to this definition"></a></dt>
+<dd><p>Extracts data from the wanted timeline
+&#64;param timeline_name: Name of the timeline to get data from
+&#64;param num_posts_to_get: Number of posts to obtain from the timeline
+&#64;param num_tries: Number of tries to get the data before giving up
+&#64;return:</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="feed_amalgamator.helpers.mastodon_data_interface.MastodonDataInterface.logger">
+<span class="sig-name descname"><span class="pre">logger</span></span><a class="headerlink" href="#feed_amalgamator.helpers.mastodon_data_interface.MastodonDataInterface.logger" title="Link to this definition"></a></dt>
+<dd><p>This is the client to perform actions on the user’s behalf</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="feed_amalgamator.helpers.mastodon_data_interface.MastodonDataInterface.start_user_api_client">
+<span class="sig-name descname"><span class="pre">start_user_api_client</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_domain</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user_access_token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/feed_amalgamator/helpers/mastodon_data_interface.html#MastodonDataInterface.start_user_api_client"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#feed_amalgamator.helpers.mastodon_data_interface.MastodonDataInterface.start_user_api_client" title="Link to this definition"></a></dt>
+<dd><p>Function to start a new client using the authorization code provided by the user.
+Does a sanity check to see if the user api access token is valid
+&#64;param user_domain: User’s account domain (eg. mstdn.social, tomorrow.io). Basically, which server
+the user’s account is on
+&#64;param user_access_token: The user access token generated from the auth procedure
+&#64;return: None, but side effect of setting user_client</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="feed_amalgamator.helpers.mastodon_data_interface.MastodonDataInterface.user_client">
+<span class="sig-name descname"><span class="pre">user_client</span></span><a class="headerlink" href="#feed_amalgamator.helpers.mastodon_data_interface.MastodonDataInterface.user_client" title="Link to this definition"></a></dt>
+<dd><p>Hard coded required scopes for the app to work</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-feed_amalgamator.helpers.mastodon_oauth_interface">
+<span id="feed-amalgamator-helpers-mastodon-oauth-interface-module"></span><h2>feed_amalgamator.helpers.mastodon_oauth_interface module<a class="headerlink" href="#module-feed_amalgamator.helpers.mastodon_oauth_interface" title="Link to this heading"></a></h2>
+<p>This interface provides an abstraction (ports/adapter model) to insulate internal code from external API changes.</p>
+<p>Any module interacting with the Mastodon API for Oauth purposes should do so strictly through this layer</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="feed_amalgamator.helpers.mastodon_oauth_interface.MastodonOAuthInterface">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">feed_amalgamator.helpers.mastodon_oauth_interface.</span></span><span class="sig-name descname"><span class="pre">MastodonOAuthInterface</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logger</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Logger</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/feed_amalgamator/helpers/mastodon_oauth_interface.html#MastodonOAuthInterface"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#feed_amalgamator.helpers.mastodon_oauth_interface.MastodonOAuthInterface" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Adapter Class for responsible for handling the user Oauth chain
+All calls to the API during the user Oauth process should go through this layer to insulate
+code from third party libraries.
+API calls for data processing AFTER Oauth is under the responsibility of MastodonDataInterface</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="feed_amalgamator.helpers.mastodon_oauth_interface.MastodonOAuthInterface.REQUIRED_SCOPES">
+<span class="sig-name descname"><span class="pre">REQUIRED_SCOPES</span></span><a class="headerlink" href="#feed_amalgamator.helpers.mastodon_oauth_interface.MastodonOAuthInterface.REQUIRED_SCOPES" title="Link to this definition"></a></dt>
+<dd><p>The redirect URI required by the API to generate certain urls</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="feed_amalgamator.helpers.mastodon_oauth_interface.MastodonOAuthInterface.add_domain_to_database">
+<span class="sig-name descname"><span class="pre">add_domain_to_database</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">domain_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/feed_amalgamator/helpers/mastodon_oauth_interface.html#MastodonOAuthInterface.add_domain_to_database"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#feed_amalgamator.helpers.mastodon_oauth_interface.MastodonOAuthInterface.add_domain_to_database" title="Link to this definition"></a></dt>
+<dd><p>Add new domain to database. Fetch client id, client secret and access token and store it in database
+&#64;param domain_name: Add domain_name to database, with its client id, client secret and access token</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="feed_amalgamator.helpers.mastodon_oauth_interface.MastodonOAuthInterface.app_client">
+<span class="sig-name descname"><span class="pre">app_client</span></span><a class="headerlink" href="#feed_amalgamator.helpers.mastodon_oauth_interface.MastodonOAuthInterface.app_client" title="Link to this definition"></a></dt>
+<dd><p>Hard coded required scopes for the app to work. Revisit if the scope changes</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="feed_amalgamator.helpers.mastodon_oauth_interface.MastodonOAuthInterface.check_if_domain_exists_in_database">
+<span class="sig-name descname"><span class="pre">check_if_domain_exists_in_database</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">domain_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/feed_amalgamator/helpers/mastodon_oauth_interface.html#MastodonOAuthInterface.check_if_domain_exists_in_database"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#feed_amalgamator.helpers.mastodon_oauth_interface.MastodonOAuthInterface.check_if_domain_exists_in_database" title="Link to this definition"></a></dt>
+<dd><p>Check if domain is already added in database with access token
+&#64;param domain_name: Check if client_id, client_secret already exist for domain_name</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="feed_amalgamator.helpers.mastodon_oauth_interface.MastodonOAuthInterface.generate_redirect_url">
+<span class="sig-name descname"><span class="pre">generate_redirect_url</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_tries</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/feed_amalgamator/helpers/mastodon_oauth_interface.html#MastodonOAuthInterface.generate_redirect_url"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#feed_amalgamator.helpers.mastodon_oauth_interface.MastodonOAuthInterface.generate_redirect_url" title="Link to this definition"></a></dt>
+<dd><p>Generates an url that the user will be redirected to in order to complete Mastodon’s Oauth procedure
+&#64;param: num_tries: Number of tries to generate a redirect url before giving up. Default value of 3
+&#64;return: The redirect url as a string or None (upon connection failure)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="feed_amalgamator.helpers.mastodon_oauth_interface.MastodonOAuthInterface.generate_user_access_token">
+<span class="sig-name descname"><span class="pre">generate_user_access_token</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_auth_code</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_tries</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/feed_amalgamator/helpers/mastodon_oauth_interface.html#MastodonOAuthInterface.generate_user_access_token"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#feed_amalgamator.helpers.mastodon_oauth_interface.MastodonOAuthInterface.generate_user_access_token" title="Link to this definition"></a></dt>
+<dd><p>Uses the user’s auth code to generate an access token that will serve as a way for our app to log
+in on the user’s behalf
+&#64;param user_auth_code: Provided by the user after going through the Mastodon OAuth Process
+&#64;param num_tries: Number of times to repeat in case of failure before throwing exception
+&#64;return: The user access token (as a str) that will allow our app to act on the user’s behalf</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="feed_amalgamator.helpers.mastodon_oauth_interface.MastodonOAuthInterface.logger">
+<span class="sig-name descname"><span class="pre">logger</span></span><a class="headerlink" href="#feed_amalgamator.helpers.mastodon_oauth_interface.MastodonOAuthInterface.logger" title="Link to this definition"></a></dt>
+<dd><p>This is the client used to authenticate users. Generated using our app’s down details</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="feed_amalgamator.helpers.mastodon_oauth_interface.MastodonOAuthInterface.start_app_api_client">
+<span class="sig-name descname"><span class="pre">start_app_api_client</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_domain</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">client_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">client_secret</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">access_token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/feed_amalgamator/helpers/mastodon_oauth_interface.html#MastodonOAuthInterface.start_app_api_client"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#feed_amalgamator.helpers.mastodon_oauth_interface.MastodonOAuthInterface.start_app_api_client" title="Link to this definition"></a></dt>
+<dd><p>Function to start the app client (client used by our app to authenticate users).
+This generated app client will be used to process user authorization requests</p>
+<p>Is not automatically called by init as we may not wish to start a client every time
+&#64;param: user_domain: Mastodon.io, mstdn.io and the like; essentially, which server the user’s
+account is located on
+&#64;return: None, but there is a side effect of setting self.app_client</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="feed_amalgamator.helpers.mastodon_oauth_interface.MastodonOAuthInterface.verify_user_provided_domain">
+<span class="sig-name descname"><span class="pre">verify_user_provided_domain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_domain:</span> <span class="pre">str)</span> <span class="pre">-&gt;</span> <span class="pre">(&lt;class</span> <span class="pre">'bool'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">&lt;class</span> <span class="pre">'str'&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/feed_amalgamator/helpers/mastodon_oauth_interface.html#MastodonOAuthInterface.verify_user_provided_domain"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#feed_amalgamator.helpers.mastodon_oauth_interface.MastodonOAuthInterface.verify_user_provided_domain" title="Link to this definition"></a></dt>
+<dd><p>Ensures that the user provided domain is a legitimate mastodon server
+&#64;param user_domain: Server of the account provided by the user
+&#64;return: True (if server is a legitimate mastodon domain), False otherwise</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-feed_amalgamator.helpers">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-feed_amalgamator.helpers" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="feed_amalgamator.html" class="btn btn-neutral float-left" title="feed_amalgamator package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="feed_amalgamator.test_directory.html" class="btn btn-neutral float-right" title="feed_amalgamator.test_directory package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Team 5.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
