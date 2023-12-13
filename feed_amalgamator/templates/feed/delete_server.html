@@ -1,36 +1,45 @@
 {% extends 'base.html' %}
+{% block extra_head %}<link rel="stylesheet" href="{{ url_for('static', filename='feed.css') }}">{% endblock %}
 {% block header %}
     <h1 class="add-server-title">
         {% block title %}Delete Server{% endblock %}
     </h1>
+    <script>
+        // Stop the form resubmission on page refresh
 
-<script>
+        if (window.history.replaceState) {
 
-// Stop the form resubmission on page refresh
+            window.history.replaceState(null, null, window.location.href);
 
-if ( window.history.replaceState ) {
-
-window.history.replaceState( null, null, window.location.href );
-
-}
-
-</script>
+        }
+    </script>
 {% endblock %}
 {% block content %}
-    {% if error_message is not none %}
-    <h3>{{ error_message }}</h3>
-    {% endif %}
+    {% if error_message is not none %}<h3>{{ error_message }}</h3>{% endif %}
     <div class="delete-server">
         <div class="server-list">
             {% if user_servers is not none %}
-                <form method="post">
-                    {% for user_server in user_servers %}
-                        <input type="checkbox" name="servers" value="{{ user_server.server }}">
-                        {{ user_server.server }}
-                        <br />
-                    {% endfor %}
-                    <input type="submit" value="Delete">
-                </form>
+                <table id="servers">
+                    <caption>Servers To Delete</caption>
+                    <tr>
+                        <th></th>
+                        <th>Server</th>
+                    </tr>
+                    <form id="delete-server" method="post">
+                        {% for user_server in user_servers %}
+                            <tr>
+                                <td>
+                                    <input type="checkbox" name="servers" value="{{ user_server.server }}">
+                                </td>
+                                <td>{{ user_server.server }}</td>
+                            </tr>
+                        {% endfor %}
+                    </form>
+                </table>
+                <input type="submit"
+                       form="delete-server"
+                       class="delete-server-button"
+                       value="Delete">
             {% else %}
                 <h3>No server records found</h3>
             {% endif %}

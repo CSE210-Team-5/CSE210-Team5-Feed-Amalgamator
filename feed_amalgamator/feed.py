@@ -30,6 +30,7 @@ redirect_uri = parser["REDIRECT_URI"]["REDIRECT_URI"]
 logger = LoggingHelper.generate_logger(logging.INFO, log_file_loc, "feed_page")
 auth_api = MastodonOAuthInterface(logger, redirect_uri)
 data_api = MastodonDataInterface(logger)
+auth_login = "auth.login"
 
 # TODO - Add Swagger/OpenAPI documentation
 # TODO - Business logic of home feed (deciding what to filter etc.)
@@ -84,7 +85,9 @@ def add_server():
     if request.method == "POST":
         if USER_DOMAIN_FIELD in request.form:
             return render_redirect_url_page()
-
+    provided_user_id = session.get(USER_ID_FIELD)
+    if provided_user_id is None:
+        return redirect(url_for("auth.login"))
     return render_template("feed/add_server.html", is_domain_set=False)
 
 
@@ -215,4 +218,7 @@ def delete_server():
         return render_user_servers()
 
     else:
+        provided_user_id = session.get(USER_ID_FIELD)
+        if provided_user_id is None:
+            return redirect(url_for("auth.login"))
         return render_user_servers()
