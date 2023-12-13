@@ -129,3 +129,13 @@ body {
     text-decoration: underline;
     cursor: pointer;
 }
+
+.flash {
+    color: red;
+    background-color: #fff0f0;
+    border: 1px solid red;
+    padding: 5px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    display: none;
+}

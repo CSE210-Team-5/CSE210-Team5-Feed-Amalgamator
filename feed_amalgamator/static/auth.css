@@ -78,3 +78,11 @@ input[type="submit"]:hover {
     display: none;
 }
 
+h3 {
+    color: red;
+    background-color: #fff0f0;
+    position: absolute;
+     text-align: center;
+   margin: auto;
+}
+
