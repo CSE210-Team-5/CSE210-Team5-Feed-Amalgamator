@@ -28,7 +28,7 @@ from sqlalchemy import exc
 
 from feed_amalgamator.constants.common_constants import USERNAME_FIELD, PASSWORD_FIELD, USER_ID_FIELD, CONFIG_LOC
 from feed_amalgamator.constants.error_messages import USER_ALREADY_EXISTS_MSG, INVALID_USERNAME_MSG, \
-    INVALID_PASSWORD_MSG, USER_DOES_NOT_EXIST_MSG
+    INVALID_PASSWORD_MSG, USER_DOES_NOT_EXIST_MSG, REDIRECT_LOGIN, REDIRECT_REGISTER
 
 bp = Blueprint("auth", __name__, url_prefix="/auth")
 
@@ -59,12 +59,12 @@ def register():
         except exc.IntegrityError:
             raise IntegrityError(
                 {"message": USER_ALREADY_EXISTS_MSG,
-                 "redirect_path": "auth/register.html"})
+                 "redirect_path": REDIRECT_REGISTER})
         else:
             # Executes if there is no exception
             return redirect(url_for("auth.login"))
     # Executes if there is an exception
-    return render_template("auth/register.html")
+    return render_template(REDIRECT_REGISTER)
 
 
 @bp.route("/login", methods=("GET", "POST"))
@@ -76,15 +76,15 @@ def login():
         user = User.query.filter_by(username=username).first()
         if user is None:
             raise InvalidCredentialsError({"message": INVALID_USERNAME_MSG,
-                                           "redirect_path": "auth/login.html"})
+                                           "redirect_path": REDIRECT_LOGIN})
         elif not check_password_hash(user.password, password):
             raise InvalidCredentialsError({"message": INVALID_PASSWORD_MSG,
-                                           "redirect_path": "auth/login.html"})
+                                           "redirect_path": REDIRECT_LOGIN})
         else:
             session.clear()
             session[USER_ID_FIELD] = user.user_id
             return redirect(url_for("feed.feed_home"))
-    return render_template("auth/login.html")
+    return render_template(REDIRECT_LOGIN)
 
 
 @bp.before_app_request
@@ -100,7 +100,7 @@ def load_logged_in_user():
         except sqlalchemy.exc.NoResultFound:
             raise IntegrityError(
                 {"message": USER_DOES_NOT_EXIST_MSG + ":{u}".format(u=user_id),
-                 "redirect_path": "auth/register.html"})
+                 "redirect_path": REDIRECT_REGISTER})
 
 @bp.route("/logout")
 def logout():

@@ -47,21 +47,21 @@ class TestAuthPage(unittest.TestCase):
         self.assertIn(r'Log In', html_rendered)
 
         # Test the Post
-        test_user = "Gojo Satoru"
-        test_password = "Infinite4oid!"
+        TEST_USER = "Gojo Satoru"
+        TEST_PASSWORD = "Infinite4oid!"
 
-        response_with_post = client.post(register_url, data={USERNAME_FIELD: test_user,
-                                                             PASSWORD_FIELD: test_password})
+        response_with_post = client.post(register_url, data={USERNAME_FIELD: TEST_USER,
+                                                             PASSWORD_FIELD: TEST_PASSWORD})
 
         decoded_post_response = response_with_post.data.decode("utf-8")
 
         with self.app.app_context():
             # Test that db insertion was correct
-            items = User.query.filter_by(username=test_user).all()
+            items = User.query.filter_by(username=TEST_USER).all()
             self.assertEqual(1, len(items))
             object_to_check = items[0]
-            self.assertEqual(test_user, object_to_check.username)
-            self.assertEqual(True, check_password_hash(object_to_check.password, test_password))
+            self.assertEqual(TEST_USER, object_to_check.username)
+            self.assertEqual(True, check_password_hash(object_to_check.password, TEST_PASSWORD))
 
         # Check that we have been successfully redirected to the home page
         self.assertIn("/{r}/login".format(r=self.page_root), decoded_post_response)
@@ -72,14 +72,14 @@ class TestAuthPage(unittest.TestCase):
         client.get(register_url)
 
         # Register new user
-        test_user = "Gojo Satoru"
-        test_password = "Infinite4oid!"
+        TEST_USER = "Gojo Satoru"
+        TEST_PASSWORD = "Infinite4oid!"
 
-        client.post(register_url, data={USERNAME_FIELD: test_user, PASSWORD_FIELD: test_password})
+        client.post(register_url, data={USERNAME_FIELD: TEST_USER, PASSWORD_FIELD: TEST_PASSWORD})
 
         # Try to register the same user again
         client.get(register_url)
-        response = client.post(register_url, data={USERNAME_FIELD: test_user, PASSWORD_FIELD: test_password})
+        response = client.post(register_url, data={USERNAME_FIELD: TEST_USER, PASSWORD_FIELD: TEST_PASSWORD})
         decoded_response = response.data.decode("utf-8")
         self.assertIn(USER_ALREADY_EXISTS_MSG, decoded_response)
 
@@ -88,17 +88,17 @@ class TestAuthPage(unittest.TestCase):
         client = self.app.test_client()
         client.get(login_url)
 
-        test_user = "Meowmaster"
-        test_password = "Infinite4oid!"
+        TEST_USER = "Meowmaster"
+        TEST_PASSWORD = "Infinite4oid!"
 
         with self.app.app_context():
             # Insert the user inside the db first
-            user = User(username=test_user, password=generate_password_hash(test_password))
+            user = User(username=TEST_USER, password=generate_password_hash(TEST_PASSWORD))
             dbi.session.add(user)
             dbi.session.commit()
 
         # Check that log in is successful
-        response = client.post(login_url, data={USERNAME_FIELD: test_user, PASSWORD_FIELD: test_password})
+        response = client.post(login_url, data={USERNAME_FIELD: TEST_USER, PASSWORD_FIELD: TEST_PASSWORD})
         decoded_response = response.data.decode("utf-8")
         self.assertIn("feed/home", decoded_response)  # Should be redirected to feed/home page
 
@@ -107,19 +107,19 @@ class TestAuthPage(unittest.TestCase):
         client = self.app.test_client()
         client.get(login_url)
 
-        test_user = "Meowmaster"
-        test_password = "Infinite4oid!"
+        TEST_USER = "Meowmaster"
+        TEST_PASSWORD = "Infinite4oid!"
 
         with self.app.app_context():
             # Insert the user inside the db first
-            user = User(username=test_user, password=generate_password_hash(test_password))
+            user = User(username=TEST_USER, password=generate_password_hash(TEST_PASSWORD))
             dbi.session.add(user)
             dbi.session.commit()
 
-        response = client.post(login_url, data={USERNAME_FIELD: "undefined", PASSWORD_FIELD: test_password})
+        response = client.post(login_url, data={USERNAME_FIELD: "undefined", PASSWORD_FIELD: TEST_PASSWORD})
         decoded_response = response.data.decode("utf-8")
         self.assertIn(INVALID_USERNAME_MSG, decoded_response)
 
-        pw_response = client.post(login_url, data={USERNAME_FIELD: test_user, PASSWORD_FIELD: "meow"})
+        pw_response = client.post(login_url, data={USERNAME_FIELD: TEST_USER, PASSWORD_FIELD: "meow"})
         decoded_pw_response = pw_response.data.decode("utf-8")
         self.assertIn(INVALID_PASSWORD_MSG, decoded_pw_response)

@@ -50,11 +50,11 @@ class TestFeedPage(unittest.TestCase):
     def test_feed_amalgamation(self):
         client = self.app.test_client()
         home_url = "{r}/home".format(r=self.page_root)
-        test_user = "Meowmaster"
-        test_password = "Infinite4oid!"
+        TEST_USER = "Meowmaster"
+        TEST_PASSWORD = "Infinite4oid!"
 
         with self.app.app_context():
-            user = User(username=test_user, password=generate_password_hash(test_password))
+            user = User(username=TEST_USER, password=generate_password_hash(TEST_PASSWORD))
             dbi.session.add(user)
             dbi.session.commit()
 
@@ -83,10 +83,10 @@ class TestFeedPage(unittest.TestCase):
         decoded_resp = response.data.decode("utf-8")
         self.assertIn("auth/login", decoded_resp)
 
-        test_user = "Meowmaster"
-        test_password = "Infinite4oid!"
+        TEST_USER = "Meowmaster"
+        TEST_PASSWORD = "Infinite4oid!"
         with self.app.app_context():
-            user = User(username=test_user, password=generate_password_hash(test_password))
+            user = User(username=TEST_USER, password=generate_password_hash(TEST_PASSWORD))
             dbi.session.add(user)
             dbi.session.commit()
 
@@ -129,11 +129,11 @@ class TestFeedPage(unittest.TestCase):
         self.assertIn(self.client_domain, decoded_response)
 
     def test_delete_server(self):
-        test_user = "Meowmaster"
-        test_password = "Infinite4oid!"
+        TEST_USER = "Meowmaster"
+        TEST_PASSWORD = "Infinite4oid!"
         with self.app.app_context():
             # Setting up necessary entries in the test db
-            user = User(username=test_user, password=generate_password_hash(test_password))
+            user = User(username=TEST_USER, password=generate_password_hash(TEST_PASSWORD))
             dbi.session.add(user)
             dbi.session.commit()
             # Now we can add the servers

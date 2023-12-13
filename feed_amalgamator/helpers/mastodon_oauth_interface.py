@@ -13,7 +13,7 @@ import sqlalchemy.exc
 from mastodon import Mastodon, MastodonAPIError  # pip install Mastodon.py
 
 from feed_amalgamator.constants.error_messages import INVALID_MASTODON_DOMAIN_MSG, INVALID_JSON_RESPONSE_MSG, \
-    SERVICE_UNAVAILABLE_MSG
+    SERVICE_UNAVAILABLE_MSG, REDIRECT_ADD_SERVER
 from feed_amalgamator.helpers.custom_exceptions import (
     MastodonConnError,
     InvalidApiInputError,
@@ -123,7 +123,7 @@ class MastodonOAuthInterface:
         except (ConnectionError, MastodonAPIError) as err:
             self.logger.error("Encountered {e} when trying to start app_client".format(e=err))
             raise ServiceUnavailableError({"message": "Mastodon API client failed to start",
-                                           "redirect_path": "feed/add_server.html"})
+                                           "redirect_path": REDIRECT_ADD_SERVER})
 
 
     def generate_redirect_url(self, num_tries=3) -> str:
@@ -148,7 +148,7 @@ class MastodonOAuthInterface:
 
         # This following code will only run if the above code failed n times.
         raise ServiceUnavailableError({"message": "Failed to generate url error after trying {n} times. Throwing error"
-                                      .format(n=num_tries), "redirect_path": "feed/add_server.html"})
+                                      .format(n=num_tries), "redirect_path": REDIRECT_ADD_SERVER})
 
     def generate_user_access_token(self, user_auth_code: str, num_tries=3) -> str:
         """
