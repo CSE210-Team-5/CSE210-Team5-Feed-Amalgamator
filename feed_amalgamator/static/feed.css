@@ -1,29 +1,29 @@
 h1 {
     color: #fff;
-  }
-  
-  body {
+}
+
+body {
     font-family: sans-serif;
     background: #191b22;
     text-decoration: none;
     margin: 0;
     padding: 0;
-  }
-  
-  a {
+}
+
+a {
     color: #8c8dff;
-  }
-  
-  .status {
+}
+
+.status {
     animation: fade 0.15s linear;
     border-bottom: 1px solid #393f4f;
     cursor: auto;
     min-height: 54px;
     opacity: 1;
     padding: 16px;
-  }
-  
-  .status-prepend {
+}
+
+.status-prepend {
     color: #606984;
     display: block;
     font-size: 15px;
@@ -31,9 +31,9 @@ h1 {
     gap: 10px;
     line-height: 22px;
     padding: 16px 16px 0;
-  }
-  
-  .status-info {
+}
+
+.status-info {
     align-items: center;
     display: flex;
     font-size: 15px;
@@ -41,41 +41,41 @@ h1 {
     line-height: 22px;
     max-width: 100%;
     overflow: hidden;
-  }
-  
-  .detailed-status-meta {
+}
+
+.detailed-status-meta {
     padding-top: 8px;
     color: #606984;
-  }
-  
-  .display-name-html {
+}
+
+.display-name-html {
     color: #fff;
-  }
-  
-  .display-name-account {
+}
+
+.display-name-account {
     color: #606984;
     display: block;
-  }
-  
-  .status-avatar {
+}
+
+.status-avatar {
     height: 46px;
     width: 46px;
-  }
-  
-  .account-avatar img {
+}
+
+.account-avatar img {
     display: block;
     height: 100%;
-  
+
     /* -o-object-fit: cover; */
     object-fit: cover;
     width: 100%;
-  }
-  
-  /* article {
+}
+
+/* article {
     border-bottom: 1px solid #393f4f;
   } */
-  
-  .status-content {
+
+.status-content {
     word-wrap: break-word;
     color: #fff;
     font-size: 15px;
@@ -85,25 +85,25 @@ h1 {
     padding-top: 2px;
     position: relative;
     text-overflow: ellipsis;
-  }
-  
-  .status-content p {
+}
+
+.status-content p {
     margin-bottom: 22px;
     unicode-bidi: plaintext;
     white-space: pre-wrap;
-  }
-  
-  .add-server-title {
+}
+
+.add-server-title {
     text-align: center;
-  }
-  
-  .enter-domain {
+}
+
+.enter-domain {
     text-align: center;
     color: white;
     margin: 10px;
-  }
-  
-  input[type="text"] {
+}
+
+input[type="text"] {
     /* outline: #8c8dff;
       border-radius: 5px;
       height: 30px; */
@@ -116,9 +116,10 @@ h1 {
     outline: 0;
     padding: 10px;
     resize: vertical;
-  }
-  
-  .add-server-btn, .delete-server-button {
+}
+
+.add-server-btn,
+.delete-server-button {
     margin-top: 10px;
     background-color: #6364ff;
     border: none;
@@ -129,84 +130,90 @@ h1 {
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
-  }
-  
-  .add-server-btn:hover, .delete-server-button:hover {
+}
+
+.add-server-btn:hover,
+.delete-server-button:hover {
     background-color: #563acc;
     cursor: pointer;
-  }
-  
-  .flash{
-    text-align: center;
-    color: white;
-  }
-  
-  .delete-server {
-    color: white;
-    text-align: center;
-  }
-  
-  .delete-list-item {
-    margin: 10px;
-  }
+}
 
-  #servers {
+.flash {
+    text-align: center;
+    color: white;
+}
+
+.delete-server {
+    color: white;
+    text-align: center;
+}
+
+.delete-list-item {
+    margin: 10px;
+}
+
+#servers {
     border-collapse: collapse;
     margin-left: auto;
     margin-right: auto;
     background-color: #1f232b;
-  }
-  
-  #servers td, #servers th {
+}
+
+#servers td,
+#servers th {
     border: 1px solid #17191f;
     padding: 8px;
     text-align: left;
-  }
-  
-  #servers tr:nth-child(even){background-color: #282c37;}
-  
-  #servers tr:hover {background-color: #563acc;}
-  
-  #servers th {
+}
+
+#servers tr:nth-child(even) {
+    background-color: #282c37;
+}
+
+#servers tr:hover {
+    background-color: #563acc;
+}
+
+#servers th {
     padding-top: 12px;
     padding-bottom: 12px;
     background-color: #6364ff;
-    color:white;
-  }
-  
-  .feed-container {
+    color: white;
+}
+
+.feed-container {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100%;
-  }
-  
-  .feed-div {
+}
+
+.feed-div {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     width: 100%;
     max-width: 800px;
     background-color: #282c37;
-  }
-  
-  article {
+}
+
+article {
     width: 100%;
     box-sizing: border-box;
     padding: 10px;
     border: 1px #393f4f solid;
     border-bottom: none;
     border-top: none;
-  }
-  
-  .media{
+}
+
+.media {
     display: block;
     text-align: center;
-  }
-  
-  .media img{
+}
+
+.media img {
     width: 75%;
     margin: 10px;
     border-radius: 5%;
     cursor: zoom-in;
-  }
+}

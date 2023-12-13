@@ -4,23 +4,18 @@
     <h1 class="add-server-title">
         {% block title %}Delete Server{% endblock %}
     </h1>
+    <script>
+        // Stop the form resubmission on page refresh
 
-<script>
+        if (window.history.replaceState) {
 
-// Stop the form resubmission on page refresh
+            window.history.replaceState(null, null, window.location.href);
 
-if ( window.history.replaceState ) {
-
-window.history.replaceState( null, null, window.location.href );
-
-}
-
-</script>
+        }
+    </script>
 {% endblock %}
 {% block content %}
-    {% if error_message is not none %}
-    <h3>{{ error_message }}</h3>
-    {% endif %}
+    {% if error_message is not none %}<h3>{{ error_message }}</h3>{% endif %}
     <div class="delete-server">
         <div class="server-list">
             {% if user_servers is not none %}
