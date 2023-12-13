@@ -186,6 +186,7 @@ class MastodonOAuthInterface:
     def check_if_domain_exists_in_database(self, domain_name):
         """
         Check if domain is already added in database with access token
+        @param user_id: user_id of the user currently logged in
         @param domain_name: Check if client_id, client_secret already exist for domain_name
         """
         domain = ApplicationTokens.query.filter_by(server=domain_name).first()
