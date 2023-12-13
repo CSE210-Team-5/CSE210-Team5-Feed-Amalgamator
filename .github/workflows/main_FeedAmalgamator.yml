@@ -31,7 +31,7 @@ jobs:
     - name: Setup Config Files
       env:
         TEST_SECRET: ${{secrets.TEST_CONFIG}}
-        APP_SECRET: ${{secrets.APP_CONFIG}}
+        APP_SECRET: ${{secrets.APP_CONFIG_PROD}}
       shell: bash
       run: |
         echo "$APP_SECRET" >> configuration/app_settings.ini
