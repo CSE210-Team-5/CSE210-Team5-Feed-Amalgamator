@@ -1,7 +1,7 @@
 import os
 import configparser
 import urllib
-from pathlib import Path
+
 
 from flask import Flask, redirect, url_for
 

@@ -4,13 +4,11 @@ import logging
 from pathlib import Path
 
 from flask import Blueprint, flash, redirect, render_template, request, session, url_for
-from sqlalchemy import exc
 
 from feed_amalgamator.constants.common_constants import CONFIG_LOC, FILTER_LIST, USER_ID_FIELD, HOME_TIMELINE_NAME, \
     NUM_POSTS_TO_GET, USER_DOMAIN_FIELD, SORT_BY, SERVERS_FIELD, ORIGINAL_SERVER_FIELD
 from feed_amalgamator.helpers.custom_exceptions import (
-    MastodonConnError, NoContentFoundError, InvalidDomainError, IntegrityError, ServiceUnavailableError,
-    InvalidCredentialsError, InvalidApiInputError, AddServerInvalidCredentialsError, AddServerIntegrityError,
+    MastodonConnError, NoContentFoundError, InvalidDomainError, IntegrityError, InvalidApiInputError, AddServerInvalidCredentialsError, AddServerIntegrityError,
     AddServerServiceUnavailableError)
 from feed_amalgamator.helpers.logging_helper import LoggingHelper
 from feed_amalgamator.helpers.mastodon_data_interface import MastodonDataInterface
