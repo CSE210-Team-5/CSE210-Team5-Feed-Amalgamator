@@ -8,12 +8,12 @@
         </h1>
 
         <div class="cover-image">
-            <img src="{{ url_for('static', filename='bugs_bunny_mastodon.jpeg')}}" alt="Bigs Bunny looking at Mastodon Servers" width="400px"/>
+            <img src="{{ url_for('static', filename='images/bugs_bunny_mastodon.jpeg')}}" alt="Bigs Bunny looking at Mastodon Servers" width="400px"/>
         </div>
         <div>Welcome to Feed Amalgamator, the ultimate solution for streamlining your Mastodon experience!</div>
 
         <h2>
-            What is Feed Amalgamator?
+            What is the Feed Amalgamator?
         </h2>
         <span>
             Feed Amalgamator is a revolutionary platform designed to simplify and enhance your Mastodon usage. 
@@ -22,7 +22,7 @@
             more streamlined and enjoyable social media experience.
         </span>
         <h2>
-            How to Use Feed Amalgamator
+            How to Use the Feed Amalgamator?
         </h2>
         <span>
             <ol>
@@ -30,9 +30,16 @@
                     <h3><a href="/auth/register">Register An Account</a></h3>
                     <span>
                         Getting started with Feed Amalgamator is quick and easy. Begin by registering an account using your 
-                        preferred username and password. Head to our Registration Page to create your account and unlock the 
+                        preferred username and password. Head to our Registration Page to create your account and unlock the
                         full potential of a unified Mastodon feed.
                     </span>
+                    <div class = "screenshots">
+                        <img src="{{ url_for('static', filename='images/register.png')}}" alt="Bigs Bunny looking at Mastodon Servers" width="300px"/>
+                    </div>
+                    <div class="redirect-btn-div">
+                        <a href="/auth/register"><input type="submit" class="redirect-btn" value="Register"></a>
+                    </div>
+
                 </li>
                 <li>
                     <h3><a href="/feed/add_server">Add Mastodon Server Instances</a></h3>
@@ -41,6 +48,13 @@
                         instances to amalgamate your feeds. Enter the server instance details, such as mastodon.social or mastodon.world, 
                         and follow the on-screen instructions.
                     </span>
+                    <div class = "screenshots">
+                        <img src="{{ url_for('static', filename='images/add-server.png')}}" alt="Bigs Bunny looking at Mastodon Servers" width="300px"/>
+                    </div>
+                    <div class="redirect-btn-div">
+                        <a href="/feed/add_server"><input type="submit" class="redirect-btn" value="Add Mastodon Server"></a>
+                    </div>
+
                 </li>
                 <li>
                     <h3><a href="/feed/add_server">OAuth Procedure</a></h3>
@@ -49,6 +63,10 @@
                         This is a secure authentication process that establishes a connection between Feed Amalgamator 
                         and your Mastodon accounts. Don't worry; we've streamlined the process to make it as seamless as possible.
                     </span>
+                    <div class = "screenshots">
+                        <img src="{{ url_for('static', filename='images/oauth.png')}}" alt="Bigs Bunny looking at Mastodon Servers" width="300px"/>
+                    </div>
+
                 </li>
                 <li>
                     <h3><a href="/feed/home">Home Page: Your Amalgamated Feed</a></h3>
@@ -56,6 +74,12 @@
                         Once you've added and authenticated your Mastodon server instances, head to the Feed Amalgamator homepage. 
                         Here, you'll find your newly created amalgamated feed— a single, centralized stream that combines all your Mastodon accounts.
                     </span>
+                    <div class = "screenshots">
+                        <img src="{{ url_for('static', filename='images/feed.png')}}" alt="Bigs Bunny looking at Mastodon Servers" width="300px"/>
+                    </div>
+                    <div class="redirect-btn-div">
+                        <a href="/feed/home"><input type="submit" class="redirect-btn" value="Go to Home Page"></a>
+                    </div>
                 </li>
             </ol>
         </span>

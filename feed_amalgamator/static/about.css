@@ -1,8 +1,17 @@
+.content{
+    margin: auto;
+    width: 75%;
+}
+
 .about{
     display: flex;
     background-color: black;
     margin: 10px;
     padding: 10px;
+}
+
+.about-header{
+    text-align: center;
 }
 
 .content h1{
@@ -13,10 +22,7 @@
     font-size: xx-large;
     margin-top: 20px;
     margin-bottom: 20px;
-}
-
-.content{
-    width: 75%;
+    color: white;
 }
 
 .cover-image{
@@ -30,13 +36,42 @@
 
 li{
     margin: 10px;
+    color: white;
 }
 
 h3{
     font-weight: 600;
     margin-bottom: 5px;
+    color: white;
 }
 
 a{
     text-decoration: none;
+    color: white;
+}
+
+span{
+    color: white;
+}
+
+.redirect-btn {
+    margin-top: 10px;
+    background-color: #6364ff;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}
+
+.screenshots{
+    margin-top: 10px;
+    text-align: center;
+}
+
+.redirect-btn-div{
+    text-align: center;
 }
