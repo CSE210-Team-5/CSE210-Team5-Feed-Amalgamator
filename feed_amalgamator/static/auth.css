@@ -1,3 +1,26 @@
+/* Input and Button Styles */
+input[type="text"],
+input[type="password"],
+input[type="submit"] {
+    width: 100%;
+
+    /* Full width of the form container */
+    padding: 16px;
+
+    /* Increased padding for taller fields */
+    margin-bottom: 10px;
+
+    /* Space between elements */
+    border-radius: 5px;
+    border: 1px solid #34495e;
+    box-sizing: border-box;
+
+    /* Ensures padding is included in the width */
+    font-size: 18px;
+
+    /* Larger font size for better readability */
+}
+
 input[type="submit"] {
     background-color: #3498D8;
     color: #fff;
@@ -6,6 +29,7 @@ input[type="submit"] {
     text-align: center;
     border: none;
     padding: 18px;
+
     /* Slightly larger padding for the button */
 }
 
@@ -52,23 +76,4 @@ input[type="submit"]:hover {
     margin-bottom: 10px;
     border-radius: 4px;
     display: none;
-}
-
-
-/* Input and Button Styles */
-input[type="text"],
-input[type="password"],
-input[type="submit"] {
-    width: 100%;
-    /* Full width of the form container */
-    padding: 16px;
-    /* Increased padding for taller fields */
-    margin-bottom: 10px;
-    /* Space between elements */
-    border-radius: 5px;
-    border: 1px solid #34495e;
-    box-sizing: border-box;
-    /* Ensures padding is included in the width */
-    font-size: 18px;
-    /* Larger font size for better readability */
 }
