@@ -84,5 +84,7 @@ h3 {
     position: absolute;
      text-align: center;
    margin: auto;
+  width: 50%;
+  transform: translate(50%, 50%);
 }
 
