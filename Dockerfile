@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM laudio/pyodbc
+FROM laudio/pyodbc:latest
 WORKDIR /code
 
 COPY . .
