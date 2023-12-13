@@ -149,7 +149,7 @@ def process_provided_auth_token(auth_token):
 
     else:
         raise InvalidCredentialsError({
-            {"redirect_path": "feed/add_server.html", "message": error}
+            "redirect_path": "feed/add_server.html", "message": error
         })
 
 

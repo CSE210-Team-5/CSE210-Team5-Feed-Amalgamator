@@ -25,6 +25,7 @@ auth_logger = LoggingHelper.generate_logger(logging.INFO, log_file_loc, "auth_pa
 @feed_bp.errorhandler(NoContentFoundError)
 @feed_bp.errorhandler(ServiceUnavailableError)
 @feed_bp.errorhandler(IntegrityError)
+@feed_bp.errorhandler(InvalidCredentialsError)
 def handle_feed_exceptions(err):
     feed_logger.exception(err)
     return render_template(err.args[0]['redirect_path'], error_message=err.args[0]['message'])
