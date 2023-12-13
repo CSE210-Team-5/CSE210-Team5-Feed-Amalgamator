@@ -1,7 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM python:3.11
-
+FROM laudio/pyodbc
 WORKDIR /code
 
 COPY . .
