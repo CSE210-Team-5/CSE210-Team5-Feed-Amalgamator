@@ -97,8 +97,6 @@ def load_logged_in_user():
                 {"message": USER_DOES_NOT_EXIST_MSG + ":{u}".format(u=user_id),
                  "redirect_path": "auth/register.html"})
 
-
-
 @bp.route("/logout")
 def logout():
     session.clear()
