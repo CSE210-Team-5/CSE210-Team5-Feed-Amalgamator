@@ -18,7 +18,6 @@ class TestFeedPage(unittest.TestCase):
         test_config_loc = Path("configuration/test_mastodon_client_info.ini")
         parser = configparser.ConfigParser()
         parser.read(test_config_loc)
-        # test_log_root = parser["TEST_SETTINGS"]["test_log_root"]
         test_db_name = parser["TEST_SETTINGS"]["test_db_location"]
 
         self.app = create_app(db_file_name=test_db_name)

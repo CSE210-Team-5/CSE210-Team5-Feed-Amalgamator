@@ -2,6 +2,7 @@ import os
 import configparser
 import urllib
 
+
 from flask import Flask, redirect, url_for
 
 from . import auth, feed

@@ -30,8 +30,6 @@ auth_api = MastodonOAuthInterface(logger, redirect_uri)
 data_api = MastodonDataInterface(logger)
 auth_login = "auth.login"
 
-# TODO - Add Swagger/OpenAPI documentation
-# TODO - Business logic of home feed (deciding what to filter etc.)
 
 
 def filter_sort_feed(timelines: list[dict]) -> list[dict]:

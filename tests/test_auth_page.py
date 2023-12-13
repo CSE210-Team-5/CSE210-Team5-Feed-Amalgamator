@@ -123,5 +123,3 @@ class TestAuthPage(unittest.TestCase):
         pw_response = client.post(login_url, data={USERNAME_FIELD: test_user, PASSWORD_FIELD: "meow"})
         decoded_pw_response = pw_response.data.decode("utf-8")
         self.assertIn(INVALID_PASSWORD_MSG, decoded_pw_response)
-
-    # TODO - Test password validation

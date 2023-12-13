@@ -140,7 +140,7 @@ input[type="text"] {
 
 .flash {
     text-align: center;
-    color: white;
+    color: red;
 }
 
 .delete-server {
