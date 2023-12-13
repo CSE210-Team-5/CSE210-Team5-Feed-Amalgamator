@@ -1,9 +1,12 @@
 {% extends 'base.html' %}
 {% block extra_head %}<link rel="stylesheet" href="{{ url_for('static', filename='feed.css') }}">{% endblock %}
 {% block content %}
+{% if error_message %}
+<div class="flash">{{ error_message }}</div>
+{% endif %}
     <div class="feed-container">
         <div class="feed-div">
-            {% if error_message is not none %}<h3>{{ error_message }}</h3>{% endif %}
+
             {% if timelines is not none %}
                 {% for post in timelines %}
                     <article>
