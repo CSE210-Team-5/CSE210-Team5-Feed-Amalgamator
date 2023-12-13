@@ -17,7 +17,7 @@ from feed_amalgamator.helpers.mastodon_oauth_interface import MastodonOAuthInter
 from feed_amalgamator.helpers.db_interface import dbi, UserServer
 from feed_amalgamator.constants.error_messages import NO_CONTENT_FOUND_MSG, USER_SERVER_COMBI_ALREADY_EXISTS_MSG, \
     LOGIN_TOKEN_ERROR_MSG, AUTHORIZATION_TOKEN_REQUIRED_MSG, PASSWORD_REQUIRED_MSG, DOMAIN_REQUIRED_MSG, \
-    INVALID_DELETE_SERVER_RECORD_MSG, AUTH_CODE_ERROR_MSG
+    INVALID_DELETE_SERVER_RECORD_MSG, AUTH_CODE_ERROR_MSG, REDIRECT_HOME, REDIRECT_ADD_SERVER
 
 bp = Blueprint("feed", __name__, url_prefix="/feed")
 parser = configparser.ConfigParser()
@@ -29,7 +29,7 @@ redirect_uri = parser["REDIRECT_URI"]["REDIRECT_URI"]
 logger = LoggingHelper.generate_logger(logging.INFO, log_file_loc, "feed_page")
 auth_api = MastodonOAuthInterface(logger, redirect_uri)
 data_api = MastodonDataInterface(logger)
-auth_login = "auth.login"
+AUTH_LOGIN = "auth.login"
 
 
 
@@ -52,11 +52,11 @@ def feed_home():
     if request.method == "GET":
         provided_user_id = session.get(USER_ID_FIELD)
         if provided_user_id is None:
-            return redirect(url_for("auth.login"))
+            return redirect(url_for(AUTH_LOGIN))
 
         user_servers = UserServer.query.filter_by(user_id=provided_user_id).all()
         if len(user_servers) == 0:
-            raise NoContentFoundError({"redirect_path": "feed/home.html",
+            raise NoContentFoundError({"redirect_path": REDIRECT_HOME,
                                        "message": NO_CONTENT_FOUND_MSG})
         else:
             logger.info("Found {n} servers tied to user id {i}".format(n=len(user_servers), i=provided_user_id))
@@ -73,9 +73,9 @@ def feed_home():
                     post[ORIGINAL_SERVER_FIELD] = server_domain
                 timelines.extend(timeline)
             timelines = filter_sort_feed(timelines)
-            return render_template("feed/home.html", timelines=timelines)
+            return render_template(REDIRECT_HOME, timelines=timelines)
 
-    return render_template("feed/home.html", timelines=None)  # Default return
+    return render_template(REDIRECT_HOME, timelines=None)  # Default return
 
 
 @bp.route("/add_server", methods=["GET", "POST"])
@@ -86,8 +86,8 @@ def add_server():
             return render_redirect_url_page()
     provided_user_id = session.get(USER_ID_FIELD)
     if provided_user_id is None:
-        return redirect(url_for("auth.login"))
-    return render_template("feed/add_server.html", is_domain_set=False)
+        return redirect(url_for(AUTH_LOGIN))
+    return render_template(REDIRECT_ADD_SERVER, is_domain_set=False)
 
 
 def render_redirect_url_page():
@@ -103,7 +103,7 @@ def render_redirect_url_page():
     if not is_valid_domain:
         error_message = parsed_domain  # If verify fails, error is returned in place of the domain
         raise InvalidDomainError({
-            "redirect_path": "feed/add_server.html",
+            "redirect_path": REDIRECT_ADD_SERVER,
             "message": error_message})
     app_token_obj = auth_api.check_if_domain_exists_in_database(parsed_domain)
     if app_token_obj is not None:
@@ -220,5 +220,5 @@ def delete_server():
     else:
         provided_user_id = session.get(USER_ID_FIELD)
         if provided_user_id is None:
-            return redirect(url_for("auth.login"))
+            return redirect(url_for(AUTH_LOGIN))
         return render_user_servers()

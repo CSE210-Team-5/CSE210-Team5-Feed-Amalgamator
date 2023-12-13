@@ -20,3 +20,7 @@ INVALID_MASTODON_DOMAIN_MSG = "The desired domain was not a valid mastodon domai
 INVALID_JSON_RESPONSE_MSG = "Server returned a value that cannot be parsed. Server is likely to not be a " \
                              "legitimate server"
 SERVICE_UNAVAILABLE_MSG = "Something is wrong. Not sure if it us or Mastodon. Please try again later"
+REDIRECT_REGISTER = "auth/register.html"
+REDIRECT_LOGIN = "auth/login.html"
+REDIRECT_HOME = "feed/home.html"
+REDIRECT_ADD_SERVER = "feed/add_server.html"
