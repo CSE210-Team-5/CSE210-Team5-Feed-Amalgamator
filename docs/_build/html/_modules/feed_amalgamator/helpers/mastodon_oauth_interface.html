@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>feed_amalgamator.helpers.mastodon_oauth_interface &mdash; Feed-amalgamator  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            Feed-amalgamator
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">feed_amalgamator</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Feed-amalgamator</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">feed_amalgamator.helpers.mastodon_oauth_interface</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for feed_amalgamator.helpers.mastodon_oauth_interface</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;This interface provides an abstraction (ports/adapter model) to insulate internal code from external API changes.</span>
+
+<span class="sd">Any module interacting with the Mastodon API for Oauth purposes should do so strictly through this layer&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">mastodon.errors</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">from</span> <span class="nn">urllib.parse</span> <span class="kn">import</span> <span class="n">urlparse</span>
+<span class="kn">from</span> <span class="nn">http</span> <span class="kn">import</span> <span class="n">HTTPStatus</span>
+
+<span class="kn">from</span> <span class="nn">mastodon</span> <span class="kn">import</span> <span class="n">Mastodon</span><span class="p">,</span> <span class="n">MastodonAPIError</span>  <span class="c1"># pip install Mastodon.py</span>
+<span class="kn">from</span> <span class="nn">feed_amalgamator.helpers.custom_exceptions</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">MastodonConnError</span><span class="p">,</span>
+    <span class="n">InvalidApiInputError</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">feed_amalgamator.helpers.db_interface</span> <span class="kn">import</span> <span class="n">dbi</span><span class="p">,</span> <span class="n">ApplicationTokens</span>
+
+<span class="c1"># Add more logging levels (info etc. - forgot about this)</span>
+<span class="c1"># Segment https error types to become more descriptive</span>
+<span class="c1"># Need to test the third party api thoroughly (definitely need to sanity check the url)</span>
+<span class="c1"># Eg. test that data fields that are needed are returned; create a weird fizzborb to create &quot;deterministic&quot; tests</span>
+
+
+<div class="viewcode-block" id="MastodonOAuthInterface">
+<a class="viewcode-back" href="../../../feed_amalgamator.helpers.html#feed_amalgamator.helpers.mastodon_oauth_interface.MastodonOAuthInterface">[docs]</a>
+<span class="k">class</span> <span class="nc">MastodonOAuthInterface</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Adapter Class for responsible for handling the user Oauth chain</span>
+<span class="sd">    All calls to the API during the user Oauth process should go through this layer to insulate</span>
+<span class="sd">    code from third party libraries.</span>
+<span class="sd">    API calls for data processing AFTER Oauth is under the responsibility of MastodonDataInterface</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">logger</span><span class="p">:</span> <span class="n">logging</span><span class="o">.</span><span class="n">Logger</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;We pass in a logger instead of creating a new one</span>
+<span class="sd">        As we want logs to be logged to the program calling the interface</span>
+<span class="sd">        rather than have separate logs for the interface layer specifically&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">logger</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;This is the client used to authenticate users. Generated using our app&#39;s down details&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">app_client</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Hard coded required scopes for the app to work. Revisit if the scope changes&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">REQUIRED_SCOPES</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;read&quot;</span><span class="p">,</span> <span class="s2">&quot;write&quot;</span><span class="p">,</span> <span class="s2">&quot;push&quot;</span><span class="p">]</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The redirect URI required by the API to generate certain urls&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">REDIRECT_URI</span> <span class="o">=</span> <span class="s2">&quot;urn:ietf:wg:oauth:2.0:oob&quot;</span>
+
+    <span class="c1"># ===== Functions to handle the authorization pipeline with the user =====</span>
+<div class="viewcode-block" id="MastodonOAuthInterface.verify_user_provided_domain">
+<a class="viewcode-back" href="../../../feed_amalgamator.helpers.html#feed_amalgamator.helpers.mastodon_oauth_interface.MastodonOAuthInterface.verify_user_provided_domain">[docs]</a>
+    <span class="k">def</span> <span class="nf">verify_user_provided_domain</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_domain</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Ensures that the user provided domain is a legitimate mastodon server</span>
+<span class="sd">        @param user_domain: Server of the account provided by the user</span>
+<span class="sd">        @return: True (if server is a legitimate mastodon domain), False otherwise</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">wanted_domain</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_clean_user_provided_domain</span><span class="p">(</span><span class="n">user_domain</span><span class="p">)</span>
+
+        <span class="c1"># Hardcoded endpoint for generally getting an instance&#39;s info</span>
+        <span class="n">endpoint_to_test</span> <span class="o">=</span> <span class="s2">&quot;https://</span><span class="si">{d}</span><span class="s2">/api/v2/instance&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="n">wanted_domain</span><span class="p">)</span>
+        <span class="c1"># As this is before any api client is created, we will use a simple https request</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">headers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generate_headers_for_api_call</span><span class="p">()</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">endpoint_to_test</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="n">HTTPStatus</span><span class="o">.</span><span class="n">OK</span><span class="p">:</span>
+                <span class="n">wanted_domain</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">content</span><span class="p">)[</span><span class="s1">&#39;domain&#39;</span><span class="p">]</span>
+                <span class="k">return</span> <span class="kc">True</span><span class="p">,</span> <span class="n">wanted_domain</span>  <span class="c1"># Obtain the cleansed content</span>
+        <span class="k">except</span> <span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">ConnectionError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="c1"># If the user domain is invalid, it is indistinguishable from a connection error (cannot resolve</span>
+            <span class="c1"># the domain of the redirected url)</span>
+            <span class="c1"># Increase granularity of http error logging (500?400?)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
+                <span class="s2">&quot;ConnectionError </span><span class="si">{e}</span><span class="s2"> trying to verify user provided domain. User provided domain&quot;</span>
+                <span class="s2">&quot;is either invalid, or there is a connection problem&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">e</span><span class="o">=</span><span class="n">e</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="k">except</span> <span class="n">json</span><span class="o">.</span><span class="n">JSONDecodeError</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;JsonDecodeError </span><span class="si">{e}</span><span class="s2">: Response obtained from server while verifying domain was &quot;</span>
+                              <span class="s2">&quot;successful, but returned a value that cannot be parsed. Server is likely to &quot;</span>
+                              <span class="s2">&quot;not be a legitimate server&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;&quot;</span>  <span class="c1"># Failed. Could be due to connection errors or wrong domain provided</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_generate_headers_for_api_call</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generates standardized headers to be fed into a HTTP request. A lack of these headers</span>
+<span class="sd">        may cause the server&#39;s api to respond incorrectly&quot;&quot;&quot;</span>
+        <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;User-Agent&quot;</span><span class="p">:</span> <span class="s2">&quot;YourApp/1.0&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Accept&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">headers</span>
+
+    <span class="k">def</span> <span class="nf">_clean_user_provided_domain</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_provided_domain</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Private function to clean the user provided domain string, to get rid of variance</span>
+<span class="sd">        in provided formats</span>
+<span class="sd">        @param user_provided_domain: String provided by the user</span>
+<span class="sd">        @return: Cleaned user domain (as a string)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">parsed_input</span> <span class="o">=</span> <span class="n">urlparse</span><span class="p">(</span><span class="n">user_provided_domain</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">parsed_input</span><span class="o">.</span><span class="n">scheme</span><span class="p">:</span>
+            <span class="c1"># user provided http in string. This changes the way the standard library parses the url</span>
+            <span class="n">wanted_domain</span> <span class="o">=</span> <span class="n">parsed_input</span><span class="o">.</span><span class="n">netloc</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># user did not provide http in string</span>
+            <span class="n">wanted_domain</span> <span class="o">=</span> <span class="n">parsed_input</span><span class="o">.</span><span class="n">path</span>
+        <span class="k">return</span> <span class="n">wanted_domain</span>
+
+<div class="viewcode-block" id="MastodonOAuthInterface.start_app_api_client">
+<a class="viewcode-back" href="../../../feed_amalgamator.helpers.html#feed_amalgamator.helpers.mastodon_oauth_interface.MastodonOAuthInterface.start_app_api_client">[docs]</a>
+    <span class="k">def</span> <span class="nf">start_app_api_client</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_domain</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>  <span class="n">client_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">client_secret</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">access_token</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Function to start the app client (client used by our app to authenticate users).</span>
+<span class="sd">        This generated app client will be used to process user authorization requests</span>
+
+<span class="sd">        Is not automatically called by init as we may not wish to start a client every time</span>
+<span class="sd">        @param: user_domain: Mastodon.io, mstdn.io and the like; essentially, which server the user&#39;s</span>
+<span class="sd">        account is located on</span>
+<span class="sd">        @return: None, but there is a side effect of setting self.app_client</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">client</span> <span class="o">=</span> <span class="n">Mastodon</span><span class="p">(</span>
+                <span class="n">client_id</span><span class="o">=</span><span class="n">client_id</span><span class="p">,</span>
+                <span class="n">client_secret</span><span class="o">=</span><span class="n">client_secret</span><span class="p">,</span>
+                <span class="n">access_token</span><span class="o">=</span><span class="n">access_token</span><span class="p">,</span>
+                <span class="n">api_base_url</span><span class="o">=</span><span class="n">user_domain</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="c1"># Be careful: Wrong information used to start this client will not cause</span>
+            <span class="c1"># the code to fail. Failure will only occur when the client is used later on</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">app_client</span> <span class="o">=</span> <span class="n">client</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">ConnectionError</span><span class="p">,</span> <span class="n">MastodonAPIError</span><span class="p">)</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Encountered </span><span class="si">{e}</span><span class="s2"> when trying to start app_client&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">e</span><span class="o">=</span><span class="n">err</span><span class="p">))</span>
+            <span class="k">raise</span> <span class="n">MastodonConnError</span><span class="p">(</span><span class="s2">&quot;API client failed to start&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="MastodonOAuthInterface.generate_redirect_url">
+<a class="viewcode-back" href="../../../feed_amalgamator.helpers.html#feed_amalgamator.helpers.mastodon_oauth_interface.MastodonOAuthInterface.generate_redirect_url">[docs]</a>
+    <span class="k">def</span> <span class="nf">generate_redirect_url</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_tries</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generates an url that the user will be redirected to in order to complete Mastodon&#39;s Oauth procedure</span>
+<span class="sd">        @param: num_tries: Number of tries to generate a redirect url before giving up. Default value of 3</span>
+<span class="sd">        @return: The redirect url as a string or None (upon connection failure)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">app_client</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;App client has not been initialized&quot;</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_tries</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="c1"># It redirects the user to copy and paste an authorization code</span>
+                <span class="c1"># Note that it does NOT check if the url generated is valid</span>
+                <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">app_client</span><span class="o">.</span><span class="n">auth_request_url</span><span class="p">(</span><span class="n">redirect_uris</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">REDIRECT_URI</span><span class="p">,</span> <span class="n">scopes</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">REQUIRED_SCOPES</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">url</span>
+            <span class="k">except</span> <span class="n">MastodonAPIError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
+                    <span class="s2">&quot;Encountered MastodonAPIError </span><span class="si">{e}</span><span class="s2"> in generate_redirect url. Retrying.&quot;</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">e</span><span class="o">=</span><span class="n">err</span><span class="p">)</span>
+                <span class="p">)</span>
+
+        <span class="c1"># This following code will only run if the above code failed n times.</span>
+        <span class="n">error_message</span> <span class="o">=</span> <span class="s2">&quot;Failed to generate url error after trying </span><span class="si">{n}</span><span class="s2"> times. Throwing error&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">num_tries</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">error_message</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">MastodonConnError</span><span class="p">(</span><span class="n">error_message</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="MastodonOAuthInterface.generate_user_access_token">
+<a class="viewcode-back" href="../../../feed_amalgamator.helpers.html#feed_amalgamator.helpers.mastodon_oauth_interface.MastodonOAuthInterface.generate_user_access_token">[docs]</a>
+    <span class="k">def</span> <span class="nf">generate_user_access_token</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_auth_code</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">num_tries</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Uses the user&#39;s auth code to generate an access token that will serve as a way for our app to log</span>
+<span class="sd">        in on the user&#39;s behalf</span>
+<span class="sd">        @param user_auth_code: Provided by the user after going through the Mastodon OAuth Process</span>
+<span class="sd">        @param num_tries: Number of times to repeat in case of failure before throwing exception</span>
+<span class="sd">        @return: The user access token (as a str) that will allow our app to act on the user&#39;s behalf</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">app_client</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;App client has not been initialized&quot;</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_tries</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">users_access_token</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">app_client</span><span class="o">.</span><span class="n">log_in</span><span class="p">(</span>
+                    <span class="n">code</span><span class="o">=</span><span class="n">user_auth_code</span><span class="p">,</span>
+                    <span class="n">redirect_uri</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">REDIRECT_URI</span><span class="p">,</span>
+                    <span class="n">scopes</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">REQUIRED_SCOPES</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="k">return</span> <span class="n">users_access_token</span>
+            <span class="k">except</span> <span class="n">mastodon</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">MastodonIllegalArgumentError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">illegal_arg_error_msg</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="s2">&quot;Encountered error </span><span class="si">{e}</span><span class="s2"> trying to generate user access token. User &quot;</span>
+                    <span class="s2">&quot;authorization code provided is likely invalid. Aborting&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">e</span><span class="o">=</span><span class="n">e</span><span class="p">)</span>
+                <span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">illegal_arg_error_msg</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="n">InvalidApiInputError</span><span class="p">(</span><span class="n">illegal_arg_error_msg</span><span class="p">)</span>
+            <span class="k">except</span> <span class="p">(</span><span class="ne">ConnectionError</span><span class="p">,</span> <span class="n">MastodonAPIError</span><span class="p">)</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Encountered </span><span class="si">{e}</span><span class="s2"> when trying to generate_user_access_token.&quot;</span> <span class="s2">&quot;Retrying&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">e</span><span class="o">=</span><span class="n">err</span><span class="p">))</span>
+
+        <span class="n">error_message</span> <span class="o">=</span> <span class="s2">&quot;Failed to generate user access token after trying </span><span class="si">{n}</span><span class="s2"> times. Throwing error&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">n</span><span class="o">=</span><span class="n">num_tries</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">error_message</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">MastodonConnError</span><span class="p">(</span><span class="n">error_message</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="MastodonOAuthInterface.check_if_domain_exists_in_database">
+<a class="viewcode-back" href="../../../feed_amalgamator.helpers.html#feed_amalgamator.helpers.mastodon_oauth_interface.MastodonOAuthInterface.check_if_domain_exists_in_database">[docs]</a>
+    <span class="k">def</span> <span class="nf">check_if_domain_exists_in_database</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">domain_name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check if domain is already added in database with access token</span>
+<span class="sd">        @param domain_name: Check if client_id, client_secret already exist for domain_name</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">domain</span> <span class="o">=</span> <span class="n">ApplicationTokens</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">server</span><span class="o">=</span><span class="n">domain_name</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">domain</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">domain</span></div>
+
+
+<div class="viewcode-block" id="MastodonOAuthInterface.add_domain_to_database">
+<a class="viewcode-back" href="../../../feed_amalgamator.helpers.html#feed_amalgamator.helpers.mastodon_oauth_interface.MastodonOAuthInterface.add_domain_to_database">[docs]</a>
+    <span class="k">def</span> <span class="nf">add_domain_to_database</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">domain_name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add new domain to database. Fetch client id, client secret and access token and store it in database</span>
+<span class="sd">        @param domain_name: Add domain_name to database, with its client id, client secret and access token</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">api_url</span> <span class="o">=</span> <span class="s2">&quot;https://&quot;</span> <span class="o">+</span> <span class="n">domain_name</span> <span class="o">+</span> <span class="s2">&quot;/api/v1/apps&quot;</span>
+        <span class="n">token_url</span> <span class="o">=</span> <span class="s2">&quot;https://&quot;</span> <span class="o">+</span> <span class="n">domain_name</span> <span class="o">+</span> <span class="s2">&quot;/oauth/token&quot;</span>
+        <span class="c1"># TODO: Will need to refactor the code below into several functions</span>
+        <span class="n">payload</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;client_name&#39;</span><span class="p">:</span> <span class="s1">&#39;Test Application&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;redirect_uris&#39;</span><span class="p">:</span> <span class="s1">&#39;urn:ietf:wg:oauth:2.0:oob&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;scopes&#39;</span><span class="p">:</span> <span class="s1">&#39;read write push&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;website&#39;</span><span class="p">:</span> <span class="s1">&#39;https://myapp.example&#39;</span>
+        <span class="p">}</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">headers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generate_headers_for_api_call</span><span class="p">()</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">api_url</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">payload</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
+            <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>  <span class="c1"># Raises an HTTPError if the HTTP request returned an unsuccessful status code</span>
+            <span class="n">response_dict</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+            <span class="n">client_id</span> <span class="o">=</span> <span class="n">response_dict</span><span class="p">[</span><span class="s1">&#39;client_id&#39;</span><span class="p">]</span>
+            <span class="n">client_secret</span> <span class="o">=</span> <span class="n">response_dict</span><span class="p">[</span><span class="s1">&#39;client_secret&#39;</span><span class="p">]</span>
+            <span class="n">payload_token</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">&#39;client_id&#39;</span><span class="p">:</span> <span class="n">client_id</span><span class="p">,</span>
+                <span class="s1">&#39;client_secret&#39;</span><span class="p">:</span> <span class="n">client_secret</span><span class="p">,</span>
+                <span class="s1">&#39;redirect_uri&#39;</span><span class="p">:</span> <span class="s1">&#39;urn:ietf:wg:oauth:2.0:oob&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;grant_type&#39;</span><span class="p">:</span> <span class="s1">&#39;client_credentials&#39;</span>
+            <span class="p">}</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">token_url</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">payload_token</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
+            <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>  <span class="c1"># Raises an HTTPError if the HTTP request returned an unsuccessful status code</span>
+            <span class="n">response_dict_token</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+            <span class="n">access_token</span> <span class="o">=</span> <span class="n">response_dict_token</span><span class="p">[</span><span class="s1">&#39;access_token&#39;</span><span class="p">]</span>
+            <span class="n">app_token</span> <span class="o">=</span> <span class="n">ApplicationTokens</span><span class="p">(</span><span class="n">server</span><span class="o">=</span><span class="n">domain_name</span><span class="p">,</span> <span class="n">client_id</span><span class="o">=</span><span class="n">client_id</span><span class="p">,</span> <span class="n">client_secret</span><span class="o">=</span><span class="n">client_secret</span><span class="p">,</span>
+                                          <span class="n">access_token</span><span class="o">=</span><span class="n">access_token</span><span class="p">)</span>
+            <span class="n">dbi</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">app_token</span><span class="p">)</span>
+            <span class="n">dbi</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">client_id</span><span class="p">,</span> <span class="n">client_secret</span><span class="p">,</span> <span class="n">access_token</span>
+        <span class="k">except</span> <span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">RequestException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="c1"># Handle exceptions that might occur during the request</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Team 5.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

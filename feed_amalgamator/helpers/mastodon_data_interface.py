@@ -8,8 +8,9 @@ import mastodon.errors
 from mastodon import MastodonAPIError, Mastodon
 
 from feed_amalgamator.helpers.custom_exceptions import (
-    InvalidApiInputError,
     MastodonConnError,
+    InvalidCredentialsError,
+    ServiceUnavailableError
 )
 
 
@@ -46,9 +47,10 @@ class MastodonDataInterface:
             self.user_client = client
             self.logger.info("Successfully started user API client")
         except mastodon.errors.MastodonUnauthorizedError:
-            error_msg = "start_user_api_client failed as the access token provided was invalid"
-            self.logger.error(error_msg)
-            raise InvalidApiInputError(error_msg)
+            raise InvalidCredentialsError({
+                "redirect_page": "feed/add_server.html",
+                "message": "Invalid access token"
+            })
         except (ConnectionError, MastodonAPIError) as err:
             conn_error_msg = "Encountered error {e} in start_user_api_client".format(e=err)
             self.logger.error(conn_error_msg)
@@ -73,10 +75,9 @@ class MastodonDataInterface:
                 return standardized_timeline
             except (ConnectionError, MastodonAPIError) as err:
                 self.logger.error("Encountered error {e} in start_user_api_client." "Retrying".format(e=err))
-
-        error_message = "Failed to get raw timeline data after trying {n} times. Throwing error".format(n=num_tries)
-        self.logger.error(error_message)
-        raise MastodonConnError(error_message)
+        raise ServiceUnavailableError({
+            "redirect_page": "feed/home.html",
+            "message": "Failed to get timeline data after trying {n} times".format(n=num_tries)})
 
     def _standardize_api_objects(self, raw_timeline: mastodon.utility.AttribAccessList) -> list[dict]:
         """

@@ -4,6 +4,7 @@ from flask import Flask, redirect, url_for
 
 from . import auth, feed
 from feed_amalgamator.helpers.db_interface import dbi
+from feed_amalgamator.helpers import error_handler # noqa
 
 
 def create_app(test_config=None, db_file_name=None):

@@ -27,7 +27,7 @@ class UserServer(dbi.Model):
     server: Mapped[str] = mapped_column(dbi.String, nullable=False, name="server")
     """TODO - For future versions of the project. The access token to the third party api is stored as plaintext
     at the moment. Coming up with a solution is not viable for this sprint"""
-    token: Mapped[str] = mapped_column(dbi.String, nullable=False, name="token")
+    token: Mapped[str] = mapped_column(dbi.String, unique=True, nullable=False, name="token")
 
 
 class ApplicationTokens(dbi.Model):

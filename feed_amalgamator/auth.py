@@ -3,9 +3,9 @@ import logging
 import configparser
 from pathlib import Path
 
+import sqlalchemy.exc
 from flask import (
     Blueprint,
-    flash,
     g,
     redirect,
     render_template,
@@ -13,6 +13,8 @@ from flask import (
     session,
     url_for,
 )
+
+from feed_amalgamator.helpers.custom_exceptions import InvalidCredentialsError, IntegrityError
 
 from feed_amalgamator.helpers.db_interface import dbi, User
 
@@ -22,9 +24,9 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 from sqlalchemy import exc
 
-from . import CONFIG
-from .CONFIG import USERNAME_FIELD, PASSWORD_FIELD
-from .feed import USER_ID_FIELD
+from feed_amalgamator.constants.common_constants import USERNAME_FIELD, PASSWORD_FIELD, USER_ID_FIELD, CONFIG_LOC
+from feed_amalgamator.constants.error_messages import USER_ALREADY_EXISTS_MSG, INVALID_USERNAME_MSG, \
+    INVALID_PASSWORD_MSG, USER_DOES_NOT_EXIST_MSG
 
 bp = Blueprint("auth", __name__, url_prefix="/auth")
 
@@ -32,11 +34,10 @@ bp = Blueprint("auth", __name__, url_prefix="/auth")
 
 # Setting up the loggers and interface layers
 parser = configparser.ConfigParser()
-with open(CONFIG.path) as file:
+with open(CONFIG_LOC) as file:
     parser.read_file(file)
 log_file_loc = Path(parser["LOG_SETTINGS"]["auth_log_loc"])
 logger = LoggingHelper.generate_logger(logging.INFO, log_file_loc, "auth_page")
-error = ""
 
 # Constants for form fields
 
@@ -46,14 +47,16 @@ error = ""
 @bp.route("/register", methods=("GET", "POST"))
 def register():
     if request.method == "POST":
-        username = request.form[CONFIG.USERNAME_FIELD]
-        password = generate_password_hash(request.form[CONFIG.PASSWORD_FIELD])
+        username = request.form[USERNAME_FIELD]
+        password = generate_password_hash(request.form[PASSWORD_FIELD])
         try:
             user = User(username=username, password=password)
             dbi.session.add(user)
             dbi.session.commit()
         except exc.IntegrityError:
-            pass  # Hardcore error messages, or abstract further?
+            raise IntegrityError(
+                {"message": USER_ALREADY_EXISTS_MSG,
+                 "redirect_path": "auth/register.html"})
         else:
             # Executes if there is no exception
             return redirect(url_for("auth.login"))
@@ -68,20 +71,15 @@ def login():
         password = request.form[PASSWORD_FIELD]
         user = User.query.filter_by(username=username).first()
         if user is None:
-            flash("Invalid User")  # issue with hard coded error messages - see below
-            logger.error("No such user found")
-            raise Exception  # TODO: We need to standardize how exceptions are raised and parsed in flask.
+            raise InvalidCredentialsError({"message": INVALID_USERNAME_MSG,
+                                           "redirect_path": "auth/login.html"})
         elif not check_password_hash(user.password, password):
-            flash("Invalid Password")  # issue with hard coded error messages - see below
-            logger.error(f"Invalid Password for user {username}")
-            raise Exception  # TODO: We need to standardize how exceptions are raised and parsed in flask.
+            raise InvalidCredentialsError({"message": INVALID_PASSWORD_MSG,
+                                           "redirect_path": "auth/login.html"})
         else:
             session.clear()
             session[USER_ID_FIELD] = user.user_id
             return redirect(url_for("feed.feed_home"))
-
-        flash(error)
-
     return render_template("auth/login.html")
 
 
@@ -92,7 +90,13 @@ def load_logged_in_user():
     if user_id is None:
         g.user = None
     else:
-        g.user = dbi.session.execute(dbi.select(User).filter_by(user_id=user_id)).one()
+        try:
+            g.user = dbi.session.execute(dbi.select(User).filter_by(user_id=user_id)).one()
+        except sqlalchemy.exc.NoResultFound:
+            raise IntegrityError(
+                {"message": USER_DOES_NOT_EXIST_MSG + ":{u}".format(u=user_id),
+                 "redirect_path": "auth/register.html"})
+
 
 
 @bp.route("/logout")

@@ -20,3 +20,28 @@ class MastodonConnError(Exception):
 
     def __init__(self, error_message: str):
         super().__init__(error_message)
+
+
+class InvalidDomainError(Exception):
+    code = 404
+    description = "Invalid Domain"
+
+
+class InvalidCredentialsError(Exception):
+    code = 403
+    description = "Forbidden Request"
+
+
+class NoContentFoundError(Exception):
+    code = 400
+    description = "Bad Request"
+
+
+class ServiceUnavailableError(Exception):
+    code = 503
+    description = "Service Unavailable"
+
+
+class IntegrityError(Exception):
+    code = 500
+    description = "Database Integrity Error"
