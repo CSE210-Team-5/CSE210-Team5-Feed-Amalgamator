@@ -7,10 +7,8 @@ from flask import (
     render_template,
 )
 
-
+from feed_amalgamator.constants.common_constants import CONFIG_LOC
 from feed_amalgamator.helpers.logging_helper import LoggingHelper
-
-from . import CONFIG
 
 bp = Blueprint("about", __name__)
 
@@ -18,11 +16,10 @@ bp = Blueprint("about", __name__)
 
 # Setting up the loggers and interface layers
 parser = configparser.ConfigParser()
-with open(CONFIG.path) as file:
+with open(CONFIG_LOC) as file:
     parser.read_file(file)
 log_file_loc = Path(parser["LOG_SETTINGS"]["auth_log_loc"])
 logger = LoggingHelper.generate_logger(logging.INFO, log_file_loc, "auth_page")
-error = ""
 
 # Constants for form fields
 
