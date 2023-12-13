@@ -10,6 +10,7 @@ authors = [
     {name = "Samarth Bhadane", email = "samarthbhadane119@gmail.com"},
     {name = "Wei Jie CHIA",email = "wchia@ucsd.edu"},
     {name = "Samarth Bhadane", email = "samarthbhadane119@gmail.com"},
+    {name = "Julian Rahimi",email = "78955065+ju-ra-96@users.noreply.github.com"},
 ]
 dependencies = [
     "flask>=3.0.0",

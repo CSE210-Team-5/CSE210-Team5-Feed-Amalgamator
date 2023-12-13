@@ -77,3 +77,14 @@ input[type="submit"]:hover {
     border-radius: 4px;
     display: none;
 }
+
+h3 {
+    color: red;
+    background-color: #fff0f0;
+    position: absolute;
+     text-align: center;
+   margin: auto;
+  width: 50%;
+  transform: translate(50%, 50%);
+}
+
