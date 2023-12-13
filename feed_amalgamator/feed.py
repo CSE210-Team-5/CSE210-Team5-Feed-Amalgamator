@@ -1,4 +1,5 @@
 """Code for handling the main, feed page via flask"""
+
 import configparser
 import logging
 from pathlib import Path
@@ -35,7 +36,8 @@ auth_login = "auth.login"
 def filter_sort_feed(timelines: list[dict]) -> list[dict]:
     """
     Function that sorts and fiters the timeline
-    @param timelines : timeline data to need to be filtered and sorted
+
+    :param timelines: timeline data (list of dicts) to need to be filtered and sorted
     """
     for post in timelines:
         for delete in FILTER_LIST:
@@ -46,6 +48,7 @@ def filter_sort_feed(timelines: list[dict]) -> list[dict]:
 
 @bp.route("/home", methods=["GET"])
 def feed_home():
+    """Default page for the feed"""
     if request.method == "GET":
         provided_user_id = session.get(USER_ID_FIELD)
         if provided_user_id is None:
@@ -160,10 +163,11 @@ def generate_auth_code_error_message(
     """
     Helper function to generate different error messages that will be shown to the user depending
     on what went wrong
-    @param authentication_token: auth_token field in the request form
-    @param user_id: user_id field in the session
-    @param user_domain: user_domain field in the session
-    @return: Either the error message, or None
+
+    :param authentication_token: auth_token field in the request form
+    :param user_id: user_id field in the session
+    :param user_domain: user_domain field in the session
+    :return: Either the error message, or None
     """
     error = None
     # Hardcode error messages, or abstract further? For localization. If shown to user, will have to localize further

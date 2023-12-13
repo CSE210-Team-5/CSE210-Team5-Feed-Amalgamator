@@ -1,3 +1,5 @@
+"""Flask page for handling authentication requests (registering and logins to the app)"""
+
 import functools
 import logging
 import configparser
@@ -46,6 +48,7 @@ logger = LoggingHelper.generate_logger(logging.INFO, log_file_loc, "auth_page")
 
 @bp.route("/register", methods=("GET", "POST"))
 def register():
+    """Endpoint for the user to register a new account with the app"""
     if request.method == "POST":
         username = request.form[USERNAME_FIELD]
         password = generate_password_hash(request.form[PASSWORD_FIELD])
@@ -66,6 +69,7 @@ def register():
 
 @bp.route("/login", methods=("GET", "POST"))
 def login():
+    """Endpoint for the user to log in to the app"""
     if request.method == "POST":
         username = request.form[USERNAME_FIELD]
         password = request.form[PASSWORD_FIELD]
@@ -85,6 +89,7 @@ def login():
 
 @bp.before_app_request
 def load_logged_in_user():
+    """Helps to load data for a user that is already logged in"""
     user_id = session.get("user_id")
 
     if user_id is None:
@@ -99,6 +104,7 @@ def load_logged_in_user():
 
 @bp.route("/logout")
 def logout():
+    """Endpoint for the user to log out"""
     session.clear()
     return redirect(url_for("auth.login"))
 

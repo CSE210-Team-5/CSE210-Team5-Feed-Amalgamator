@@ -20,6 +20,14 @@ feed\_amalgamator.helpers.db\_interface module
    :undoc-members:
    :show-inheritance:
 
+feed\_amalgamator.helpers.error\_handler module
+-----------------------------------------------
+
+.. automodule:: feed_amalgamator.helpers.error_handler
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 feed\_amalgamator.helpers.logging\_helper module
 ------------------------------------------------
 

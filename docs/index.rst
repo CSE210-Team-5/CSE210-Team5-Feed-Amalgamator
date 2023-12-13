@@ -1,9 +1,9 @@
-.. Feed-amalgamator documentation master file, created by
-   sphinx-quickstart on Mon Dec 11 16:03:30 2023.
+.. Feed Amalgamator documentation master file, created by
+   sphinx-quickstart on Tue Dec 12 23:04:31 2023.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to Feed-amalgamator's documentation!
+Welcome to Feed Amalgamator's documentation!
 ============================================
 
 .. toctree::
@@ -11,6 +11,7 @@ Welcome to Feed-amalgamator's documentation!
    :caption: Contents:
 
    modules
+
 
 
 Indices and tables

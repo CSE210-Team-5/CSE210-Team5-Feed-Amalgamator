@@ -1,3 +1,6 @@
+"""Contains flask error handlers which detail how flask should react in response to various
+raised exceptions"""
+
 import logging
 import configparser
 from flask import render_template, redirect, url_for, flash
