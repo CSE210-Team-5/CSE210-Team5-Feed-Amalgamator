@@ -22,35 +22,22 @@
             <ul class="nav-links">
                 {% if g.user %}
                     <li>
+                        <span class="username">
+                            Hello {{ g.user[0].username }}!
+                        </span>
+                    </li>
+                    <li>
                         <div class="dropdown">
                             <button class="dropbtn">
                                 <i class="fa fa-bars menu-icon"></i>
                             </button>
                             <div class="dropdown-content">
-                                <a href="{{ url_for("feed.feed_home") }}">Home
-                                    <i class="fa fa-home"></i>
-                                </a>
-                                <a href="{{ url_for("feed.add_server") }}">Add Server
-                                    <i class="fa fa-plus"></i>
-                                </a>
-                                <a href="{{ url_for("feed.delete_server") }}">Delete Server
-                                    <i class="fa fa-close"></i>
-                                </a>
-                                <a href="{{ url_for("auth.logout") }}">Log Out
-                                    <i class="fa fa-sign-out"></i>
-                                </a>
+                                <a href="{{ url_for("feed.feed_home") }}"><i class="fa fa-fw fa-house"></i> Home</a>
+                                <a href="{{ url_for("feed.add_server") }}"> <i class="fa fa-fw fa-plus"></i> Add Server</a>
+                                <a href="{{ url_for("feed.delete_server") }}"><i class="fa fa-fw fa-close"></i> Delete Server</a>
+                                <a href="{{ url_for("auth.logout") }}"><i class="fa fa-fw fa-sign-out"></i> Log Out</a>
                             </div>
                         </div>
-                    </li>
-                    <li>
-                        <span class="username">
-                            {{ g.user[0].username }}
-                            <img class="profile-picture"
-                                 src="{{ url_for('static', filename='mastodon_profile_default.png') }}"
-                                 alt="Profile Picture"
-                                 height="50"
-                                 width="50" />
-                        </span>
                     </li>
                 {% else %}
                     <li>
