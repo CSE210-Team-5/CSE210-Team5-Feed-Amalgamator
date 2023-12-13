@@ -16,46 +16,43 @@
               rel="stylesheet">
         {% block extra_head %}{% endblock %}
     </head>
-    <body>
-        <nav class="navbar">
-            <div class="navbar-container">
-                <a class="logo">
-                    <i class="fab fa-mastodon"></i> <strong><i>Feed Amalgamator</i></strong>
-                </a>
-                <ul class="nav-links">
-                    {% if g.user %}
-                        <li>
-                            <a href="{{ url_for("auth.logout") }}">Log Out</a>
-                        </li>
-                        <li>
-                            <a href="{{ url_for("feed.feed_home") }}">Home</a>
-                        </li>
-                        <li class="username">
-                            {{ g.user['username'] }}
-                            <img class="profile-picture"
-                                 src="{{ url_for('static', filename='mastodon_profile_default.png') }}"
-                                 alt="Profile Picture"
-                                 height="30"
-                                 width="30" />
-                        </li>
-                    {% else %}
-                        <li>
-                            <a href="{{ url_for("auth.register") }}">Register</a>
-                        </li>
-                        <li>
-                            <a href="{{ url_for("auth.login") }}">Log In</a>
-                        </li>
-                    {% endif %}
-                </ul>
-            </div>
-        </nav>
-        <section class="content">
-            <header>
-                {% block header %}{% endblock %}
-            </header>
-            {% for message in get_flashed_messages() %}<div class="flash">{{ message }}</div>{% endfor %}
-            {% block content %}{% endblock %}
-        </section>
-        {% block scripts %}{% endblock %}
-    </body>
+    <nav class="navbar">
+        <div class="navbar-container">
+            <h1 class="logo">Feed Amalgamator</h1>
+            <ul class="nav-links">
+                {% if g.user %}
+                    <li>
+                        <span class="username">Hello {{ g.user[0].username }}!</span>
+                    </li>
+                    <li>
+                        <div class="dropdown">
+                            <button class="dropbtn">
+                                <i class="fa fa-bars menu-icon"></i>
+                            </button>
+                            <div class="dropdown-content">
+                                <a href="{{ url_for("feed.feed_home") }}"><i class="fa fa-fw fa-house"></i> Home</a>
+                                <a href="{{ url_for("feed.add_server") }}"> <i class="fa fa-fw fa-plus"></i> Add Server</a>
+                                <a href="{{ url_for("feed.delete_server") }}"><i class="fa fa-fw fa-close"></i> Delete Server</a>
+                                <a href="{{ url_for("auth.logout") }}"><i class="fa fa-fw fa-sign-out"></i> Log Out</a>
+                            </div>
+                        </div>
+                    </li>
+                {% else %}
+                    <li>
+                        <a href="{{ url_for("auth.register") }}">Register</a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for("auth.login") }}">Log In</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+    <section class="content">
+        <header>
+            {% block header %}{% endblock %}
+        </header>
+        {% for message in get_flashed_messages() %}<div class="flash">{{ message }}</div>{% endfor %}
+        {% block content %}{% endblock %}
+    </section>
 </html>
