@@ -15,7 +15,9 @@
     </script>
 {% endblock %}
 {% block content %}
-    {% if error_message is not none %}<h3>{{ error_message }}</h3>{% endif %}
+    {% if error_message %}
+    <div class="flash">{{ error_message }}</div>
+    {% endif %}
     <div class="delete-server">
         <div class="server-list">
             {% if user_servers is not none %}

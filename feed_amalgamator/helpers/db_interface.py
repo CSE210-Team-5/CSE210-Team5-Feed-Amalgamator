@@ -16,25 +16,25 @@ dbi = SQLAlchemy()  # Not initialized without the app
 class User(dbi.Model):
     __tablename__ = "user"
     user_id: Mapped[int] = mapped_column(dbi.Integer, primary_key=True, autoincrement=True, name="id")
-    username: Mapped[str] = mapped_column(dbi.String, nullable=False, unique=True, name="username")
-    password: Mapped[str] = mapped_column(dbi.String, nullable=False, name="password")
+    username: Mapped[str] = mapped_column(dbi.String(20), nullable=False, unique=True, name="username")
+    password: Mapped[str] = mapped_column(dbi.String(1000), nullable=False, name="password")
 
 
 class UserServer(dbi.Model):
     __tablename__ = "user_server"
     user_server_id: Mapped[int] = mapped_column(dbi.Integer, primary_key=True, autoincrement=True, name="id")
     user_id: Mapped[int] = mapped_column(dbi.Integer, dbi.ForeignKey("user.id"), name="user_id")
-    server: Mapped[str] = mapped_column(dbi.String, nullable=False, name="server")
+    server: Mapped[str] = mapped_column(dbi.String(100), nullable=False, name="server")
     """TODO - For future versions of the project. The access token to the third party api is stored as plaintext
     at the moment. Coming up with a solution is not viable for this sprint"""
-    token: Mapped[str] = mapped_column(dbi.String, unique=True, nullable=False, name="token")
+    token: Mapped[str] = mapped_column(dbi.String(500), nullable=False, name="token")
 
 
 class ApplicationTokens(dbi.Model):
     __tablename__ = "application_tokens"
     server_id: Mapped[int] = mapped_column(dbi.Integer, primary_key=True, autoincrement=True, name="id")
-    server: Mapped[str] = mapped_column(dbi.String, nullable=False, name="server")
-    client_id: Mapped[str] = mapped_column(dbi.String, nullable=False, name="client_id")
-    client_secret: Mapped[str] = mapped_column(dbi.String, nullable=False, name="client_secret")
-    access_token: Mapped[str] = mapped_column(dbi.String, nullable=False, name="access_token")
-    redirect_uri: Mapped[str] = mapped_column(dbi.String, nullable=False, name="redirect_uri")
+    server: Mapped[str] = mapped_column(dbi.String(100), nullable=False, name="server")
+    client_id: Mapped[str] = mapped_column(dbi.String(500), nullable=False, name="client_id")
+    client_secret: Mapped[str] = mapped_column(dbi.String(500), nullable=False, name="client_secret")
+    access_token: Mapped[str] = mapped_column(dbi.String(500), nullable=False, name="access_token")
+    redirect_uri: Mapped[str] = mapped_column(dbi.String(500), nullable=False, name="redirect_uri")

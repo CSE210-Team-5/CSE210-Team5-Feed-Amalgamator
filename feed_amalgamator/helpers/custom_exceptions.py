@@ -45,3 +45,18 @@ class ServiceUnavailableError(Exception):
 class IntegrityError(Exception):
     code = 500
     description = "Database Integrity Error"
+
+
+class AddServerIntegrityError(Exception):
+    code = 500
+    description = "Database Integrity Error when adding a new server"
+
+
+class AddServerServiceUnavailableError(Exception):
+    code = 503
+    description = "Service Unavailable when adding a new server"
+
+
+class AddServerInvalidCredentialsError(Exception):
+    code = 403
+    description = "Invalid Credentials when adding a new server"

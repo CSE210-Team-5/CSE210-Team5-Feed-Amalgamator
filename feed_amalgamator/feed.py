@@ -4,13 +4,12 @@ import logging
 from pathlib import Path
 
 from flask import Blueprint, flash, redirect, render_template, request, session, url_for
-from sqlalchemy import exc
 
 from feed_amalgamator.constants.common_constants import CONFIG_LOC, FILTER_LIST, USER_ID_FIELD, HOME_TIMELINE_NAME, \
     NUM_POSTS_TO_GET, USER_DOMAIN_FIELD, SORT_BY, SERVERS_FIELD, ORIGINAL_SERVER_FIELD
 from feed_amalgamator.helpers.custom_exceptions import (
-    MastodonConnError, NoContentFoundError, InvalidDomainError, IntegrityError, ServiceUnavailableError,
-    InvalidCredentialsError, InvalidApiInputError)
+    MastodonConnError, NoContentFoundError, InvalidDomainError, IntegrityError, InvalidApiInputError, AddServerInvalidCredentialsError, AddServerIntegrityError,
+    AddServerServiceUnavailableError)
 from feed_amalgamator.helpers.logging_helper import LoggingHelper
 from feed_amalgamator.helpers.mastodon_data_interface import MastodonDataInterface
 from feed_amalgamator.helpers.mastodon_oauth_interface import MastodonOAuthInterface
@@ -31,8 +30,6 @@ auth_api = MastodonOAuthInterface(logger, redirect_uri)
 data_api = MastodonDataInterface(logger)
 auth_login = "auth.login"
 
-# TODO - Add Swagger/OpenAPI documentation
-# TODO - Business logic of home feed (deciding what to filter etc.)
 
 
 def filter_sort_feed(timelines: list[dict]) -> list[dict]:
@@ -105,7 +102,6 @@ def render_redirect_url_page():
         raise InvalidDomainError({
             "redirect_path": "feed/add_server.html",
             "message": error_message})
-
     app_token_obj = auth_api.check_if_domain_exists_in_database(parsed_domain)
     if app_token_obj is not None:
         logger.info("App token for domain found in database")
@@ -134,27 +130,28 @@ def process_provided_auth_token(auth_token):
             # The auth_token input by the user is a one-time token used to generate the actual login token
             # Once the auth_token is used, it cannot be reused. We need to save the actual login token
             access_token = auth_api.generate_user_access_token(auth_token)
-
-            user_server_obj = UserServer(user_id=user_id, server=domain, token=access_token)
-            dbi.session.add(user_server_obj)
-            dbi.session.commit()
-        except exc.IntegrityError:
-            raise IntegrityError({"redirect_path": "feed/add_server.html",
-                                  "message": USER_SERVER_COMBI_ALREADY_EXISTS_MSG})
+            user_server_exists = UserServer.query.filter_by(user_id=user_id,
+                                                            server=domain, token=access_token).first() is not None
+            if user_server_exists:
+                raise AddServerIntegrityError({"redirect_path": "feed.add_server",
+                                               "message": USER_SERVER_COMBI_ALREADY_EXISTS_MSG})
+            else:
+                user_server_obj = UserServer(user_id=user_id, server=domain, token=access_token)
+                dbi.session.add(user_server_obj)
+                dbi.session.commit()
         except MastodonConnError:
-            raise ServiceUnavailableError({"redirect_path": "feed/add_server.html",
-                                           "message": LOGIN_TOKEN_ERROR_MSG})
+            raise AddServerServiceUnavailableError({"redirect_path": "feed.add_server",
+                                                    "message": LOGIN_TOKEN_ERROR_MSG})
         except InvalidApiInputError:
-            raise InvalidCredentialsError({"redirect_path": "feed/add_server.html",
-                                           "message": AUTH_CODE_ERROR_MSG})
+            raise AddServerInvalidCredentialsError({"redirect_path": "feed.add_server",
+                                                    "message": AUTH_CODE_ERROR_MSG})
         else:
             # Executes if there is no exception
             return redirect(url_for("feed.add_server", is_domain_set=False))
 
     else:
-        raise InvalidCredentialsError({
-            {"redirect_path": "feed/add_server.html", "message": error}
-        })
+        raise AddServerInvalidCredentialsError({"redirect_path": "feed.add_server",
+                                                "message": error})
 
 
 def generate_auth_code_error_message(
