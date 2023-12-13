@@ -14,6 +14,8 @@ dbi = SQLAlchemy()  # Not initialized without the app
 
 
 class User(dbi.Model):
+    """Class that represents the user table"""
+
     __tablename__ = "user"
     user_id: Mapped[int] = mapped_column(dbi.Integer, primary_key=True, autoincrement=True, name="id")
     username: Mapped[str] = mapped_column(dbi.String(20), nullable=False, unique=True, name="username")
@@ -21,16 +23,18 @@ class User(dbi.Model):
 
 
 class UserServer(dbi.Model):
+    """Class that represents the table that stores each users' servers"""
+
     __tablename__ = "user_server"
     user_server_id: Mapped[int] = mapped_column(dbi.Integer, primary_key=True, autoincrement=True, name="id")
     user_id: Mapped[int] = mapped_column(dbi.Integer, dbi.ForeignKey("user.id"), name="user_id")
     server: Mapped[str] = mapped_column(dbi.String(100), nullable=False, name="server")
-    """TODO - For future versions of the project. The access token to the third party api is stored as plaintext
-    at the moment. Coming up with a solution is not viable for this sprint"""
     token: Mapped[str] = mapped_column(dbi.String(500), nullable=False, name="token")
 
 
 class ApplicationTokens(dbi.Model):
+    """Class that represents the table for storing data related to clients for various servers"""
+
     __tablename__ = "application_tokens"
     server_id: Mapped[int] = mapped_column(dbi.Integer, primary_key=True, autoincrement=True, name="id")
     server: Mapped[str] = mapped_column(dbi.String(100), nullable=False, name="server")

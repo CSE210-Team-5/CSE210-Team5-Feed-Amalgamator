@@ -9,9 +9,9 @@ import os
 import sys
 sys.path.insert(0, os.path.abspath('..'))
 
-project = 'Feed-amalgamator'
-copyright = '2023, Team 5'
-author = 'Team 5'
+project = 'Feed Amalgamator'
+copyright = '2023, Bugs Bunny'
+author = 'Bugs Bunny'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration

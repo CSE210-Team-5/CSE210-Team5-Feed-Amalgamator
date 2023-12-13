@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>feed_amalgamator.helpers.logging_helper &mdash; Feed-amalgamator  documentation</title>
+  <title>feed_amalgamator.helpers.logging_helper &mdash; Feed Amalgamator  documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
 
@@ -31,7 +31,7 @@
           
           
           <a href="../../../index.html" class="icon icon-home">
-            Feed-amalgamator
+            Feed Amalgamator
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -52,7 +52,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../index.html">Feed-amalgamator</a>
+          <a href="../../../index.html">Feed Amalgamator</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -91,10 +91,11 @@
     <span class="k">def</span> <span class="nf">generate_logger</span><span class="p">(</span><span class="n">log_level</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">log_file_loc</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">logger_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">logging</span><span class="o">.</span><span class="n">Logger</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Generates a logger with our standardized format based on arguments</span>
-<span class="sd">        @param log_level:</span>
-<span class="sd">        @param log_file_loc:</span>
-<span class="sd">        @param logger_name:</span>
-<span class="sd">        @return:</span>
+
+<span class="sd">        :param log_level: Wanted level of logs, logging.error etc.</span>
+<span class="sd">        :param log_file_loc: Where the log output file should be stored</span>
+<span class="sd">        :param logger_name: The name of the logger object</span>
+<span class="sd">        :return: Returns a logger object</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">wanted_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">logger_name</span><span class="p">)</span>
 
@@ -129,7 +130,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2023, Team 5.</p>
+    <p>&#169; Copyright 2023, Bugs Bunny.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

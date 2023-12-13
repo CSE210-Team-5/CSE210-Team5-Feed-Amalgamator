@@ -1,3 +1,5 @@
+"""Contains constants (eg. field names) that are used across the program."""
+
 CONFIG_LOC = "configuration/app_settings.ini"
 NUM_POSTS_TO_GET = 20
 

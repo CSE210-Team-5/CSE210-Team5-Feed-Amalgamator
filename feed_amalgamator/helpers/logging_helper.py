@@ -14,10 +14,11 @@ class LoggingHelper:
     def generate_logger(log_level: int, log_file_loc: Path, logger_name: str) -> logging.Logger:
         """
         Generates a logger with our standardized format based on arguments
-        @param log_level:
-        @param log_file_loc:
-        @param logger_name:
-        @return:
+
+        :param log_level: Wanted level of logs, logging.error etc.
+        :param log_file_loc: Where the log output file should be stored
+        :param logger_name: The name of the logger object
+        :return: Returns a logger object
         """
         wanted_logger = logging.getLogger(logger_name)
 

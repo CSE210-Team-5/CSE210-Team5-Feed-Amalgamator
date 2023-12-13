@@ -1,4 +1,4 @@
-"""Centralized class for error messages.
+"""Centralized class for error messages represented as strings.
 By abstracting the error messages like this, localization becomes much simpler in the future.
 It also makes code easier to maintain and test - if the string changes, we only need to change it
 in one place (as opposed to, say, in both the function and the test for it)"""

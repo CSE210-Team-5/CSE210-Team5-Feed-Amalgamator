@@ -54,8 +54,9 @@ class MastodonOAuthInterface:
     def verify_user_provided_domain(self, user_domain: str) -> (bool, str):
         """
         Ensures that the user provided domain is a legitimate mastodon server
-        @param user_domain: Server of the account provided by the user
-        @return: True (if server is a legitimate mastodon domain), False otherwise
+
+        :param user_domain: Server of the account provided by the user
+        :return: True (if server is a legitimate mastodon domain), False otherwise
         """
         wanted_domain = self._clean_user_provided_domain(user_domain)
 
@@ -84,8 +85,9 @@ class MastodonOAuthInterface:
         """
         Private function to clean the user provided domain string, to get rid of variance
         in provided formats
-        @param user_provided_domain: String provided by the user
-        @return: Cleaned user domain (as a string)
+
+        :param user_provided_domain: String provided by the user
+        :return: Cleaned user domain (as a string)
         """
         parsed_input = urlparse(user_provided_domain)
         if parsed_input.scheme:
@@ -104,9 +106,9 @@ class MastodonOAuthInterface:
         This generated app client will be used to process user authorization requests
 
         Is not automatically called by init as we may not wish to start a client every time
-        @param: user_domain: Mastodon.io, mstdn.io and the like; essentially, which server the user's
+        :param user_domain: Mastodon.io, mstdn.io and the like; essentially, which server the user's
         account is located on
-        @return: None, but there is a side effect of setting self.app_client
+        :return: None, but there is a side effect of setting self.app_client
         """
         try:
             client = Mastodon(
@@ -127,8 +129,9 @@ class MastodonOAuthInterface:
     def generate_redirect_url(self, num_tries=3) -> str:
         """
         Generates an url that the user will be redirected to in order to complete Mastodon's Oauth procedure
-        @param: num_tries: Number of tries to generate a redirect url before giving up. Default value of 3
-        @return: The redirect url as a string or None (upon connection failure)
+
+        :param num_tries: Number of tries to generate a redirect url before giving up. Default value of 3
+        :return: The redirect url as a string or None (upon connection failure)
         """
         assert self.app_client is not None, "App client has not been initialized"
 
@@ -151,9 +154,10 @@ class MastodonOAuthInterface:
         """
         Uses the user's auth code to generate an access token that will serve as a way for our app to log
         in on the user's behalf
-        @param user_auth_code: Provided by the user after going through the Mastodon OAuth Process
-        @param num_tries: Number of times to repeat in case of failure before throwing exception
-        @return: The user access token (as a str) that will allow our app to act on the user's behalf
+
+        :param user_auth_code: Provided by the user after going through the Mastodon OAuth Process
+        :param num_tries: Number of times to repeat in case of failure before throwing exception
+        :return: The user access token (as a str) that will allow our app to act on the user's behalf
         """
         assert self.app_client is not None, "App client has not been initialized"
 
@@ -186,8 +190,9 @@ class MastodonOAuthInterface:
     def check_if_domain_exists_in_database(self, domain_name):
         """
         Check if domain is already added in database with access token
-        @param user_id: user_id of the user currently logged in
-        @param domain_name: Check if client_id, client_secret already exist for domain_name
+
+        :param user_id: user_id of the user currently logged in
+        :param domain_name: Check if client_id, client_secret already exist for domain_name
         """
         domain = ApplicationTokens.query.filter_by(server=domain_name).first()
         if domain is None:
@@ -199,7 +204,7 @@ class MastodonOAuthInterface:
         """
         Add new domain to database. Fetch client id, client secret and access token and store it in database
 
-        @param domain_name: Add domain_name to database, with its client id, client secret and access token
+        :param domain_name: Add domain_name to database, with its client id, client secret and access token
         """
         try:
             self.logger.info("Adding domain {d} to database".format(d=domain_name))
@@ -220,7 +225,7 @@ class MastodonOAuthInterface:
     def _create_new_mastodon_client(self, domain_name: str) -> (str, str):
         """Function that registers a new client (bot) with Mastodon
 
-        @param domain_name: Domain to create the client for"""
+        :param domain_name: Domain to create the client for"""
         self.logger.info("Creating new Mastodon client with domain {d}".format(d=domain_name))
         api_url = "https://" + domain_name + "/api/v1/apps"
 
@@ -254,9 +259,9 @@ class MastodonOAuthInterface:
         A created client/bot needs an auth token to make most API calls. This requests such a token
         from Mastodon
 
-        @param client_id: Id of the client
-        @param client_secret: Secret of the client
-        @param domain_name: Domain to request the auth token from
+        :param client_id: Id of the client
+        :param client_secret: Secret of the client
+        :param domain_name: Domain to request the auth token from
         """
         token_url = "https://" + domain_name + "/oauth/token"
 

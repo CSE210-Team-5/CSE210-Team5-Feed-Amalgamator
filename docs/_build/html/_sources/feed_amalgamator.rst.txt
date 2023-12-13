@@ -7,19 +7,11 @@ Subpackages
 .. toctree::
    :maxdepth: 4
 
+   feed_amalgamator.constants
    feed_amalgamator.helpers
-   feed_amalgamator.test_directory
 
 Submodules
 ----------
-
-feed\_amalgamator.CONFIG module
--------------------------------
-
-.. automodule:: feed_amalgamator.CONFIG
-   :members:
-   :undoc-members:
-   :show-inheritance:
 
 feed\_amalgamator.auth module
 -----------------------------
