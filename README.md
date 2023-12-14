@@ -21,6 +21,7 @@ Feed Amalgamator is a revolutionary platform designed to simplify and enhance yo
 - **Register An Account:**
   Getting started with Feed Amalgamator is quick and easy. Begin by registering an account using your preferred username and password. Head to our Registration
   Page to create your account and unlock the full potential of a unified Mastodon feed.
+  ![Alt text](./feed_amalgamator/static/images/register.png)
 - **Add Mastodon Server Instances:**
   In your account settings, locate the "Add Server" option. Here, you can link various Mastodon server instances to amalgamate your feeds. Enter the server
   instance details, such as mastodon.social or mastodon.world, and follow the on-screen instructions.
