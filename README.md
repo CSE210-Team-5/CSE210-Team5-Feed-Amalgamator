@@ -1,6 +1,39 @@
 # Feed Amalgamator
 
-This branch contains the initial version of the web application feed-amalgmator developed using Flask.
+[![Lint](https://github.com/CSE210-Team-5/CSE210-Team5-Feed-Amalgamator/actions/workflows/lint.yml/badge.svg)](https://github.com/CSE210-Team-5/CSE210-Team5-Feed-Amalgamator/actions/workflows/lint.yml) [![python-tests](https://github.com/CSE210-Team-5/CSE210-Team5-Feed-Amalgamator/actions/workflows/python-tests.yml/badge.svg)](https://github.com/CSE210-Team-5/CSE210-Team5-Feed-Amalgamator/actions/workflows/python-tests.yml) [![Static-Code-Analysis](https://github.com/CSE210-Team-5/CSE210-Team5-Feed-Amalgamator/actions/workflows/static-analysis.yml/badge.svg)](https://github.com/CSE210-Team-5/CSE210-Team5-Feed-Amalgamator/actions/workflows/static-analysis.yml) [![Deploy static content to Pages](https://github.com/CSE210-Team-5/CSE210-Team5-Feed-Amalgamator/actions/workflows/Documentation_Generator.yml/badge.svg)](https://github.com/CSE210-Team-5/CSE210-Team5-Feed-Amalgamator/actions/workflows/Documentation_Generator.yml) [![Build and Deploy](https://github.com/CSE210-Team-5/CSE210-Team5-Feed-Amalgamator/actions/workflows/Deployment_Workflow.yml/badge.svg)](https://github.com/CSE210-Team-5/CSE210-Team5-Feed-Amalgamator/actions/workflows/Deployment_Workflow.yml)
+
+# Useful Links:
+
+- #### Website: <https://feedamalgamator.azurewebsites.net/>
+- #### Documentation: <https://cse210-team-5.github.io/CSE210-Team5-Feed-Amalgamator/>
+- #### Architecture / Concept Diagrams:
+- #### ADR:
+- #### Retrospective and Future Enhancements:
+- #### Process Documentation:
+- #### Slide Decks: 
+
+# What is Feed Amalgamator?
+
+Feed Amalgamator is a revolutionary platform designed to simplify and enhance your Mastodon usage. If you're tired of juggling multiple accounts across different Mastodon server instances, look no further. Our application empowers users to link various Mastodon accounts seamlessly, creating a unified feed for a more streamlined and enjoyable social media experience.
+
+# How do I use it?
+
+- **Register An Account:**
+  Getting started with Feed Amalgamator is quick and easy. Begin by registering an account using your preferred username and password. Head to our Registration
+  Page to create your account and unlock the full potential of a unified Mastodon feed.
+- **Add Mastodon Server Instances:**
+  In your account settings, locate the "Add Server" option. Here, you can link various Mastodon server instances to amalgamate your feeds. Enter the server
+  instance details, such as mastodon.social or mastodon.world, and follow the on-screen instructions.
+- **OAuth Procedure:**
+  For each Mastodon server instance you add, you'll need to complete the OAuth procedure. This is a secure authentication process that establishes a connection
+  between Feed Amalgamator and your Mastodon accounts. Don't worry; we've streamlined the process to make it as seamless as possible.
+- **Home Page: Your Amalgamated Feed:**
+  Once you've added and authenticated your Mastodon server instances, head to the Feed Amalgamator homepage. Here, you'll find your newly created amalgamated feed,
+  a single, centralized stream that combines all your Mastodon accounts.
+
+You can also find the instructions for using the website here: <https://feedamalgamator.azurewebsites.net/about>
+
+# Instructions for Setting up Local Environment
 
 Please follow the instructions below to run the application:
 
@@ -18,7 +51,7 @@ Please follow the instructions below to run the application:
 
 7. Restart the terminal inside Pycharm.
 
-8. Put the client.ini file in instance directory.
+8. Make a new directory named configuration and store app_settings.ini and test_mastodon_client_info.ini files in it. Request the team for these configuration files.
 
 9. Run `flask --app feed_amalgamator run --debug` . This opens the site in your browser. In debug mode, you can make live changes in the code which will be reflected on the site without having to restart the server.
 
@@ -32,3 +65,13 @@ Please follow the instructions below to run the application:
 `make lint`  
 `make test`  
 `make test-coverage`
+
+# The Team Behind Feed Amalgamator:
+
+- [Brandon Wu](https://github.com/bwu2018)
+- [Julian Rahimi](https://github.com/ju-ra-96)
+- [Samarth Bhadane](https://github.com/samarth9201)
+- [Shibani Likhite](https://github.com/ShibaniL123)
+- [Srinivas](https://github.com/srinivasraman18)
+- [Vancheeswaran Vaidyanathan](https://github.com/vancheeswaran)
+- [Weijie CHIA](https://github.com/Moomootank)
