@@ -76,19 +76,19 @@ Please follow the instructions below to run the application:
 
 ## Useful Links
 
-- ### Website: <https://feedamalgamator.azurewebsites.net/>
+- **Website:** <https://feedamalgamator.azurewebsites.net/>
 
-- ### Documentation: <https://cse210-team-5.github.io/CSE210-Team5-Feed-Amalgamator/>
+- **Documentation:** <https://cse210-team-5.github.io/CSE210-Team5-Feed-Amalgamator/>
 
-- ### Architecture / Concept Diagrams
+- **Architecture / Concept Diagrams:** <https://github.com/CSE210-Team-5/CSE210-Team5-Feed-Amalgamator/tree/Readme-Update-Revision-I/specs/Diagrams>
 
-- ### ADR
+- **ADR:** <https://github.com/CSE210-Team-5/CSE210-Team5-Feed-Amalgamator/blob/305774855dfd771ef0410ac7b6c710b6a93922cd/specs/ADR.pdf>
 
-- ### Retrospective and Future Enhancements
+- **Retrospective and Future Enhancements:** <https://github.com/CSE210-Team-5/CSE210-Team5-Feed-Amalgamator/blob/305774855dfd771ef0410ac7b6c710b6a93922cd/specs/Known_Issues_and_Future_Enhancements.pdf>
 
-- ### Process Documentation
+- **Process Documentation:** <https://github.com/CSE210-Team-5/CSE210-Team5-Feed-Amalgamator/blob/305774855dfd771ef0410ac7b6c710b6a93922cd/specs/Process.pdf>
 
-- ### Slide Decks
+- **Slide Decks:** <https://github.com/CSE210-Team-5/CSE210-Team5-Feed-Amalgamator/tree/Readme-Update-Revision-I/specs/>
 
 ## The Team Behind Feed Amalgamator
 
