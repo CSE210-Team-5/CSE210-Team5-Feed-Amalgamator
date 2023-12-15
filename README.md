@@ -1,8 +1,12 @@
 # Feed Amalgamator
 
-[![Lint](https://github.com/CSE210-Team-5/CSE210-Team5-Feed-Amalgamator/actions/workflows/lint.yml/badge.svg)](https://github.com/CSE210-Team-5/CSE210-Team5-Feed-Amalgamator/actions/workflows/lint.yml) [![python-tests](https://github.com/CSE210-Team-5/CSE210-Team5-Feed-Amalgamator/actions/workflows/python-tests.yml/badge.svg)](https://github.com/CSE210-Team-5/CSE210-Team5-Feed-Amalgamator/actions/workflows/python-tests.yml) [![Static-Code-Analysis](https://github.com/CSE210-Team-5/CSE210-Team5-Feed-Amalgamator/actions/workflows/static-analysis.yml/badge.svg)](https://github.com/CSE210-Team-5/CSE210-Team5-Feed-Amalgamator/actions/workflows/static-analysis.yml) [![Deploy static content to Pages](https://github.com/CSE210-Team-5/CSE210-Team5-Feed-Amalgamator/actions/workflows/Documentation_Generator.yml/badge.svg)](https://github.com/CSE210-Team-5/CSE210-Team5-Feed-Amalgamator/actions/workflows/Documentation_Generator.yml) [![Build and Deploy](https://github.com/CSE210-Team-5/CSE210-Team5-Feed-Amalgamator/actions/workflows/Deployment_Workflow.yml/badge.svg)](https://github.com/CSE210-Team-5/CSE210-Team5-Feed-Amalgamator/actions/workflows/Deployment_Workflow.yml)
+[![Lint](https://github.com/CSE210-Team-5/CSE210-Team5-Feed-Amalgamator/actions/workflows/lint.yml/badge.svg)](https://github.com/CSE210-Team-5/CSE210-Team5-Feed-Amalgamator/actions/workflows/lint.yml)
+[![python-tests](https://github.com/CSE210-Team-5/CSE210-Team5-Feed-Amalgamator/actions/workflows/python-tests.yml/badge.svg)](https://github.com/CSE210-Team-5/CSE210-Team5-Feed-Amalgamator/actions/workflows/python-tests.yml)
+[![Static-Code-Analysis](https://github.com/CSE210-Team-5/CSE210-Team5-Feed-Amalgamator/actions/workflows/static-analysis.yml/badge.svg)](https://github.com/CSE210-Team-5/CSE210-Team5-Feed-Amalgamator/actions/workflows/static-analysis.yml)
+[![Deploy static content to Pages](https://github.com/CSE210-Team-5/CSE210-Team5-Feed-Amalgamator/actions/workflows/Documentation_Generator.yml/badge.svg)](https://github.com/CSE210-Team-5/CSE210-Team5-Feed-Amalgamator/actions/workflows/Documentation_Generator.yml)
+[![Build and Deploy](https://github.com/CSE210-Team-5/CSE210-Team5-Feed-Amalgamator/actions/workflows/Deployment_Workflow.yml/badge.svg)](https://github.com/CSE210-Team-5/CSE210-Team5-Feed-Amalgamator/actions/workflows/Deployment_Workflow.yml)
 
-# Table of Contents:
+## Table of Contents
 
 - [What is Feed Amalgamator](README.md#what-is-feed-amalgamator)
 - [How to use it](README.md#how-do-i-use-it)
@@ -11,38 +15,33 @@
 - [Useful Links](README.md#useful-links)
 - [The Team](README.md#what-is-feed-amalgamator)
 
-
-# What is Feed Amalgamator?
+## What is Feed Amalgamator?
 
 Feed Amalgamator is a revolutionary platform designed to simplify and enhance your Mastodon usage. If you're tired of juggling multiple accounts across different Mastodon server instances, look no further. Our application empowers users to link various Mastodon accounts seamlessly, creating a unified feed for a more streamlined and enjoyable social media experience.
 
-You can access our website here: <https://feedamalgamator.azurewebsites.net/>
+You can access our site here: <https://feedamalgamator.azurewebsites.net/>
 
-# How do I use it?
+## How do I use it?
 
 - **Register An Account:**
   Getting started with Feed Amalgamator is quick and easy. Begin by registering an account using your preferred username and password. Head to our Registration
   Page to create your account and unlock the full potential of a unified Mastodon feed.
-  <img src="./feed_amalgamator/static/images/register.png" alt="Alt text" width="300"/>
+  
 - **Add Mastodon Server Instances:**
   In your account settings, locate the "Add Server" option. Here, you can link various Mastodon server instances to amalgamate your feeds. Enter the server
   instance details, such as mastodon.social or mastodon.world, and follow the on-screen instructions.
-  
-  <img src="./feed_amalgamator/static/images/add-server.png" alt="Alt text" width="300"/>
+
 - **OAuth Procedure:**
   For each Mastodon server instance you add, you'll need to complete the OAuth procedure. This is a secure authentication process that establishes a connection
   between Feed Amalgamator and your Mastodon accounts. Don't worry; we've streamlined the process to make it as seamless as possible.
   
-  <img src="./feed_amalgamator/static/images/oauth.png" alt="Alt text" width="300"/>
 - **Home Page: Your Amalgamated Feed:**
   Once you've added and authenticated your Mastodon server instances, head to the Feed Amalgamator homepage. Here, you'll find your newly created amalgamated feed,
   a single, centralized stream that combines all your Mastodon accounts.
-  
-  <img src="./feed_amalgamator/static/images/feed.png" alt="Alt text" width="300"/>
 
-You can also find the instructions for using the website here: <https://feedamalgamator.azurewebsites.net/about>
+You can also find the instructions for using the site here: <https://feedamalgamator.azurewebsites.net/about>
 
-# Instructions for Setting up Local Environment
+## Instructions for Setting up Local Environment
 
 Please follow the instructions below to run the application:
 
@@ -64,7 +63,7 @@ Please follow the instructions below to run the application:
 
 9. Run `flask --app feed_amalgamator run --debug` . This opens the site in your browser. In debug mode, you can make live changes in the code which will be reflected on the site without having to restart the server.
 
-## Using Makefiles to use Linters and run Tests locally
+### Using Makefiles to use Linters and run Tests locally
 
 1. Use `npm install` to install stylelint and ESLint.
 2. Use `npm init @eslint/config` to get config file for ESLint.
@@ -75,17 +74,23 @@ Please follow the instructions below to run the application:
 `make test`  
 `make test-coverage`
 
-# Useful Links:
+## Useful Links
 
-- #### Website: <https://feedamalgamator.azurewebsites.net/>
-- #### Documentation: <https://cse210-team-5.github.io/CSE210-Team5-Feed-Amalgamator/>
-- #### Architecture / Concept Diagrams:
-- #### ADR:
-- #### Retrospective and Future Enhancements:
-- #### Process Documentation:
-- #### Slide Decks: 
+- ### Website: <https://feedamalgamator.azurewebsites.net/>
 
-# The Team Behind Feed Amalgamator:
+- ### Documentation: <https://cse210-team-5.github.io/CSE210-Team5-Feed-Amalgamator/>
+
+- ### Architecture / Concept Diagrams
+
+- ### ADR
+
+- ### Retrospective and Future Enhancements
+
+- ### Process Documentation
+
+- ### Slide Decks
+
+## The Team Behind Feed Amalgamator
 
 - [Brandon Wu](https://github.com/bwu2018)
 - [Julian Rahimi](https://github.com/ju-ra-96)
