@@ -2,19 +2,21 @@
 
 [![Lint](https://github.com/CSE210-Team-5/CSE210-Team5-Feed-Amalgamator/actions/workflows/lint.yml/badge.svg)](https://github.com/CSE210-Team-5/CSE210-Team5-Feed-Amalgamator/actions/workflows/lint.yml) [![python-tests](https://github.com/CSE210-Team-5/CSE210-Team5-Feed-Amalgamator/actions/workflows/python-tests.yml/badge.svg)](https://github.com/CSE210-Team-5/CSE210-Team5-Feed-Amalgamator/actions/workflows/python-tests.yml) [![Static-Code-Analysis](https://github.com/CSE210-Team-5/CSE210-Team5-Feed-Amalgamator/actions/workflows/static-analysis.yml/badge.svg)](https://github.com/CSE210-Team-5/CSE210-Team5-Feed-Amalgamator/actions/workflows/static-analysis.yml) [![Deploy static content to Pages](https://github.com/CSE210-Team-5/CSE210-Team5-Feed-Amalgamator/actions/workflows/Documentation_Generator.yml/badge.svg)](https://github.com/CSE210-Team-5/CSE210-Team5-Feed-Amalgamator/actions/workflows/Documentation_Generator.yml) [![Build and Deploy](https://github.com/CSE210-Team-5/CSE210-Team5-Feed-Amalgamator/actions/workflows/Deployment_Workflow.yml/badge.svg)](https://github.com/CSE210-Team-5/CSE210-Team5-Feed-Amalgamator/actions/workflows/Deployment_Workflow.yml)
 
-# Useful Links:
+# Table of Contents:
 
-- #### Website: <https://feedamalgamator.azurewebsites.net/>
-- #### Documentation: <https://cse210-team-5.github.io/CSE210-Team5-Feed-Amalgamator/>
-- #### Architecture / Concept Diagrams:
-- #### ADR:
-- #### Retrospective and Future Enhancements:
-- #### Process Documentation:
-- #### Slide Decks: 
+- [What is Feed Amalgamator](README.md#what-is-feed-amalgamator)
+- [How to use it](README.md#how-do-i-use-it)
+- [Instructions for Setting up Local Environment](README.md#instructions-for-setting-up-local-environment)
+- [Using Makefiles to use Linters and run Tests locally](README.md#using-makefiles-to-use-linters-and-run-tests-locally)
+- [Useful Links](README.md#useful-links)
+- [The Team](README.md#what-is-feed-amalgamator)
+
 
 # What is Feed Amalgamator?
 
 Feed Amalgamator is a revolutionary platform designed to simplify and enhance your Mastodon usage. If you're tired of juggling multiple accounts across different Mastodon server instances, look no further. Our application empowers users to link various Mastodon accounts seamlessly, creating a unified feed for a more streamlined and enjoyable social media experience.
+
+You can access our website here: <https://feedamalgamator.azurewebsites.net/>
 
 # How do I use it?
 
@@ -72,6 +74,16 @@ Please follow the instructions below to run the application:
 `make lint`  
 `make test`  
 `make test-coverage`
+
+# Useful Links:
+
+- #### Website: <https://feedamalgamator.azurewebsites.net/>
+- #### Documentation: <https://cse210-team-5.github.io/CSE210-Team5-Feed-Amalgamator/>
+- #### Architecture / Concept Diagrams:
+- #### ADR:
+- #### Retrospective and Future Enhancements:
+- #### Process Documentation:
+- #### Slide Decks: 
 
 # The Team Behind Feed Amalgamator:
 
