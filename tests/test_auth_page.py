@@ -61,7 +61,7 @@ class TestAuthPage(unittest.TestCase):
             self.assertEqual(1, len(items))
             object_to_check = items[0]
             self.assertEqual(TEST_USER, object_to_check.username)
-            self.assertEqual(True, check_password_hash(object_to_check.password, TEST_PASSWORD))
+            self.assertTrue(check_password_hash(object_to_check.password, TEST_PASSWORD))
 
         # Check that we have been successfully redirected to the home page
         self.assertIn("/{r}/login".format(r=self.page_root), decoded_post_response)

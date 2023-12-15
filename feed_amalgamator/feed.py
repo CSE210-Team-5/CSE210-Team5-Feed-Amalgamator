@@ -7,7 +7,7 @@ from pathlib import Path
 from flask import Blueprint, flash, redirect, render_template, request, session, url_for
 
 from feed_amalgamator.constants.common_constants import CONFIG_LOC, FILTER_LIST, USER_ID_FIELD, HOME_TIMELINE_NAME, \
-    NUM_POSTS_TO_GET, USER_DOMAIN_FIELD, SORT_BY, SERVERS_FIELD, ORIGINAL_SERVER_FIELD
+    NUM_POSTS_TO_GET, USER_DOMAIN_FIELD, SORT_BY, SERVERS_FIELD, ORIGINAL_SERVER_FIELD, AUTH_LOGIN, FEED_ADD_SERVER
 from feed_amalgamator.helpers.custom_exceptions import (
     MastodonConnError, NoContentFoundError, InvalidDomainError, IntegrityError, InvalidApiInputError, AddServerInvalidCredentialsError, AddServerIntegrityError,
     AddServerServiceUnavailableError)
@@ -29,7 +29,7 @@ redirect_uri = parser["REDIRECT_URI"]["REDIRECT_URI"]
 logger = LoggingHelper.generate_logger(logging.INFO, log_file_loc, "feed_page")
 auth_api = MastodonOAuthInterface(logger, redirect_uri)
 data_api = MastodonDataInterface(logger)
-AUTH_LOGIN = "auth.login"
+
 
 
 
@@ -81,9 +81,8 @@ def feed_home():
 @bp.route("/add_server", methods=["GET", "POST"])
 def add_server():
     """Endpoint for the user to add a server to their existing list"""
-    if request.method == "POST":
-        if USER_DOMAIN_FIELD in request.form:
-            return render_redirect_url_page()
+    if request.method == "POST" and USER_DOMAIN_FIELD in request.form:
+        return render_redirect_url_page()
     provided_user_id = session.get(USER_ID_FIELD)
     if provided_user_id is None:
         return redirect(url_for(AUTH_LOGIN))
@@ -136,24 +135,24 @@ def process_provided_auth_token(auth_token):
             user_server_exists = UserServer.query.filter_by(user_id=user_id,
                                                             server=domain, token=access_token).first() is not None
             if user_server_exists:
-                raise AddServerIntegrityError({"redirect_path": "feed.add_server",
+                raise AddServerIntegrityError({"redirect_path": FEED_ADD_SERVER,
                                                "message": USER_SERVER_COMBI_ALREADY_EXISTS_MSG})
             else:
                 user_server_obj = UserServer(user_id=user_id, server=domain, token=access_token)
                 dbi.session.add(user_server_obj)
                 dbi.session.commit()
         except MastodonConnError:
-            raise AddServerServiceUnavailableError({"redirect_path": "feed.add_server",
+            raise AddServerServiceUnavailableError({"redirect_path": FEED_ADD_SERVER,
                                                     "message": LOGIN_TOKEN_ERROR_MSG})
         except InvalidApiInputError:
-            raise AddServerInvalidCredentialsError({"redirect_path": "feed.add_server",
+            raise AddServerInvalidCredentialsError({"redirect_path": FEED_ADD_SERVER,
                                                     "message": AUTH_CODE_ERROR_MSG})
         else:
             # Executes if there is no exception
-            return redirect(url_for("feed.add_server", is_domain_set=False))
+            return redirect(url_for(FEED_ADD_SERVER, is_domain_set=False))
 
     else:
-        raise AddServerInvalidCredentialsError({"redirect_path": "feed.add_server",
+        raise AddServerInvalidCredentialsError({"redirect_path": FEED_ADD_SERVER,
                                                 "message": error})
 
 

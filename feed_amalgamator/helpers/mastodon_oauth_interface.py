@@ -135,7 +135,7 @@ class MastodonOAuthInterface:
         """
         assert self.app_client is not None, "App client has not been initialized"
 
-        for i in range(num_tries):
+        for _ in range(num_tries):
             try:
                 # It redirects the user to copy and paste an authorization code
                 # Note that it does NOT check if the url generated is valid
@@ -161,7 +161,7 @@ class MastodonOAuthInterface:
         """
         assert self.app_client is not None, "App client has not been initialized"
 
-        for i in range(num_tries):
+        for _ in range(num_tries):
             try:
                 users_access_token = self.app_client.log_in(
                     code=user_auth_code,
@@ -218,7 +218,7 @@ class MastodonOAuthInterface:
             return client_id, client_secret, access_token
         except sqlalchemy.exc.SQLAlchemyError:
             raise ServiceUnavailableError({
-                "redirect_path": "feed/add_sever.html",
+                "redirect_path": REDIRECT_ADD_SERVER,
                 "message": SERVICE_UNAVAILABLE_MSG
             })
 
@@ -250,7 +250,7 @@ class MastodonOAuthInterface:
             if response is not None:
                 self.logger.error("Response status is: {r}".format(r=response.status_code))
             raise ServiceUnavailableError({
-                "redirect_path": "feed/add_sever.html",
+                "redirect_path": REDIRECT_ADD_SERVER,
                 "message": SERVICE_UNAVAILABLE_MSG
             })
 
@@ -287,6 +287,6 @@ class MastodonOAuthInterface:
             if response is not None:
                 self.logger.error("Response status is: {r}".format(r=response.status_code))
             raise ServiceUnavailableError({
-                "redirect_path": "feed/add_sever.html",
+                "redirect_path": REDIRECT_ADD_SERVER,
                 "message": SERVICE_UNAVAILABLE_MSG
             })
