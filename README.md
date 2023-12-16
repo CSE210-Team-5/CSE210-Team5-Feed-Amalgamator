@@ -63,6 +63,11 @@ Please follow the instructions below to run the application:
 
 9. Run `flask --app feed_amalgamator run --debug` . This opens the site in your browser. In debug mode, you can make live changes in the code which will be reflected on the site without having to restart the server.
 
+### Run Using Docker
+
+1. Build the Docker Image: docker build . -t test
+2. Run the container: docker run --publish 5000:80 test
+
 ### Using Makefiles to use Linters and run Tests locally
 
 1. Use `npm install` to install stylelint and ESLint.
@@ -90,6 +95,8 @@ Please follow the instructions below to run the application:
 
 - **Slide Decks:** <https://github.com/CSE210-Team-5/CSE210-Team5-Feed-Amalgamator/tree/Readme-Update-Revision-I/specs/>
 
+- **Youtube Link (Launch): https://youtu.be/hMvNHG9saj4**
+- 
 ## The Team Behind Feed Amalgamator
 
 - [Brandon Wu](https://github.com/bwu2018)
