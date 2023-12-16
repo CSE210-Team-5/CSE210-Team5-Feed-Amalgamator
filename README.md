@@ -85,7 +85,7 @@ Please follow the instructions below to run the application:
 
 - **Documentation:** <https://cse210-team-5.github.io/CSE210-Team5-Feed-Amalgamator/>
 
-- **Architecture / Concept Diagrams:** <https://github.com/CSE210-Team-5/CSE210-Team5-Feed-Amalgamator/tree/Readme-Update-Revision-I/specs/Diagrams>
+- **Architecture / Concept Diagrams:** <https://github.com/CSE210-Team-5/CSE210-Team5-Feed-Amalgamator/tree/main/specs/Diagrams>
 
 - **ADR:** <https://github.com/CSE210-Team-5/CSE210-Team5-Feed-Amalgamator/blob/305774855dfd771ef0410ac7b6c710b6a93922cd/specs/ADR.pdf>
 
@@ -93,10 +93,10 @@ Please follow the instructions below to run the application:
 
 - **Process Documentation:** <https://github.com/CSE210-Team-5/CSE210-Team5-Feed-Amalgamator/blob/305774855dfd771ef0410ac7b6c710b6a93922cd/specs/Process.pdf>
 
-- **Slide Decks:** <https://github.com/CSE210-Team-5/CSE210-Team5-Feed-Amalgamator/tree/Readme-Update-Revision-I/specs/>
+- **Slide Decks:** <https://github.com/CSE210-Team-5/CSE210-Team5-Feed-Amalgamator/tree/main/specs/Slide_Decks>
 
-- **Youtube Link (Launch): https://youtu.be/hMvNHG9saj4**
-- 
+- **Youtube Link (Launch): <https://youtu.be/hMvNHG9saj4>**
+
 ## The Team Behind Feed Amalgamator
 
 - [Brandon Wu](https://github.com/bwu2018)
