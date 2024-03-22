@@ -67,7 +67,7 @@ class MastodonDataInterface:
         :return: List of dictionaries containing the obtained data
         """
         assert self.user_client is not None, "User client has not been started"
-        for i in range(num_tries):
+        for _ in range(num_tries):
             try:
                 self.logger.info("Starting to get timeline data")
                 timeline = self.user_client.timeline(timeline=timeline_name, limit=num_posts_to_get)

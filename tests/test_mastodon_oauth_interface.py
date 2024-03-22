@@ -37,7 +37,7 @@ class TestOauthInterface(unittest.TestCase):
         self.assertEqual((True, wanted_result), self.client.verify_user_provided_domain(without_https))
 
         mangled_domain = "mastodo.social"
-        self.assertEqual(self.client.verify_user_provided_domain(mangled_domain)[0], False)
+        self.assertFalse(self.client.verify_user_provided_domain(mangled_domain)[0])
 
     def test_generate_user_token(self):
         # No client has been started yet, AssertionError should be thrown

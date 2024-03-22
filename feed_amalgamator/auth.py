@@ -26,7 +26,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 from sqlalchemy import exc
 
-from feed_amalgamator.constants.common_constants import USERNAME_FIELD, PASSWORD_FIELD, USER_ID_FIELD, CONFIG_LOC
+from feed_amalgamator.constants.common_constants import USERNAME_FIELD, PASSWORD_FIELD, USER_ID_FIELD, CONFIG_LOC, AUTH_LOGIN
 from feed_amalgamator.constants.error_messages import USER_ALREADY_EXISTS_MSG, INVALID_USERNAME_MSG, \
     INVALID_PASSWORD_MSG, USER_DOES_NOT_EXIST_MSG, REDIRECT_LOGIN, REDIRECT_REGISTER
 
@@ -62,7 +62,7 @@ def register():
                  "redirect_path": REDIRECT_REGISTER})
         else:
             # Executes if there is no exception
-            return redirect(url_for("auth.login"))
+            return redirect(url_for(AUTH_LOGIN))
     # Executes if there is an exception
     return render_template(REDIRECT_REGISTER)
 
@@ -106,14 +106,14 @@ def load_logged_in_user():
 def logout():
     """Endpoint for the user to log out"""
     session.clear()
-    return redirect(url_for("auth.login"))
+    return redirect(url_for(AUTH_LOGIN))
 
 
 def login_required(view):
     @functools.wraps(view)
     def wrapped_view(**kwargs):
         if g.user is None:
-            return redirect(url_for("auth.login"))
+            return redirect(url_for(AUTH_LOGIN))
 
         return view(**kwargs)
 

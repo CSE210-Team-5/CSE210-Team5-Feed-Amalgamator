@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } else if (username.value.length < 4 || username.value.length > 20) {
       errorMessage.innerHTML += 'Username must be between 4 and 20 characters.<br>'
       valid = false
-    } else if (!/^[a-zA-Z0-9_]+$/.test(username.value)) {
+    } else if (!/^\w+$/.test(username.value)) {
       errorMessage.innerHTML += 'Username can only contain letters, numbers, and underscores.<br>'
       valid = false
     }
@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } else if (!/[a-z]/.test(password.value)) {
       errorMessage.innerHTML += 'Password must contain at least one lowercase letter.<br>'
       valid = false
-    } else if (!/[0-9]/.test(password.value)) {
+    } else if (!/\d/.test(password.value)) {
       errorMessage.innerHTML += 'Password must contain at least one digit.<br>'
       valid = false
     } else if (!/[^a-zA-Z0-9]/.test(password.value)) {
